@@ -1,0 +1,41 @@
+import 'dart:io';
+
+import 'package:delivery_app_v0/Providers/MenuProvider.dart';
+import 'package:delivery_app_v0/Widgets/AppBar.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+class AdminManage extends StatefulWidget{
+  @override
+  AdminManagePage createState() => AdminManagePage();
+  
+}
+
+class AdminManagePage extends State<AdminManage>{
+  MenuProvider menuProvider;
+  @override
+  void initState() {
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    menuProvider = Provider.of<MenuProvider>(context, listen: false);
+
+    super.initState();
+    // Enable hybrid composition.
+  }
+  @override
+  Widget build(BuildContext context) {
+    double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(deviceheight*0.11),
+        child: barapp('Admin Manage',context,menuProvider),
+      ),
+      body: WebView(
+        initialUrl: 'https://flutter.dev',
+      ),
+    );
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
