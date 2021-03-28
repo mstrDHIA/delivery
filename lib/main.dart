@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'API/APIS.dart';
+import 'Providers/LoginProvider.dart';
 import 'Providers/AppControllerProvider.dart';
 import 'Providers/MapProvider.dart';
 import 'Providers/MenuProvider.dart';
 import 'Providers/OrderProvider.dart';
+
 import 'Screens/Register.dart';
 import 'Screens/api test.dart';
 
@@ -19,21 +21,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => MenuProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => MapProvider()),
         ChangeNotifierProvider(create: (_) => AppProvider()),
+        
+
 
       ],
-      child: APIS(
-        child: MaterialApp(
+      child:
+         MaterialApp(
           theme: ThemeData(
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: MyHomePage(),
         ),
-      ),
+      
     );
   }
 }
@@ -46,7 +51,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    String GAK=context.dependOnInheritedWidgetOfExactType<APIS>().GoogleApiKey;
+    String GAK=GoogleApiKey;
+    String AO=getOrdersApi;
 
     return Scaffold(
       appBar: AppBar(
@@ -58,6 +64,9 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               GAK,
+            ),
+             Text(
+              AO,
             ),
           ],
         ),

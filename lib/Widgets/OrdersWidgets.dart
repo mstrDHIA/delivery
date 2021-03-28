@@ -1,4 +1,5 @@
 
+import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Screens/Order.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,11 @@ showOrder(context) {
 }
 
 
-Widget listitem(context, id) {
+Widget listitem(context, Orders order) {
+  print("I am listing");
+  print(order.price);
+  //String buyername=order.buyer.firstName+" "+order.buyer.lastName;
+ // String sellername=order.seller.firstName+" "+order.seller.lastName;
 
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
@@ -47,14 +52,14 @@ Widget listitem(context, id) {
         title: Padding(
           padding: const EdgeInsets.only(top: 14.0, left: 16),
           child: Text(
-            'Order $id',
+            order.id.toString(),
             style: TextStyle(
               //fontFamily: 'ebrima',
                 fontSize: 18),
           ),
         ),
         trailing: Text(
-          '$num',
+          order.price.toString(),
           style: TextStyle(
             //fontFamily: 'ebrima',
               fontSize: 18),
@@ -73,6 +78,14 @@ Widget listitem(context, id) {
                         fontSize: 17,
                         fontWeight: FontWeight.w500),
                   ),
+                  Text(
+                    "${order.seller.name}",
+                    style: TextStyle(
+                        color: Color.fromRGBO(187, 33, 33, 0.86),
+                        fontFamily: 'calist',
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500),
+                  ),
 
                 ],
               ),
@@ -87,7 +100,7 @@ Widget listitem(context, id) {
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    'Mohsen Toukebri',
+                    "${order.buyer.firstName} ${order.buyer.lastName}",
                     style: TextStyle(
                         color: Color.fromRGBO(187, 33, 33, 0.86),
                         fontFamily: 'calist',

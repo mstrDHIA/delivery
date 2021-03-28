@@ -1,40 +1,44 @@
-import 'SellerType.dart';
 class Seller {
   int id;
-  String firstName;
-  String lastName;
+  String name;
   String address;
-  int phone;
+  String phone;
   String email;
-  double long;
-  double lat;
-  SellerType seller_type;
+  String long;
+  String lat;
+  int idSellertype;
 
-  Seller({this.id, this.firstName, this.lastName, this.address, this.phone,this.email, this.long, this.lat,this.seller_type});
+  Seller(
+      {this.id,
+      this.name,
+      this.address,
+      this.phone,
+      this.email,
+      this.long,
+      this.lat,
+      this.idSellertype});
 
   Seller.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    firstName = json['first_name'];
-    lastName = json['last_name'];
+    name = json['name'];
     address = json['address'];
     phone = json['phone'];
     email = json['email'];
     long = json['long'];
     lat = json['lat'];
-    seller_type=json['seller_type'];
-
+    idSellertype = json['id_sellertype'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['first_name'] = this.firstName;
-    data['last_name'] = this.lastName;
+    data['name'] = this.name;
     data['address'] = this.address;
     data['phone'] = this.phone;
+    data['email'] = this.email;
     data['long'] = this.long;
     data['lat'] = this.lat;
-    data['seller_type']=this.seller_type;
+    data['id_sellertype'] = this.idSellertype;
     return data;
   }
 }
