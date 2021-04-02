@@ -47,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     
     
+      final String whattodo="Login";
 
     return Scaffold(
         backgroundColor: Color.fromRGBO(250, 250, 250, 1),
@@ -57,15 +58,15 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(
                     top:16.0),
-                child: InputWidget("User Name",Icon(Icons.person),context,usernamecontrol),
+                child: InputWidget(placeholder:"User Name",ic:Icon(Icons.person),context:context,controller:usernamecontrol),
               ),
-              InputWidget("Password",Icon(Icons.lock),context,passwordcontrol),
+              InputWidget(placeholder:"Password",ic:Icon(Icons.lock),context:context,controller:passwordcontrol),
               Padding(
                 padding: const EdgeInsets.only(
                     top:36.0,
                     bottom: 8
                 ),
-                child: But(context,loginProvider,usernamecontrol,passwordcontrol),
+                child: But(context:context,provider:loginProvider,username:usernamecontrol,password:passwordcontrol,whattodo: whattodo),
               ),
               Padding(
                   padding: const EdgeInsets.only(

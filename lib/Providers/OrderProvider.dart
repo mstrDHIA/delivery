@@ -79,11 +79,18 @@ Future<void> fetchOrders(context) async{
     loading=false;
     notify();
   }
+
+
+
   else{
     print("Order not done");
   }
 
 }
+
+  calculsumitem(OrderItems item){
+    return item.count*item.price;
+  }
 
 
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:custom_bottom_navigation_bar/custom_bottom_navigation_bar_item.dart';
 import 'package:provider/provider.dart';
-import 'Orders.dart';
+import 'OrdersScreen.dart';
 import 'Profile.dart';
 
 import 'MyMap.dart';
@@ -156,7 +156,7 @@ class AppPage extends State<AppController> {
 
     final tabs = [
 
-      Expanded(child: Orders()),
+      Expanded(child: OrdersScreen()),
       Container(height: 0,width: 0,),
       Profile()
       //Expanded(child: Map()),

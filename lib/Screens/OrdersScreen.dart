@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'Order.dart';
 import 'package:provider/provider.dart';
 
-class Orders extends StatefulWidget {
+class OrdersScreen extends StatefulWidget {
   @override
   OrdersPage createState() => OrdersPage();
 }
 
-class OrdersPage extends State<Orders> {
+class OrdersPage extends State<OrdersScreen> {
   int num = 30;
   
   OrderProvider provider;

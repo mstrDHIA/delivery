@@ -7,20 +7,22 @@ import 'package:http/http.dart' as http;
 import 'package:delivery_app_v0/API/APIS.dart';
 
 
-class LoginProvider extends ChangeNotifier {
+class RegisterProvider extends ChangeNotifier {
 
-Future<void> Login(context,username,password) async{
-  final loginresponse = await http.post(
+Future<void> Register(context,username,password,email,phone) async{
+  final registerresponse = await http.post(
     Authentication,
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String,String>{
       "username":username,
-      "password":password
+      "password":password,
+      "email":email,
+      "phone":phone
     })
   );
-  if (loginresponse.statusCode == 200) {
+  if (registerresponse.statusCode == 200) {
 Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -28,9 +30,10 @@ Navigator.pushAndRemoveUntil(
       ),
       (route) => false,
     );  }
-  else if(loginresponse.statusCode == 401){
-    print("not authorized");
+  else if(registerresponse.statusCode == 401){
+    print("false information");
   }
+  notify();
 }
 
 

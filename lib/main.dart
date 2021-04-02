@@ -8,6 +8,7 @@ import 'Providers/MapProvider.dart';
 import 'Providers/MenuProvider.dart';
 import 'Providers/OrderProvider.dart';
 
+import 'Providers/RegisterProvider.dart';
 import 'Screens/Register.dart';
 import 'Screens/api test.dart';
 
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => RegisterProvider()),
+
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => MenuProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),

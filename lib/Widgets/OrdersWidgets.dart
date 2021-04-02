@@ -3,18 +3,26 @@ import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Screens/Order.dart';
 import 'package:flutter/material.dart';
 
-showOrder(context) {
+showOrder({context,Orders order}) {
+  for(int i=0;i<order.orderitems.length;i++){
+    print(order.orderitems[i].name);
+  }
+  //print(order.orderitems);
   Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Order(),
+        builder: (context) => Order(order:order),
       ));
 }
 
 
-Widget listitem(context, Orders order) {
+Widget listitem(context,Orders order) {
   print("I am listing");
+  
   print(order.price);
+  for(int i=0;i<order.orderitems.length;i++){
+    print(order.orderitems[i].name);
+  }
   //String buyername=order.buyer.firstName+" "+order.buyer.lastName;
  // String sellername=order.seller.firstName+" "+order.seller.lastName;
 
@@ -43,7 +51,7 @@ Widget listitem(context, Orders order) {
       child: ListTile(
         onTap: () {
           //  _increment();
-          showOrder(context);
+          showOrder(context:context,order:order);
         },
         leading: Padding(
           padding: const EdgeInsets.only(top: 6.0, right: 6),

@@ -2,6 +2,9 @@ import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
 import 'package:flutter/material.dart';
 
+verify(LoginProvider loginprovider){
+  
+}
 roundedtop(context) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
@@ -59,7 +62,7 @@ roundedtop(context) {
   );
 }
 
-InputWidget(String placeholder, Icon ic, context,TextEditingController controller) {
+InputWidget({String placeholder, Icon ic, context,TextEditingController controller}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
 
@@ -110,7 +113,7 @@ InputWidget(String placeholder, Icon ic, context,TextEditingController controlle
   );
 }
 
-But(context,LoginProvider loginprovider,username,password) {
+But({context,provider,username,password,whattodo}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
   return Container(
@@ -125,8 +128,24 @@ But(context,LoginProvider loginprovider,username,password) {
       Opacity(
           opacity: 0,
           child: RaisedButton(
-            onPressed: () {
-              loginprovider.Login(context, username.text, password.text);
+            onPressed: () async {
+              if(whattodo=="register"){
+                provider.Register(context, username.text, password.text);
+
+              }
+              else if(whattodo=="Login"){
+                provider.Login(context, username.text, password.text);
+
+              }
+              
+                provider.notify();
+
+                
+    
+                
+
+              
+              //loginprovider.notify();
             },
           )),
     ]),

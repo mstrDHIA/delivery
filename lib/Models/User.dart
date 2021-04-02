@@ -10,9 +10,9 @@ class User {
   bool isStaff;
   bool isActive;
   String dateJoined;
-  /*List<String> groups;
+  List<String> groups;
   List<Null> userPermissions;
-*/
+
   User(
       {this.id,
         this.password,
@@ -25,8 +25,9 @@ class User {
         this.isStaff,
         this.isActive,
         this.dateJoined,
-       /* this.groups,
-        this.userPermissions*/});
+        this.groups,
+        this.userPermissions
+        });
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -41,9 +42,9 @@ class User {
     isActive = json['is_active'];
     dateJoined = json['date_joined'];
     /*if (json['groups'] != null) {
-      groups = new List<Null>();
+      groups = new List<String>();
       json['groups'].forEach((v) {
-        groups.add(new Null.fromJson(v));
+        groups.add(new String.fromJson(v));
       });
     }
     if (json['user_permissions'] != null) {
