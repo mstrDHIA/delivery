@@ -1,7 +1,7 @@
 class User {
   int id;
   String password;
-  Null lastLogin;
+  String lastLogin;
   bool isSuperuser;
   String username;
   String firstName;
@@ -10,24 +10,19 @@ class User {
   bool isStaff;
   bool isActive;
   String dateJoined;
-  List<String> groups;
-  List<Null> userPermissions;
 
   User(
       {this.id,
-        this.password,
-        this.lastLogin,
-        this.isSuperuser,
-        this.username,
-        this.firstName,
-        this.lastName,
-        this.email,
-        this.isStaff,
-        this.isActive,
-        this.dateJoined,
-        this.groups,
-        this.userPermissions
-        });
+      this.password,
+      this.lastLogin,
+      this.isSuperuser,
+      this.username,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.isStaff,
+      this.isActive,
+      this.dateJoined});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -41,18 +36,6 @@ class User {
     isStaff = json['is_staff'];
     isActive = json['is_active'];
     dateJoined = json['date_joined'];
-    /*if (json['groups'] != null) {
-      groups = new List<String>();
-      json['groups'].forEach((v) {
-        groups.add(new String.fromJson(v));
-      });
-    }
-    if (json['user_permissions'] != null) {
-      userPermissions = new List<Null>();
-      json['user_permissions'].forEach((v) {
-        userPermissions.add(new Null.fromJson(v));
-      });
-    }*/
   }
 
   Map<String, dynamic> toJson() {
@@ -68,13 +51,6 @@ class User {
     data['is_staff'] = this.isStaff;
     data['is_active'] = this.isActive;
     data['date_joined'] = this.dateJoined;
-  /*  if (this.groups != null) {
-      data['groups'] = this.groups.map((v) => v.toJson()).toList();
-    }
-    if (this.userPermissions != null) {
-      data['user_permissions'] =
-          this.userPermissions.map((v) => v.toJson()).toList();
-    }*/
     return data;
   }
 }

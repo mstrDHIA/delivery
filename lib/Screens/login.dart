@@ -1,4 +1,5 @@
 import 'package:delivery_app_v0/Providers/LoginProvider.dart';
+import 'package:delivery_app_v0/Screens/AdminManage.dart';
 import 'package:delivery_app_v0/Widgets/LoginWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -79,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Link("Don't have an account","Register",Register(),context),
 
-                      Link("Forgot your password","Click Here",MyApp(),context),
+                      Link("Forgot your password","Click Here",AdminManage(),context),
                     ],
                   )
               ),

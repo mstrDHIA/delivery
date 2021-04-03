@@ -4,6 +4,7 @@ import 'package:delivery_app_v0/Providers/MenuProvider.dart';
 import 'package:delivery_app_v0/Widgets/AppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../API/APIS.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class AdminManage extends StatefulWidget{
@@ -32,7 +33,7 @@ class AdminManagePage extends State<AdminManage>{
         child: barapp('Admin Manage',context,menuProvider),
       ),
       body: WebView(
-        initialUrl: 'https://flutter.dev',
+        initialUrl: adminmanage,
       ),
     );
     // TODO: implement build

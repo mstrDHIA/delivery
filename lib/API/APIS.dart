@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 
-const String initiallink="http://7b9fdb9ed370.ngrok.io/";
+const String initiallink="http://68d5b6846422.ngrok.io/";
 const String getOrdersApi=initiallink+"available_orders/";
+const String getUserApi=initiallink+"user/";
+const String adminmanage=initiallink+"admin/";
 const String GoogleApiKey="AIzaSyD6ijb43zMaxEZCfGP_XF7Cc4NgIByAGS0";
 const Authentication=initiallink+"api/token/";
 

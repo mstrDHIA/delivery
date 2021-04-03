@@ -21,6 +21,8 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  jwt_decode: ^0.2.0
+
   provider: ^4.3.3
   http: ^0.12.2
   webview_flutter: ^1.0.7
