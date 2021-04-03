@@ -29,7 +29,7 @@ Future<void> getUser(context,id) async{
       dynamic res=jsonDecode(userresponse.body);
       User user=User.fromJson(res);
       print(user.isSuperuser);
-      if(user.isSuperuser){
+      if(user.isStaff){
         print("admin");
          Navigator.pushAndRemoveUntil(
       context,
