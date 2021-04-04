@@ -143,7 +143,7 @@ OrderProvider orderProvider;
                 bill(context: context,order: order,orderProvider: orderProvider),
                 info(context: context,text: "distance:",orderprovider: orderProvider,orders: order),
 
-                timer(context: context),
+                timer(context: context,order: order),
 
                 ],
               ),

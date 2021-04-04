@@ -352,7 +352,7 @@ bill({context,Orders order,OrderProvider orderProvider}) {
   }
 
 
-timer({context}) {
+timer({context,Orders order}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return Padding(
@@ -365,7 +365,7 @@ timer({context}) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Delivery Time:',
+            'Delivery Duration:',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600
@@ -401,7 +401,7 @@ timer({context}) {
                 child:
                 Center(
                     child: Text(
-                        '9:00',
+                        order.orderDuration.toString(),
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700
