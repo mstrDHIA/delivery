@@ -46,7 +46,7 @@ class MapPage extends State<Map> {
 
     mapProvider = Provider.of<MapProvider>(context, listen: false);
     mapProvider.getCurrentLocation(_geolocator,_currentPosition,mapController);
-    markers=mapProvider.AddMarkers(orderslist);
+    markers=mapProvider.AddMarkers(orderslist,context);
     for(Marker marker in markers){
       print(marker.markerId);
     }

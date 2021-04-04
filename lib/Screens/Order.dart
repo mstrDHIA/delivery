@@ -25,13 +25,12 @@ class Order extends  StatefulWidget{
 class OrderPage extends State<Order>{
 final Orders order;
 MenuProvider menuProvider;
-
+Future<double> distance;
 OrderPage(this.order);
 OrderProvider orderProvider;
 @override
-  void initState() {
+  Future<void> initState()  {
   orderProvider = Provider.of<OrderProvider>(context, listen: false);
-
   menuProvider = Provider.of<MenuProvider>(context, listen: false);
     super.initState();
   }
@@ -142,7 +141,10 @@ OrderProvider orderProvider;
                 children: [route(context: context,order: order),
                 showmap(context: context),
                 bill(context: context,order: order,orderProvider: orderProvider),
-                timer(context: context)
+                info(context: context,text: "distance:",orderprovider: orderProvider,orders: order),
+
+                timer(context: context),
+
                 ],
               ),
             )
@@ -171,7 +173,7 @@ OrderProvider orderProvider;
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${order.price.toString()}DT",
+              Text("${order.totalPrice.toString()}DT",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500
