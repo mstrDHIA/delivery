@@ -18,10 +18,13 @@ class OrdersPage extends State<OrdersScreen> {
   @override
   void initState() {
     provider = Provider.of<OrderProvider>(context, listen: false);
-
+    /*if(provider.list.length==0){
+      provider.fetchOrders(context);
+    }*/
+    
     //provider?.fetchdata(context);
     //print("blablabla");
-    provider?.fetchOrders(context);
+    //provider?.fetchOrders(context);
     super.initState();
   }
 

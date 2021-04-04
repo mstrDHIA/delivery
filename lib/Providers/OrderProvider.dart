@@ -15,6 +15,7 @@ class OrderProvider extends ChangeNotifier{
 
 final List<Widget> list=List();
 bool loading=false;
+  List<Orders> allorders=[];
 
 /*
 Future<void> fetchdata(context)async{
@@ -44,7 +45,6 @@ Future<void> fetchOrders(context) async{
   Seller seller;
   Payment payment;
   List<OrderItems> orderItems=[];
-  List<Orders> allorders=[];
   final Orderresponse = await http.get(
     OrdersKey,
   );
@@ -67,6 +67,7 @@ Future<void> fetchOrders(context) async{
       orders.orderitems=orderItems;
 
     allorders.add(orders);
+    
     }
     for(int k=0;k<allorders.length;k++){
       list.add(listitem(context, allorders[k]));

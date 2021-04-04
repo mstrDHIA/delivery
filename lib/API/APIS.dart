@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-const String initiallink="http://68d5b6846422.ngrok.io/";
+const String initiallink="http://a94625f6f59e.ngrok.io/";
 const String getOrdersApi=initiallink+"available_orders/";
 const String getUserApi=initiallink+"user/";
 const String adminmanage=initiallink+"admin/";

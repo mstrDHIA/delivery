@@ -1,4 +1,6 @@
+import 'package:delivery_app_v0/Providers/AppControllerProvider.dart';
 import 'package:delivery_app_v0/Providers/MenuProvider.dart';
+import 'package:delivery_app_v0/Providers/OrderProvider.dart';
 import 'package:delivery_app_v0/Screens/Notifications.dart';
 import 'package:delivery_app_v0/Widgets/popupMenu.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +23,16 @@ int currentindex=0;
 
 class AppPage extends State<AppController> {
   MenuProvider menuprovider;
+  AppProvider appProvider;
+  OrderProvider provider;
 
   @override
   void initState() {
+    provider = Provider.of<OrderProvider>(context, listen: false);
+
     menuprovider = Provider.of<MenuProvider>(context, listen: false);
+    appProvider = Provider.of<AppProvider>(context, listen: false);
+    if(provider.list.length==0){provider?.fetchOrders(context);}
 
     super.initState();
   }
@@ -136,7 +144,7 @@ class AppPage extends State<AppController> {
       }
       else if (currentindex == 1) {
         return PreferredSize(
-            child: Map(),
+            child: Map(orderslist: provider.allorders,),
             preferredSize: Size.fromHeight(deviceheight*0.871)
         );/*Container(
           color: Color.fromRGBO(211, 16, 39, 0.3),

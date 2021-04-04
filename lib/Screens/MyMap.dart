@@ -1,3 +1,4 @@
+import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Providers/MapProvider.dart';
@@ -8,14 +9,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 class Map extends StatefulWidget{
+  final List<Orders> orderslist;
+
+  const Map({Key key, this.orderslist}) : super(key: key);
 
   @override
-  MapPage createState() => MapPage();
+  MapPage createState() => MapPage(orderslist);
 }
 int currentindex=0;
 
 class MapPage extends State<Map> {
-
+  final List<Orders> orderslist;
+  
   static CameraPosition _initialLocation = CameraPosition(
       target: LatLng(0.0, 0.0));
 
@@ -31,12 +36,20 @@ class MapPage extends State<Map> {
   //PageController _pageController = PageController();
   MapProvider mapProvider;
 
+  MapPage(this.orderslist);
+
+      List<Marker> markers;
+
 
   @override
   void initState() {
 
     mapProvider = Provider.of<MapProvider>(context, listen: false);
     mapProvider.getCurrentLocation(_geolocator,_currentPosition,mapController);
+    markers=mapProvider.AddMarkers(orderslist);
+    for(Marker marker in markers){
+      print(marker.markerId);
+    }
     super.initState();
 
 
@@ -45,12 +58,12 @@ class MapPage extends State<Map> {
   @override
   Widget build(BuildContext ctx) {
 
-
     double deviceheight = MediaQuery.of(ctx).size.height;
     double devicewidth = MediaQuery.of(ctx).size.width;
 
-
     Widget gmap() {
+          print("this is ${orderslist[0].price}");
+
       return
         Stack(
           children: [
@@ -68,7 +81,8 @@ class MapPage extends State<Map> {
                   mapType: MapType.normal,
                   zoomGesturesEnabled: true,
                   zoomControlsEnabled: false,
-                  //markers: markers,
+                  markers: markers.toSet(),
+                  
                   //onTap: goto,
                   onMapCreated: (GoogleMapController controller) {
                     mapController = controller;
@@ -186,13 +200,18 @@ class MapPage extends State<Map> {
 
     return
 
-       Container(
-        height: deviceheight,
-          transform: Matrix4.translationValues(
-              0.0, deviceheight * 0.037, 0.0),
+       Consumer<MapProvider>(
+                builder: (context, mapProvider,child) {
+                      return Container(
+          height: deviceheight,
+            transform: Matrix4.translationValues(
+                0.0, deviceheight * 0.037, 0.0),
 
 
-          child: gmap());
+            child: gmap());
+                  },
+              
+       );
 
 
     // TODO: implement build
