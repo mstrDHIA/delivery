@@ -12,6 +12,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 
 
 class LoginProvider extends ChangeNotifier {
+  String msg="";
   void notify(){
     try{
       notifyListeners();
@@ -85,10 +86,14 @@ Future<void> Login(context,username,password) async{
       (route) => false,
     );  }*/
  // else 
-  if(loginresponse.statusCode == 401){
-    print("not authorized");
-  }
+  
 }
+else if(loginresponse.statusCode == 401){
+    print("not authorized");
+    msg="Unauthorized";
+        notify();
+
+  }
 
 
   
