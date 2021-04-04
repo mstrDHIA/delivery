@@ -416,3 +416,40 @@ timer({context}) {
     );
 
   }
+
+
+   info({context,text,value,OrderProvider orderprovider,Orders orders}) {
+   // var v=orderprovider.CaclulDistance(orders);
+    print(orderprovider.distance);
+    double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.only(
+        right:42,
+        left: 42,
+        top:30
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600
+            ),
+          ),
+          Center(
+              child: Text(
+                  "${orderprovider.distance}m",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700
+                ),
+              )
+          )
+        ],
+      ),
+    );
+
+  }

@@ -7,6 +7,7 @@ import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Models/Payment.dart';
 import 'package:delivery_app_v0/Models/Seller.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import '../Widgets/OrdersWidgets.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,6 +17,7 @@ class OrderProvider extends ChangeNotifier{
 final List<Widget> list=List();
 bool loading=false;
   List<Orders> allorders=[];
+  double distance;
 
 /*
 Future<void> fetchdata(context)async{
@@ -30,7 +32,19 @@ Future<void> fetchdata(context)async{
 */
 
 
-
+ CaclulDistance(Orders order)async{
+   double blat = double.parse(order.buyer.lat);
+      assert(blat is double);
+      double blong = double.parse(order.buyer.long);
+      assert(blong is double);
+      double slat = double.parse(order.seller.lat);
+      assert(slat is double);
+      double slong = double.parse(order.seller.long);
+      assert(slong is double);
+   distance =await Geolocator().distanceBetween(slat, slong, blat, blong);
+  //print(distance);
+  //return distanceInMeters;
+}
 
 Future<void> fetchOrders(context) async{
   String OrdersKey=getOrdersApi;

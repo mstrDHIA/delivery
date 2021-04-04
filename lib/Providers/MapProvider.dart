@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:delivery_app_v0/Models/Orders.dart';
+import 'package:delivery_app_v0/Screens/Order.dart';
 
 import '../Screens/MyMap.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class MapProvider extends ChangeNotifier {
 
 final List<Marker> markers=List();
 
-  void showClients(List<Orders> orderslist,Orders order){
+  void showClients(List<Orders> orderslist,Orders order,context){
     if(markers.length>0){
           markers.clear();
     }
@@ -41,6 +42,9 @@ final List<Marker> markers=List();
         markerId: MarkerId(o.buyer.firstName),
         position: LatLng(lat,long),
         infoWindow: InfoWindow(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Order(order: o)));
+            },
             title: "Order Num ${o.id}",
             snippet: o.buyer.firstName,
           ),
@@ -59,7 +63,7 @@ final List<Marker> markers=List();
     
   }
 
-  List<Marker> AddMarkers(List<Orders> orderslist){
+  List<Marker> AddMarkers(List<Orders> orderslist,context){
     if(markers.length>0){
           markers.clear();
     }
@@ -70,7 +74,7 @@ final List<Marker> markers=List();
       double long = double.parse(order.seller.long);
       assert(long is double);
       final marker=Marker(
-        onTap: (){showClients(orderslist,order);},
+        onTap: (){showClients(orderslist,order,context);},
         markerId: MarkerId(order.seller.name),
         position: LatLng(lat,long),
         infoWindow: InfoWindow(
