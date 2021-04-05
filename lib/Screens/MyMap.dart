@@ -48,6 +48,7 @@ class MapPage extends State<MyMap> {
     mapProvider = Provider.of<MapProvider>(context, listen: false);
     mapProvider.getCurrentLocation(_geolocator,_currentPosition,mapController);
     markers=mapProvider.AddMarkers(orderslist,context,_geolocator);
+    mapProvider.chosen=false;
     for(Marker marker in markers){
       //print(marker.markerId);
     }
@@ -64,7 +65,7 @@ class MapPage extends State<MyMap> {
     double devicewidth = MediaQuery.of(ctx).size.width;
 
     Widget gmap() {
-          print("this is ${orderslist[0].price}");
+          //print("this is ${orderslist[0].price}");
 
       return
         Stack(
@@ -73,8 +74,15 @@ class MapPage extends State<MyMap> {
               child: Container(height: deviceheight,
                 child: GoogleMap(
 
-
+                  onTap: (index){
+                    mapProvider.polylines.clear();
+                    mapProvider.AddMarkers(orderslist, context, _geolocator);
+                    //mapProvider.removeClientsMarkers();
+                    //mapProvider.markers.clear();
+                    mapProvider.notify();
+                  },
                   polylines: Set<Polyline>.of(mapProvider.polylines.values),
+                  //polylines: ,
                   initialCameraPosition:
                   _initialLocation = CameraPosition(target: LatLng(0.0, 0.0)),
                   myLocationEnabled: true,

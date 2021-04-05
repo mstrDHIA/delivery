@@ -12,14 +12,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapProvider extends ChangeNotifier {
 
 
-
+bool chosen=false;
 
 final List<Marker> markers=List();
 
     PolylinePoints polylinePoints = PolylinePoints();
     final Map<PolylineId, Polyline> polylines = {};
+    final List<Map<PolylineId, Polyline>> polylist=List();
 
-   void _getPolyline(Position start,Position end) async {
+   void _getPolyline(Position start,Position end,String name) async {
     List<LatLng> polylineCoordinates = [];
 
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -35,12 +36,12 @@ final List<Marker> markers=List();
     } else {
       print(result.errorMessage);
     }
-    _addPolyLine(polylineCoordinates);
+    _addPolyLine(polylineCoordinates,name);
   }
 
 
-   _addPolyLine(List<LatLng> polylineCoordinates) {
-    PolylineId id = PolylineId("poly");
+   _addPolyLine(List<LatLng> polylineCoordinates,String name) {
+    PolylineId id = PolylineId(name);
     Polyline polyline = Polyline(
       polylineId: id,
       color: Colors.red,
@@ -48,12 +49,35 @@ final List<Marker> markers=List();
       width: 8,
     );
     polylines[id] = polyline;
+    polylist.add(polylines);
     notify();
+  }
+
+
+  void removeClientsMarkers(){
+    for(int i=0;i<markers.length;i++){
+
+      String markerid=markers[i].markerId.value.toString();
+      List<String> markertype=markerid.split(',');
+              //print(markertype);
+        print(markers.length);
+        print(markers[i].markerId);
+
+      //print(markertype[0]);
+      if(markertype[0]=="buyer"){
+        //print("verify");
+        //print(markers.length);
+       // markers.remove(markers[i]);
+        
+        notify();
+      }
+
+    }
   }
 
   void showClients(List<Orders> orderslist,Orders order,context){
     if(markers.length>0){
-          markers.clear();
+          //markers.clear();
     }
           double lat = double.parse(order.seller.lat);
       assert(lat is double);
@@ -79,11 +103,11 @@ final List<Marker> markers=List();
       assert(long is double);
       final marker=Marker(
         //onTap: showClients(),
-        markerId: MarkerId(o.buyer.firstName),
+        markerId: MarkerId("buyer,${o.buyer.firstName}"),
         position: LatLng(lat,long),
         onTap: () async {
-          
-         
+          chosen=true;
+
           double endlat=double.parse(order.seller.lat);
           double endlong=double.parse(order.seller.long);
           double startlat=double.parse(o.buyer.lat);
@@ -92,10 +116,12 @@ final List<Marker> markers=List();
           Position end=Position(latitude:endlat,longitude: endlong );
           Position start=Position(latitude:startlat,longitude: startlong );
 
-          _getPolyline(start, end);
+          _getPolyline(start, end,o.buyer.firstName);
           
           print(polylines.length);
-
+          notify();
+          print(chosen);
+          //chosen=true;
           
           },
         infoWindow: InfoWindow(
@@ -111,7 +137,7 @@ final List<Marker> markers=List();
         }
     }
 
-    print(markers.length);
+    //print(markers.length);
 
 
 
@@ -132,7 +158,13 @@ final List<Marker> markers=List();
       assert(long is double);
       final marker=Marker(
         onTap: () async {
-          
+          print(chosen);
+          if(chosen){
+          polylines.clear();
+          chosen=false;
+          print('blabalbla');
+          notify();
+          }
           await _geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) async {
@@ -140,12 +172,13 @@ final List<Marker> markers=List();
           double endlong=double.parse(order.seller.long);
 
           Position end=Position(latitude:endlat,longitude: endlong );
-          _getPolyline(position, end);
+          _getPolyline(position, end,order.seller.name);
           showClients(orderslist,order,context);
-                    print(polylines.length);
+                   // print(polylines.length);
 
           });
 
+                    notify();
 
           
           },
@@ -170,7 +203,7 @@ final List<Marker> markers=List();
         // Store the position in the variable
         _currentPosition = position;
 
-        print('CURRENT POS: $_currentPosition');
+        //print('CURRENT POS: $_currentPosition');
 
         // For moving the camera to current location
         mapController.animateCamera(
