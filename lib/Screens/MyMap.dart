@@ -8,17 +8,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 
-class Map extends StatefulWidget{
+class MyMap extends StatefulWidget{
   final List<Orders> orderslist;
 
-  const Map({Key key, this.orderslist}) : super(key: key);
+
+  const MyMap({Key key, this.orderslist}) : super(key: key);
 
   @override
   MapPage createState() => MapPage(orderslist);
 }
 int currentindex=0;
 
-class MapPage extends State<Map> {
+class MapPage extends State<MyMap> {
   final List<Orders> orderslist;
   
   static CameraPosition _initialLocation = CameraPosition(
@@ -46,10 +47,11 @@ class MapPage extends State<Map> {
 
     mapProvider = Provider.of<MapProvider>(context, listen: false);
     mapProvider.getCurrentLocation(_geolocator,_currentPosition,mapController);
-    markers=mapProvider.AddMarkers(orderslist,context);
+    markers=mapProvider.AddMarkers(orderslist,context,_geolocator);
     for(Marker marker in markers){
-      print(marker.markerId);
+      //print(marker.markerId);
     }
+    mapProvider.polylines.clear();
     super.initState();
 
 
@@ -72,7 +74,7 @@ class MapPage extends State<Map> {
                 child: GoogleMap(
 
 
-                  // polylines: Set<Polyline>.of(polylines.values),
+                  polylines: Set<Polyline>.of(mapProvider.polylines.values),
                   initialCameraPosition:
                   _initialLocation = CameraPosition(target: LatLng(0.0, 0.0)),
                   myLocationEnabled: true,
