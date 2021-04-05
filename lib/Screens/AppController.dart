@@ -144,7 +144,7 @@ class AppPage extends State<AppController> {
       }
       else if (currentindex == 1) {
         return PreferredSize(
-            child: Map(orderslist: provider.allorders,),
+            child: MyMap(orderslist: provider.allorders,),
             preferredSize: Size.fromHeight(deviceheight*0.871)
         );/*Container(
           color: Color.fromRGBO(211, 16, 39, 0.3),
