@@ -32,7 +32,8 @@ Future<void> fetchdata(context)async{
 */
 
 
- CaclulDistance(Orders order)async{
+ CaclulDistance(Orders order,Geolocator geo)async{
+   double d;
    double blat = double.parse(order.buyer.lat);
       assert(blat is double);
       double blong = double.parse(order.buyer.long);
@@ -41,7 +42,23 @@ Future<void> fetchdata(context)async{
       assert(slat is double);
       double slong = double.parse(order.seller.long);
       assert(slong is double);
-   distance =await Geolocator().distanceBetween(slat, slong, blat, blong);
+   d =await Geolocator().distanceBetween(slat, slong, blat, blong);
+   d=d/1000;
+   distance=double.parse(d.toStringAsPrecision(2));
+   geo.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+         .then((Position position) async{
+                     d =await Geolocator().distanceBetween(slat, slong, position.latitude, position.longitude);
+                  d=d/1000;
+   d=double.parse(d.toStringAsPrecision(2));
+         });
+         print(d);
+         distance=distance+d;
+            distance=double.parse(distance.toStringAsPrecision(2));
+
+                  //print(distance);
+
+   notify();
+   //return distance;
   //print(distance);
   //return distanceInMeters;
 }

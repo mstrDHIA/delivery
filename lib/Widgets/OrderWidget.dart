@@ -51,9 +51,9 @@ import 'package:flutter/material.dart';
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Image.asset('assets/location (2).png'),
+                  Image.asset('assets/sellerpin.png'),
                   Image.asset('assets/Component 1 – 1.png'),
-                  Image.asset('assets/location (3).png'),
+                  Image.asset('assets/buyerpin.png'),
 
                 ],
               ),
@@ -420,7 +420,7 @@ timer({context,Orders order}) {
 
    info({context,text,value,OrderProvider orderprovider,Orders orders}) {
    // var v=orderprovider.CaclulDistance(orders);
-    print(orderprovider.distance);
+    //print(orderprovider.distance);
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return Padding(
@@ -441,7 +441,7 @@ timer({context,Orders order}) {
           ),
           Center(
               child: Text(
-                  "${orderprovider.distance}m",
+                  "${orderprovider.distance}Km",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700

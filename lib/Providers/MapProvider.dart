@@ -12,6 +12,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapProvider extends ChangeNotifier {
 
 
+BitmapDescriptor customIcon1;
+BitmapDescriptor customIcon2;
+
+
 bool chosen=false;
 final List<Marker> buyermarkers=List();
 
@@ -58,6 +62,8 @@ final List<Marker> markers=List();
 
 
   void AddMarkers(List<Orders> orderslist,context,Geolocator _geolocator){
+  
+
     if(markers.length>0){
       markers.clear();
     }
@@ -67,7 +73,8 @@ final List<Marker> markers=List();
        double long = double.parse(order.seller.long);
        assert(long is double);
        Marker marker=Marker(
-         position: LatLng(lat,long),
+         icon: customIcon1,
+          position: LatLng(lat,long),
          markerId: MarkerId("seller,${order.seller.name}"),
          
          onTap: ()  async{
@@ -133,6 +140,8 @@ final List<Marker> markers=List();
             double long = double.parse(o.buyer.long);
             assert(long is double);
             Marker marker=Marker(
+              icon: customIcon2,
+
               position: LatLng(lat,long),
               markerId: MarkerId("buyer,${o.buyer.firstName}"),
               infoWindow: InfoWindow(

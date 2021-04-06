@@ -47,6 +47,35 @@ class MapPage extends State<MyMap> {
 
     mapProvider = Provider.of<MapProvider>(context, listen: false);
     mapProvider.getCurrentLocation(_geolocator,_currentPosition,mapController);
+
+BitmapDescriptor.fromAssetImage(
+         ImageConfiguration(devicePixelRatio: 2.5),
+         'assets/sellerpin.png').then((onValue) {
+            mapProvider.customIcon1 = onValue;
+         });
+         BitmapDescriptor.fromAssetImage(
+         ImageConfiguration(devicePixelRatio: 2.5),
+         'assets/buyerpin.png').then((onValue) {
+            mapProvider.customIcon2 = onValue;
+         });
+  // }
+
+//       if (mapProvider.customIcon1 == null) {
+//     ImageConfiguration configuration = createLocalImageConfiguration(context);
+//     BitmapDescriptor.fromAssetImage(configuration, 'assets/sellerpin.png')
+//         .then((icon) {
+//         mapProvider.customIcon1 = icon;
+//         mapProvider.notify();
+//     });
+//   }
+//  if (mapProvider.customIcon2 == null) {
+//     ImageConfiguration configuration = createLocalImageConfiguration(context);
+//     BitmapDescriptor.fromAssetImage(configuration, 'assets/buyerpin.png')
+//         .then((icon) {
+//         mapProvider.customIcon1 = icon;
+//         mapProvider.notify();
+//     });
+ // }
     // mapProvider.AddMarkers(orderslist,context,_geolocator);
     mapProvider.chosen=false;
    

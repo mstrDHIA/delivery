@@ -4,6 +4,7 @@ import 'package:delivery_app_v0/Providers/OrderProvider.dart';
 import 'package:delivery_app_v0/Widgets/OrderWidget.dart';
 import 'package:delivery_app_v0/Widgets/popupMenu.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'OrdersScreen.dart';
 import '../Models/Orders.dart';
@@ -25,13 +26,16 @@ class Order extends  StatefulWidget{
 class OrderPage extends State<Order>{
 final Orders order;
 MenuProvider menuProvider;
-Future<double> distance;
+//Future<double> distance;
 OrderPage(this.order);
 OrderProvider orderProvider;
+Geolocator geo=Geolocator();
 @override
   Future<void> initState()  {
   orderProvider = Provider.of<OrderProvider>(context, listen: false);
   menuProvider = Provider.of<MenuProvider>(context, listen: false);
+  orderProvider.CaclulDistance(order,geo);
+  //print(distance);
     super.initState();
   }
   @override
@@ -125,33 +129,38 @@ OrderProvider orderProvider;
         )
       ),
       backgroundColor: Color(0xfffafafa),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            blank(context: context),
+      body: Consumer<OrderProvider>(
+              builder: (BuildContext context, value, Widget child) {
+                  return SingleChildScrollView(
+          child: Column(
+            children: [
+              blank(context: context),
 
 
 
-            Container(
-              transform: Matrix4.translationValues(
+              Container(
+                transform: Matrix4.translationValues(
 
 
-                  0, -deviceheight * 0.08, 0.0),
-              child: Column(
-                children: [route(context: context,order: order),
-                showmap(context: context),
-                bill(context: context,order: order,orderProvider: orderProvider),
-                info(context: context,text: "distance:",orderprovider: orderProvider,orders: order),
+                    0, -deviceheight * 0.08, 0.0),
+                child: Column(
+                  children: [route(context: context,order: order),
+                  showmap(context: context),
+                  bill(context: context,order: order,orderProvider: orderProvider),
+                  info(context: context,text: "distance:",orderprovider: orderProvider,orders: order),
 
-                timer(context: context,order: order),
+                  timer(context: context,order: order),
 
-                ],
-              ),
-            )
+                  ],
+                ),
+              )
 
 
-          ],
-        ),
+            ],
+          ),
+        );
+                },
+              
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
