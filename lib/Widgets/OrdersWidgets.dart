@@ -86,13 +86,15 @@ Widget listitem(context,Orders order) {
                         fontSize: 17,
                         fontWeight: FontWeight.w500),
                   ),
-                  Text(
-                    "${order.seller.name}",
-                    style: TextStyle(
-                        color: Color.fromRGBO(187, 33, 33, 0.86),
-                        fontFamily: 'calist',
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500),
+                  Expanded(
+                                      child: Text(
+                      "${order.seller.name}",
+                      style: TextStyle(
+                          color: Color.fromRGBO(187, 33, 33, 0.86),
+                          fontFamily: 'calist',
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
 
                 ],

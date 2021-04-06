@@ -13,6 +13,7 @@ class MapProvider extends ChangeNotifier {
 
 
 bool chosen=false;
+final List<Marker> buyermarkers=List();
 
 final List<Marker> markers=List();
 
@@ -53,147 +54,140 @@ final List<Marker> markers=List();
     notify();
   }
 
+ 
 
-  void removeClientsMarkers(){
-    for(int i=0;i<markers.length;i++){
 
-      String markerid=markers[i].markerId.value.toString();
-      List<String> markertype=markerid.split(',');
-              //print(markertype);
-        print(markers.length);
-        print(markers[i].markerId);
-
-      //print(markertype[0]);
-      if(markertype[0]=="buyer"){
-        //print("verify");
-        //print(markers.length);
-       // markers.remove(markers[i]);
-        
-        notify();
-      }
-
-    }
-  }
-
-  void showClients(List<Orders> orderslist,Orders order,context){
+  void AddMarkers(List<Orders> orderslist,context,Geolocator _geolocator){
     if(markers.length>0){
-          //markers.clear();
+      markers.clear();
     }
-          double lat = double.parse(order.seller.lat);
-      assert(lat is double);
-      double long = double.parse(order.seller.long);
-      assert(long is double);
-      final marker=Marker(
-       // onTap: showClients(),
-        markerId: MarkerId(order.seller.name),
-        position: LatLng(lat,long),
-        infoWindow: InfoWindow(
-            title: "Order Num ${order.id}",
-            snippet: order.seller.name,
-          ),
-      );
-      markers.add(marker);
-
-
-      for(Orders o in orderslist){
-        if(order.seller.id==o.seller.id){
-      double lat = double.parse(o.buyer.lat);
-      assert(lat is double);
-      double long = double.parse(o.buyer.long);
-      assert(long is double);
-      final marker=Marker(
-        //onTap: showClients(),
-        markerId: MarkerId("buyer,${o.buyer.firstName}"),
-        position: LatLng(lat,long),
-        onTap: () async {
-          chosen=true;
-
-          double endlat=double.parse(order.seller.lat);
-          double endlong=double.parse(order.seller.long);
-          double startlat=double.parse(o.buyer.lat);
-          double startlong=double.parse(o.buyer.long);
-
-          Position end=Position(latitude:endlat,longitude: endlong );
-          Position start=Position(latitude:startlat,longitude: startlong );
-
-          _getPolyline(start, end,o.buyer.firstName);
-          
-          print(polylines.length);
-          notify();
-          print(chosen);
-          //chosen=true;
-          
-          },
-        infoWindow: InfoWindow(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Order(order: o)));
-            },
-            title: "Order Num ${o.id}",
-            snippet: o.buyer.firstName,
-          ),
-      );
-      markers.add(marker);
-      notify();
-        }
-    }
-
-    //print(markers.length);
-
-
-
-    
-    
-    
-  }
-
-  List<Marker> AddMarkers(List<Orders> orderslist,context,Geolocator _geolocator){
-    if(markers.length>0){
-          markers.clear();
-    }
-    
     for(Orders order in orderslist){
       double lat = double.parse(order.seller.lat);
-      assert(lat is double);
-      double long = double.parse(order.seller.long);
-      assert(long is double);
-      final marker=Marker(
-        onTap: () async {
-          print(chosen);
-          if(chosen){
-          polylines.clear();
-          chosen=false;
-          print('blabalbla');
-          notify();
-          }
-          await _geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) async {
-          double endlat=double.parse(order.seller.lat);
-          double endlong=double.parse(order.seller.long);
+       assert(lat is double);
+       double long = double.parse(order.seller.long);
+       assert(long is double);
+       Marker marker=Marker(
+         position: LatLng(lat,long),
+         markerId: MarkerId("seller,${order.seller.name}"),
+         
+         onTap: ()  async{
+            selleraction(order,orderslist,context,_geolocator);
 
-          Position end=Position(latitude:endlat,longitude: endlong );
-          _getPolyline(position, end,order.seller.name);
-          showClients(orderslist,order,context);
-                   // print(polylines.length);
+           
+           await _geolocator
+         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+         .then((Position position) async{
 
-          });
+                  Position end=Position(latitude: lat,longitude: long);
+                  _getPolyline(position, end, "route seller");
+         print("3lh");
+         notify();
 
-                    notify();
-
-          
-          },
-        markerId: MarkerId(order.seller.name),
-        position: LatLng(lat,long),
-        infoWindow: InfoWindow(
-            title: "Order Num ${order.id}",
-            snippet: order.seller.name,
-          ),
-      );
-      markers.add(marker);
+         });
+         notify();
+         },
+         infoWindow: InfoWindow(
+            title: order.seller.name
+         ),
+       );
+       markers.add(marker);
     }
-    return markers;
+           notify();
+
   }
-  
+
+
+
+   Future<void> selleraction(Orders order,List<Orders> orderslist,context,Geolocator _geolocator) async {
+     if(polylines.length>1){
+       print(polylines.length);
+       print("polypoly");
+       polylines.remove(polylines[1]);
+              print(polylines.length);
+
+       notify();
+     }
+    int i=0;
+    while(i<markers.length){
+      print(markers[i].markerId);
+
+      if(markers[i].markerId!=MarkerId("seller,${order.seller.name}")){
+
+        markers.remove(markers[i]);
+      }
+      else{
+        i++;
+      }
+    }
+    double lat = double.parse(order.seller.lat);
+       assert(lat is double);
+       double long = double.parse(order.seller.long);
+       assert(long is double);
+       
+        
+
+       for(Orders o in orderslist){
+         if(order.seller.id==o.seller.id){          
+            double lat = double.parse(o.buyer.lat);
+            assert(lat is double);
+            double long = double.parse(o.buyer.long);
+            assert(long is double);
+            Marker marker=Marker(
+              position: LatLng(lat,long),
+              markerId: MarkerId("buyer,${o.buyer.firstName}"),
+              infoWindow: InfoWindow(
+                title: "buyer ${o.buyer.firstName}",
+                onTap: (){Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Order(order: o)));}
+              ),
+              onTap: (){
+
+                buyeraction(o);
+                notify();
+              }
+            );
+            buyermarkers.add(marker);
+            markers.add(marker);
+         }
+       }
+       
+    notify();
+  }
+
+  void buyeraction(Orders order){
+    double lats = double.parse(order.seller.lat);
+      assert(lats is double);
+      double longs = double.parse(order.seller.long);
+      assert(longs is double);
+double late = double.parse(order.buyer.lat);
+      assert(late is double);
+      double longe = double.parse(order.buyer.long);
+      assert(longe is double);
+    Position start=Position(latitude: lats,longitude: longs);
+        Position end=Position(latitude: late,longitude: longe);
+  print(polylines.length);
+    _getPolyline(start, end, "route buyer");
+  print(polylines.length);
+
+    notify();
+    int i=0;
+    while(i<markers.length){
+      print("dddd");
+        if((markers[i].markerId!= MarkerId("buyer,${order.buyer.firstName}"))&(markers[i].markerId != MarkerId("seller,${order.seller.name}"))){
+          
+              print(markers[i].markerId);
+              print("same");
+                markers.remove(markers[i]);
+            
+
+        }
+        else{
+                        print("not same");
+
+          i++;
+        }
+        notify();
+    }
+}
 
   void getCurrentLocation(Geolocator _geolocator,Position _currentPosition,GoogleMapController mapController) async {
     await _geolocator

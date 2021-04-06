@@ -39,7 +39,7 @@ class MapPage extends State<MyMap> {
 
   MapPage(this.orderslist);
 
-      List<Marker> markers;
+      //List<Marker> markers;
 
 
   @override
@@ -47,11 +47,9 @@ class MapPage extends State<MyMap> {
 
     mapProvider = Provider.of<MapProvider>(context, listen: false);
     mapProvider.getCurrentLocation(_geolocator,_currentPosition,mapController);
-    markers=mapProvider.AddMarkers(orderslist,context,_geolocator);
+    // mapProvider.AddMarkers(orderslist,context,_geolocator);
     mapProvider.chosen=false;
-    for(Marker marker in markers){
-      //print(marker.markerId);
-    }
+   
     mapProvider.polylines.clear();
     super.initState();
 
@@ -91,10 +89,12 @@ class MapPage extends State<MyMap> {
                   mapType: MapType.normal,
                   zoomGesturesEnabled: true,
                   zoomControlsEnabled: false,
-                  markers: markers.toSet(),
+                  markers: mapProvider.markers.toSet(),
                   
                   //onTap: goto,
                   onMapCreated: (GoogleMapController controller) {
+                    mapProvider.AddMarkers(orderslist,context,_geolocator);
+
                     mapController = controller;
                   },
 
