@@ -47,6 +47,7 @@ class MapPage extends State<MyMap> {
 
     mapProvider = Provider.of<MapProvider>(context, listen: false);
     mapProvider.getCurrentLocation(_geolocator,_currentPosition,mapController);
+      mapProvider.checkGps();
 
 BitmapDescriptor.fromAssetImage(
          ImageConfiguration(devicePixelRatio: 2.5),

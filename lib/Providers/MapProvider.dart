@@ -3,6 +3,7 @@ import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Screens/Order.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:delivery_app_v0/API/APIS.dart';
+import 'package:location/location.dart' as loc;
 
 import '../Screens/MyMap.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,16 @@ final List<Marker> markers=List();
     PolylinePoints polylinePoints = PolylinePoints();
     final Map<PolylineId, Polyline> polylines = {};
     final List<Map<PolylineId, Polyline>> polylist=List();
+
+
+  var location = loc.Location();
+
+
+Future checkGps() async {
+if(!await location.serviceEnabled()){
+   location.requestService();
+  }
+}
 
    void _getPolyline(Position start,Position end,String name) async {
     List<LatLng> polylineCoordinates = [];
