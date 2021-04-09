@@ -9,9 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:delivery_app_v0/API/APIS.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import '../main.dart';
 
 class LoginProvider extends ChangeNotifier {
+
   String msg="";
   void notify(){
     try{
@@ -23,6 +25,15 @@ class LoginProvider extends ChangeNotifier {
   }
 
 Future<void> getUser(context,id) async{
+    final prefs = await SharedPreferences.getInstance();
+    //bool signed=await prefs.then((value) => value.getBool('logged')??false);
+
+    //await prefs.setBool('logged', signed).then((bool success) {};
+     
+    prefs.setBool("logged", true).then((bool success) {
+        print("logged");
+      });
+      
   String url=getUserApi+"$id/";
   print(url);
  final userresponse=await http.get(getUserApi+"$id/");
@@ -60,6 +71,7 @@ Future<void> getUser(context,id) async{
 
 
 Future<void> Login(context,username,password) async{
+
   final loginresponse = await http.post(
     Authentication,
     headers: <String, String>{
@@ -77,6 +89,7 @@ Future<void> Login(context,username,password) async{
     
     print(decoded["user_id"]);
     getUser(context, decoded["user_id"]);
+    
     //Token token=Token.fromJson(loginresponse.body);
 /*Navigator.pushAndRemoveUntil(
       context,

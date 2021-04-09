@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'API/APIS.dart';
 import 'Providers/LoginProvider.dart';
@@ -9,6 +10,7 @@ import 'Providers/MenuProvider.dart';
 import 'Providers/OrderProvider.dart';
 
 import 'Providers/RegisterProvider.dart';
+import 'Screens/AppController.dart';
 import 'Screens/Register.dart';
 import 'Screens/api test.dart';
 
@@ -17,6 +19,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+    
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -52,8 +55,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+  bool signed;
+  @override
+  Future<void> initState()   {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+
     String GAK=GoogleApiKey;
     String AO=getOrdersApi;
 
@@ -75,12 +87,26 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async{
+          signed=await prefs.then((value) => value.getBool('logged')??false);
+
+          if(!signed){
+              Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => Register(),
               ));
+          }
+          else{
+            Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => AppController(),
+      ),
+      (route) => false,
+    );  
+          }
+          
         },
         child: Icon(Icons.add),
       ),
