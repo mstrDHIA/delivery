@@ -13,6 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
 class LoginProvider extends ChangeNotifier {
+  String uservalid="";
+    String passwordvalid="";
 
   String msg="";
   void notify(){
@@ -23,6 +25,35 @@ class LoginProvider extends ChangeNotifier {
       print(e);
     }
   }
+
+
+ passwordvalidation(String password){
+  if(password==""){
+  
+
+     passwordvalid="this field is required";
+  }
+  else {
+   
+
+    passwordvalid= "";
+  }
+  notify();
+}
+
+  String uservalidation(String user){
+  if(user==""){
+  
+
+    uservalid= "this field is required";
+  }
+  else {
+
+    uservalid= "";
+    
+  }
+  notify();
+}
 
 Future<void> getUser(context,id) async{
     final prefs = await SharedPreferences.getInstance();

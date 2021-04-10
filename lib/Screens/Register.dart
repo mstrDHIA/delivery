@@ -302,10 +302,10 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           children: [
             roundedtop(context,),
-            InputWidget(placeholder:"Email",ic:Icon(Icons.alternate_email,),context:context,controller: emailcontrol),
-            InputWidget(placeholder:"User Name",ic:Icon(Icons.person,),context:context,controller: usernamecontrol),
-            InputWidget(placeholder:"Phone Number",ic:Icon(Icons.phone,),context:context,controller: phonecontrol),
-            InputWidget(placeholder:"Password",ic:Icon(Icons.lock,),context:context,controller: passwordcontrol),
+            InputWidget(placeholder:"Email",ic:Icon(Icons.alternate_email,),context:context,controller: emailcontrol,ispassword: false),
+            InputWidget(placeholder:"User Name",ic:Icon(Icons.person,),context:context,controller: usernamecontrol,ispassword: false),
+            InputWidget(placeholder:"Phone Number",ic:Icon(Icons.phone,),context:context,controller: phonecontrol,ispassword: false),
+            InputWidget(placeholder:"Password",ic:Icon(Icons.lock,),context:context,controller: passwordcontrol,ispassword: true),
 
             
             Padding(

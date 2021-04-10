@@ -2,6 +2,8 @@ import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
 import 'package:flutter/material.dart';
 
+import 'package:form_field_validator/form_field_validator.dart';
+
 verify(LoginProvider loginprovider){
   
 }
@@ -62,13 +64,19 @@ roundedtop(context) {
   );
 }
 
+
+
+
 InputWidget({String placeholder, Icon ic, context,TextEditingController controller,bool ispassword}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
+  
+ // final requiredValidator = RequiredValidator(errorText: 'this field is required'
+  //);
 
   return Center(
     child: Padding(
-      padding: const EdgeInsets.only(right: 40, left: 40, top: 32, bottom: 8),
+      padding: const EdgeInsets.only(right: 35, left: 35, top: 32, bottom: 8),
       child: Opacity(
         opacity: 0.7,
         child: Container(
@@ -85,7 +93,7 @@ InputWidget({String placeholder, Icon ic, context,TextEditingController controll
               border: Border.all(color: Colors.black, width: 0.3)),
           child: Stack(children: [
             
-            Opacity(
+            Opacity( 
                 opacity: 1,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10, top: 2),
@@ -94,12 +102,21 @@ InputWidget({String placeholder, Icon ic, context,TextEditingController controll
                       primaryColor: Colors.redAccent,
                     ),
                     child: TextFormField(
-                      
+                      /*validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },*/
+                      //autovalidate: true,
+                      //validator: requiredValidator,
                       obscureText: ispassword,
                       controller: controller,
                       cursorColor: Colors.redAccent,
                       decoration: InputDecoration(
                           prefixIcon: ic,
+                          //labelText: "$placeholder",
+                          //alignLabelWithHint: true,
                           border: InputBorder.none,
                           hintText: "$placeholder",
                           contentPadding: EdgeInsets.only(
@@ -115,7 +132,9 @@ InputWidget({String placeholder, Icon ic, context,TextEditingController controll
   );
 }
 
-But({context,provider,username,password,whattodo}) {
+
+
+But({context, provider,username,password,whattodo,formkey,String uservalid,String passwordvalid}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
   return Container(
@@ -136,8 +155,21 @@ But({context,provider,username,password,whattodo}) {
 
               }
               else if(whattodo=="Login"){
-                provider.Login(context, username.text, password.text);
+                provider.uservalidation(username.text);
+                provider.passwordvalidation(password.text);
+                                 
 
+                  
+                 if (formkey.currentState.validate()) {
+                  provider.Login(context, username.text, password.text);
+                }
+                
+
+                  // If the form is valid, display a snackbar. In the real world,
+                  // you'd often call a server or save the information in a database.
+                 // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));
+                
+                 print(uservalid);
               }
               
                 provider.notify();

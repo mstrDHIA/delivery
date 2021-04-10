@@ -34,13 +34,19 @@ class _LoginPageState extends State<LoginPage> {
     final usernamecontrol=TextEditingController();
     final passwordcontrol=TextEditingController();
 
+  final formKey = GlobalKey<FormState>();
+    String uservalid;
+    String passwordvalid;
 
     LoginProvider loginProvider;
   @override
   void initState() {
+     
+
     // TODO: implement initState
       loginProvider = Provider.of<LoginProvider>(context, listen: false);
-
+      loginProvider.uservalid="";
+     loginProvider.passwordvalid="";
     super.initState();
   }
   @override
@@ -58,19 +64,30 @@ class _LoginPageState extends State<LoginPage> {
                       return Column(
               children: [
                 roundedtop(context),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top:16.0),
-                  child: InputWidget(placeholder:"User Name",ic:Icon(Icons.person),context:context,controller:usernamecontrol,ispassword: false),
-                ),
+                Form(
+                  key: formKey,
+                                  child:Column(
+                                    children: [Padding(
+                    padding: const EdgeInsets.only(
+                        top:16.0),
+                    child: InputWidget(placeholder:"User Name",ic:Icon(Icons.person),context:context,controller:usernamecontrol,ispassword: false),
+                  ),
+                  Text(loginProvider.uservalid),
                 InputWidget(placeholder:"Password",ic:Icon(Icons.lock),context:context,controller:passwordcontrol,ispassword: true),
+                  Text(loginProvider.passwordvalid),
+                  
+
                 Padding(
                   padding: const EdgeInsets.only(
                       top:36.0,
                       bottom: 8
                   ),
-                  child: But(context:context,provider:loginProvider,username:usernamecontrol,password:passwordcontrol,whattodo: whattodo),
+                  child: But(context:context,provider:loginProvider,username:usernamecontrol,password:passwordcontrol,whattodo: whattodo,formkey: formKey),
+                ),],
+                                  )
                 ),
+                
+                
                 Padding(
                     padding: const EdgeInsets.only(
                         top:16.0,
@@ -80,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
 
                     child: Column(
                       children: [
+                        
                         Text(loginProvider.msg),
                         Link("Don't have an account","Register",Register(),context),
 

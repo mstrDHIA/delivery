@@ -8,6 +8,7 @@ import 'package:delivery_app_v0/API/APIS.dart';
 
 
 class RegisterProvider extends ChangeNotifier {
+  String passwordvalid="";
 
 Future<void> Register(context,username,password,email,phone) async{
   final registerresponse = await http.post(
@@ -34,6 +35,23 @@ Navigator.pushAndRemoveUntil(
     print("false information");
   }
   notify();
+}
+
+bool passwordvalidaion(String password){
+  if(password.length>8){
+    passwordvalid="";
+    return true;
+  }
+  else if(password.length==0){
+    passwordvalid="this field is required";
+
+    return false;
+  }
+  else{
+    passwordvalid="the password must be at least 8 characters";
+    return false;
+
+  }
 }
 
 
