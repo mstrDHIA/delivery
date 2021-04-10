@@ -62,7 +62,7 @@ roundedtop(context) {
   );
 }
 
-InputWidget({String placeholder, Icon ic, context,TextEditingController controller}) {
+InputWidget({String placeholder, Icon ic, context,TextEditingController controller,bool ispassword}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
 
@@ -94,6 +94,8 @@ InputWidget({String placeholder, Icon ic, context,TextEditingController controll
                       primaryColor: Colors.redAccent,
                     ),
                     child: TextFormField(
+                      
+                      obscureText: ispassword,
                       controller: controller,
                       cursorColor: Colors.redAccent,
                       decoration: InputDecoration(

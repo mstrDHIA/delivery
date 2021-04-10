@@ -61,9 +61,9 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.only(
                       top:16.0),
-                  child: InputWidget(placeholder:"User Name",ic:Icon(Icons.person),context:context,controller:usernamecontrol),
+                  child: InputWidget(placeholder:"User Name",ic:Icon(Icons.person),context:context,controller:usernamecontrol,ispassword: false),
                 ),
-                InputWidget(placeholder:"Password",ic:Icon(Icons.lock),context:context,controller:passwordcontrol),
+                InputWidget(placeholder:"Password",ic:Icon(Icons.lock),context:context,controller:passwordcontrol,ispassword: true),
                 Padding(
                   padding: const EdgeInsets.only(
                       top:36.0,
