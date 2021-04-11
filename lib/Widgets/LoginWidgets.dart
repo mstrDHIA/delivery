@@ -67,12 +67,20 @@ roundedtop(context) {
 
 
 
+
+
+
+
+
+
+
+
 InputWidget({String placeholder, Icon ic, context,TextEditingController controller,bool ispassword}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
   
  // final requiredValidator = RequiredValidator(errorText: 'this field is required'
-  //);
+ //);
 
   return Center(
     child: Padding(
@@ -140,7 +148,7 @@ But({context, provider,username,password,whattodo,formkey,String uservalid,Strin
   return Container(
     child: Stack(children: [
       Center(
-        child: Text('Login',
+        child: Text(whattodo,
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -150,9 +158,11 @@ But({context, provider,username,password,whattodo,formkey,String uservalid,Strin
           opacity: 0,
           child: RaisedButton(
             onPressed: () async {
-              if(whattodo=="register"){
-                provider.Register(context, username.text, password.text);
+              if(whattodo=="Register"){
+                if(provider.registerpasswordvalidation(password.text)){
 
+                provider.Register(context, username.text, password.text);
+                }
               }
               else if(whattodo=="Login"){
                 provider.uservalidation(username.text);

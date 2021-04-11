@@ -9,6 +9,64 @@ import 'package:delivery_app_v0/API/APIS.dart';
 
 class RegisterProvider extends ChangeNotifier {
   String passwordvalid="";
+  String emailvalid="";
+
+
+
+
+registeremailvalidation(String email){
+  emailvalid="";
+  bool ok=true;
+   if(email==""){
+    ok=false;
+    emailvalid="this field is required";
+  }
+  else {
+    emailvalid= "";
+  }
+   notify();
+   print(passwordvalid);
+   return ok;
+}
+
+registerpasswordvalidation(String password){
+  passwordvalid="";
+  bool ok=true;
+   if(password==""){
+     ok=false;
+
+     passwordvalid="this field is required";
+  }
+  else {
+   
+
+    passwordvalid= "";
+  }
+   if(password.contains(new RegExp(r'[A-Z]'))){
+
+     passwordvalid+="";
+   }
+   else{
+               ok=false;
+
+     passwordvalid+="\n password can't be entirely numeric";
+
+   }
+   if(password.length<8){
+          ok=false;
+
+     passwordvalid+="\n password length should be > 8";
+
+   }
+   else{
+      passwordvalid+="";
+
+   }
+   notify();
+   print(passwordvalid);
+   return ok;
+ }
+
 
 Future<void> Register(context,username,password,email,phone) async{
   final registerresponse = await http.post(

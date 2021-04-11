@@ -26,8 +26,11 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
+ 
+
 
  passwordvalidation(String password){
+   
   if(password==""){
   
 
