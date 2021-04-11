@@ -6,13 +6,17 @@ import 'package:delivery_app_v0/Models/OrderItems.dart';
 import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Models/Payment.dart';
 import 'package:delivery_app_v0/Models/Seller.dart';
+import 'package:delivery_app_v0/Screens/AppController.dart';
+import 'package:delivery_app_v0/Screens/OrdersScreen.dart';
+import 'package:delivery_app_v0/Widgets/OrderWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../Widgets/OrdersWidgets.dart';
 import 'package:http/http.dart' as http;
 
 class OrderProvider extends ChangeNotifier{
-
+  bool taken=false;
+Widget which=OrdersScreen();
 
 final List<Widget> list=List();
 bool loading=false;
@@ -33,7 +37,7 @@ Future<void> fetchdata(context)async{
 
 
 
-acceptorder(Orders order)async{
+acceptorder(Orders order,context,orderProvider)async{
   order.state="delivering";
 Map<String,dynamic> o=order.toJson();
 print(o);  
@@ -65,10 +69,24 @@ print(o);
     "id_buyer": order.buyer.id,
     "id_payement": order.payement.id,
     "id_seller": order.seller.id
-      //"username":order.s,
-      //"password":password
+      
     } 
-  ));
+    
+  )
+  );
+  if(Orderresponse.statusCode==200){
+      //allorders.clear();
+      which=singleorder(order: order,orderProvider: orderProvider,context:context);
+      taken=true;
+      notify();
+      Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => AppController(order: order,)),
+      
+      (route) => false,
+    );  
+    }
 }
 
  CaclulDistance(Orders order,Geolocator geo)async{

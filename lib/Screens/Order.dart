@@ -129,39 +129,7 @@ Geolocator geo=Geolocator();
         )
       ),
       backgroundColor: Color(0xfffafafa),
-      body: Consumer<OrderProvider>(
-              builder: (BuildContext context, value, Widget child) {
-                  return SingleChildScrollView(
-          child: Column(
-            children: [
-              blank(context: context),
-
-
-
-              Container(
-                transform: Matrix4.translationValues(
-
-
-                    0, -deviceheight * 0.08, 0.0),
-                child: Column(
-                  children: [route(context: context,order: order),
-                  showmap(context: context),
-                  bill(context: context,order: order,orderProvider: orderProvider),
-                  info(context: context,text: "distance:",orderprovider: orderProvider,orders: order),
-
-                  timer(context: context,order: order),
-
-                  ],
-                ),
-              )
-
-
-            ],
-          ),
-        );
-                },
-              
-      ),
+      body: singleorder(order: order,context: context,orderProvider: orderProvider),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [

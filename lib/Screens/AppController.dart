@@ -1,7 +1,10 @@
+import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Providers/AppControllerProvider.dart';
 import 'package:delivery_app_v0/Providers/MenuProvider.dart';
 import 'package:delivery_app_v0/Providers/OrderProvider.dart';
 import 'package:delivery_app_v0/Screens/Notifications.dart';
+import 'package:delivery_app_v0/Screens/Order.dart';
+import 'package:delivery_app_v0/Widgets/OrderWidget.dart';
 import 'package:delivery_app_v0/Widgets/popupMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
@@ -15,17 +18,22 @@ import 'MyMap.dart';
 
 
 class AppController extends StatefulWidget{
+final Orders order;
 
+  const AppController({Key key, this.order}) : super(key: key);
   @override
-  AppPage createState() => AppPage();
+  AppPage createState() => AppPage(order: order);
 }
 int currentindex=0;
 
 class AppPage extends State<AppController> {
+  final Orders order;
   MenuProvider menuprovider;
   AppProvider appProvider;
   OrderProvider provider;
+  Widget which;
 
+  AppPage({this.order});
   @override
   void initState() {
     provider = Provider.of<OrderProvider>(context, listen: false);
@@ -33,8 +41,13 @@ class AppPage extends State<AppController> {
     menuprovider = Provider.of<MenuProvider>(context, listen: false);
     appProvider = Provider.of<AppProvider>(context, listen: false);
     //if(provider.list.length==0){provider?.fetchOrders(context);}
-    provider?.fetchOrders(context);
-
+    //provider?.fetchOrders(context);
+    // if(provider.taken){
+    //   which=singleorder(order: order,context: context,orderProvider: provider);
+    // }
+    // else{
+    //   which=OrdersScreen();
+    // }
     super.initState();
   }
   @override
@@ -165,7 +178,7 @@ class AppPage extends State<AppController> {
 
     final tabs = [
 
-      Expanded(child: OrdersScreen()),
+      Expanded(child: provider.which),
       Container(height: 0,width: 0,),
       Profile()
       //Expanded(child: Map()),

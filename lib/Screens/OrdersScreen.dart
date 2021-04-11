@@ -22,6 +22,9 @@ class OrdersPage extends State<OrdersScreen> {
     provider = Provider.of<OrderProvider>(context, listen: false);
     mapProvider = Provider.of<MapProvider>(context, listen: false);
     mapProvider.checkGps();
+    provider.allorders.clear();
+    provider?.fetchOrders(context);
+
     /*if(provider.list.length==0){
       provider.fetchOrders(context);
     }*/

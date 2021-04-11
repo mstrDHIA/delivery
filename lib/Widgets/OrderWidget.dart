@@ -2,6 +2,7 @@ import 'package:delivery_app_v0/Models/OrderItems.dart';
 import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Providers/OrderProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
     
   blank({context}) {
     double deviceheight = MediaQuery.of(context).size.height;
@@ -149,6 +150,47 @@ import 'package:flutter/material.dart';
     );
   }
 
+
+
+singleorder({Orders order,context,OrderProvider orderProvider}){
+  double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+  return Consumer<OrderProvider>(
+              builder: (BuildContext context, value, Widget child) {
+                  return SingleChildScrollView(
+          child: Column(
+            children: [
+              blank(context: context),
+
+
+
+              Container(
+                transform: Matrix4.translationValues(
+
+
+                    0, -deviceheight * 0.08, 0.0),
+                child: Column(
+                  children: [route(context: context,order: order),
+                  showmap(context: context),
+                  bill(context: context,order: order,orderProvider: orderProvider),
+                  info(context: context,text: "distance:",orderprovider: orderProvider,orders: order),
+
+                  timer(context: context,order: order),
+
+                  ],
+                ),
+              )
+
+
+            ],
+          ),
+        );
+                },
+              
+      );
+}
+
+
   Accept({context,OrderProvider provider,Orders order}) {
 
     double deviceheight = MediaQuery.of(context).size.height;
@@ -158,7 +200,7 @@ import 'package:flutter/material.dart';
       bottom: 12),
       child: FlatButton(
         onPressed: (){
-          provider.acceptorder(order);
+          provider.acceptorder(order,context,provider);
           print('pressed');
         },
         child: Container(
