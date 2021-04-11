@@ -64,9 +64,7 @@ Future<void> getUser(context,id) async{
 
     //await prefs.setBool('logged', signed).then((bool success) {};
      
-    prefs.setBool("logged", true).then((bool success) {
-        print("logged");
-      });
+    
       
   String url=getUserApi+"$id/";
   print(url);
@@ -76,6 +74,9 @@ Future<void> getUser(context,id) async{
       User user=User.fromJson(res);
       print(user.isSuperuser);
       if(user.isStaff){
+        prefs.setString("logged", "Admin").then((bool success) {
+        print("logged");
+      });
         print("admin");
          Navigator.pushAndRemoveUntil(
       context,
@@ -86,6 +87,9 @@ Future<void> getUser(context,id) async{
     );  
       }
       else{
+         prefs.setString("logged", "User").then((bool success) {
+        print("logged");
+      });
                 print("not admin");
 
         Navigator.pushAndRemoveUntil(

@@ -32,7 +32,8 @@ class AppPage extends State<AppController> {
 
     menuprovider = Provider.of<MenuProvider>(context, listen: false);
     appProvider = Provider.of<AppProvider>(context, listen: false);
-    if(provider.list.length==0){provider?.fetchOrders(context);}
+    //if(provider.list.length==0){provider?.fetchOrders(context);}
+    provider?.fetchOrders(context);
 
     super.initState();
   }

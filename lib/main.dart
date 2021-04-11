@@ -57,7 +57,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   Future<SharedPreferences> prefs = SharedPreferences.getInstance();
-  bool signed;
+  String signed;
   @override
   Future<void> initState()   {
     // TODO: implement initState
@@ -88,9 +88,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async{
-          signed=await prefs.then((value) => value.getBool('logged')??false);
+          signed=await prefs.then((value) => value.getString('logged')??"");
 
-          if(!signed){
+          if(signed==""){
               Navigator.push(
               context,
               MaterialPageRoute(

@@ -18,7 +18,7 @@ class MenuProvider extends ChangeNotifier {
     }
     if(result==MenuOptions.Logout){
        final prefs = await SharedPreferences.getInstance();  
-    prefs.setBool("logged", false).then((bool success) {
+    prefs.setString("logged", "").then((bool success) {
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login(),),(route) => false,);
       });
     }
