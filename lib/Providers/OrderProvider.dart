@@ -75,7 +75,8 @@ print(o);
   )
   );
   if(Orderresponse.statusCode==200){
-      //allorders.clear();
+      allorders.clear();
+      allorders.add(order);
       which=singleorder(order: order,orderProvider: orderProvider,context:context);
       taken=true;
       notify();
