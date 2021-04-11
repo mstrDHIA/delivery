@@ -188,7 +188,7 @@ Geolocator geo=Geolocator();
                   fontWeight: FontWeight.w500
               ),
               ),
-              Accept(context:context)
+              Accept(context:context,order: order,provider: orderProvider)
             ],
           ),
         ),

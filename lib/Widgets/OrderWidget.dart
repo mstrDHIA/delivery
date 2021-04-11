@@ -149,7 +149,7 @@ import 'package:flutter/material.dart';
     );
   }
 
-  Accept({context}) {
+  Accept({context,OrderProvider provider,Orders order}) {
 
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
@@ -158,6 +158,7 @@ import 'package:flutter/material.dart';
       bottom: 12),
       child: FlatButton(
         onPressed: (){
+          provider.acceptorder(order);
           print('pressed');
         },
         child: Container(

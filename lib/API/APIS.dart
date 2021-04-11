@@ -7,6 +7,7 @@ const String getUserApi=initiallink+"user/";
 const String adminmanage=initiallink+"admin/";
 const String GoogleApiKey="AIzaSyD6ijb43zMaxEZCfGP_XF7Cc4NgIByAGS0";
 const Authentication=initiallink+"api/token/";
+const acceptapi=initiallink+"accept_order/";
 
 
 

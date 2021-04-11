@@ -32,6 +32,45 @@ Future<void> fetchdata(context)async{
 */
 
 
+
+acceptorder(Orders order)async{
+  order.state="delivering";
+Map<String,dynamic> o=order.toJson();
+print(o);  
+
+   final Orderresponse = await http.put(
+    acceptapi+"${order.id}/",
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String,dynamic>{
+       "id": order.id,
+    "buyer_phone": order.buyerPhone,
+    "buyer_mail": order.buyerMail,
+    "total_price": order.totalPrice,
+    "delivery_fees": order.deliveryFees,
+    "price": order.price,
+    "stars": order.stars,
+    "review": order.review,
+    "delivery_time": order.deliveryTime,
+    "delivery_durations": order.deliveryDuration,
+    //"accept_time": order.,
+    "order_time": order.orderTime,
+    "order_type": order.orderType,
+    "is_paid": order.isPaid,
+    "distance": order.distance,
+    "order_duration": order.orderDuration,
+    "state": "pending",
+    //"id_user": order.user.id,
+    "id_buyer": order.buyer.id,
+    "id_payement": order.payement.id,
+    "id_seller": order.seller.id
+      //"username":order.s,
+      //"password":password
+    } 
+  ));
+}
+
  CaclulDistance(Orders order,Geolocator geo)async{
    double d;
    double blat = double.parse(order.buyer.lat);
