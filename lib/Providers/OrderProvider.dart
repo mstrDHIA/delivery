@@ -35,7 +35,11 @@ Future<void> fetchdata(context)async{
 }
 */
 
-
+confirmorder(context){
+  taken=false;
+          which=OrdersScreen();
+          notify();
+}
 
 acceptorder(Orders order,context,orderProvider)async{
   order.state="delivering";
@@ -77,9 +81,9 @@ print(o);
   if(Orderresponse.statusCode==200){
       allorders.clear();
       allorders.add(order);
-      which=singleorder(order: order,orderProvider: orderProvider,context:context);
+      which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),confirm(context:context,order: order,provider: orderProvider)]));
       taken=true;
-      notify();
+      notify(); 
       Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(

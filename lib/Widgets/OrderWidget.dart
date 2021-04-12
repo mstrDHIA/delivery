@@ -1,9 +1,14 @@
+
 import 'package:delivery_app_v0/Models/OrderItems.dart';
 import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Providers/OrderProvider.dart';
+import 'package:delivery_app_v0/Screens/AppController.dart';
+import 'package:delivery_app_v0/Screens/Notifications.dart';
+import 'package:delivery_app_v0/Screens/OrdersScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-    
+//import 'dart:js';
+
   blank({context}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
@@ -189,6 +194,80 @@ singleorder({Orders order,context,OrderProvider orderProvider}){
               
       );
 }
+
+
+confirm({context,OrderProvider provider,Orders order}) {
+
+    double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.only(top:12.0,
+      bottom: 12),
+      child: FlatButton(
+        onPressed: (){
+          //provider.acceptorder(order,context,provider);
+          provider.confirmorder(context);
+          
+          print(provider.taken);
+
+          print('pressed');
+          //       Navigator.pushAndRemoveUntil(
+
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (BuildContext context) => Notifications()),
+      
+    //   (route) => false,
+    // );  
+    //       Navigator.pushAndRemoveUntil(
+
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (BuildContext context) => Notifications()),
+      
+    //   (route) => false,
+    // );  
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    offset: Offset(0,3),
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    spreadRadius: 2
+                )
+              ],
+              gradient: LinearGradient(
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                  colors: [
+                    Color(0xff71DF79),
+                    Color(0xff2ACF45),
+
+                  ]
+
+              ),
+              // color: Colors.redAccent,
+              borderRadius: BorderRadius.all(Radius.circular(10))
+          ),
+          width: devicewidth*0.4,
+          height: deviceheight*0.058,
+          child :Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:[
+                  Text('Confirm',style: TextStyle(color: Colors.white,fontSize: 16),),
+
+                ]
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 
 
   Accept({context,OrderProvider provider,Orders order}) {

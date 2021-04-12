@@ -176,7 +176,7 @@ class AppPage extends State<AppController> {
       }
     }
 
-    final tabs = [
+    var tabs = [
 
       Expanded(child: provider.which),
       Container(height: 0,width: 0,),
@@ -188,12 +188,15 @@ class AppPage extends State<AppController> {
     return Scaffold(
 
       appBar: appcontrol(currentindex),
-      body: Column(
-        children: [
+      body: Consumer<OrderProvider>(
+              builder: (BuildContext context, value, Widget child) { return Column(
+          children: [
 
 
-          tabs[currentindex],
-        ],
+            tabs[currentindex],
+          ],
+        ); },
+              
       ),
       bottomNavigationBar: Container(
 
