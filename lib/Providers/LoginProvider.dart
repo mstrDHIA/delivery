@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:delivery_app_v0/Models/Profile.dart';
 import 'package:delivery_app_v0/Models/TokenModel.dart';
 import 'package:delivery_app_v0/Models/User.dart';
 import 'package:delivery_app_v0/Screens/AdminManage.dart';
@@ -13,9 +14,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
 class LoginProvider extends ChangeNotifier {
+  String activeuser;
   String uservalid="";
-    String passwordvalid="";
-
+  String passwordvalid="";
+  Widget logverpass;
+  Widget logveruse;
   String msg="";
   void notify(){
     try{
@@ -67,17 +70,32 @@ Future<void> getUser(context,id) async{
     
       
   String url=getUserApi+"$id/";
-  print(url);
+  //print(url);
  final userresponse=await http.get(getUserApi+"$id/");
   if (userresponse.statusCode == 200) {
       dynamic res=jsonDecode(userresponse.body);
-      User user=User.fromJson(res);
-      print(user.isSuperuser);
-      if(user.isStaff){
-        prefs.setString("logged", "Admin").then((bool success) {
-        print("logged");
+      //print(res[0][0]);
+      User user=User.fromJson(res[0][0]);
+      Profile profile = Profile.fromJson(res[1]);
+      user.profile=profile;
+      activeuser=jsonEncode(user);
+      String activeprofile=jsonEncode(user.profile);
+      String activeuserprofile=activeuser+"!"+activeprofile;
+      print(activeuser+"!"+activeprofile);
+      //print(user.isSuperuser);
+       prefs.setString("logged", activeuserprofile).then((bool success) {
+      //  print("logged");
       });
-        print("admin");
+      if(user.isStaff){
+      //   prefs.setString("logged", "Admin").then((bool success) {
+      //   print("logged");
+      // });
+      // String userjson=
+      // prefs.setString("logged", "Admin").then((bool success) {
+      //   print("logged");
+      // });
+        print(user.profile.age);
+        //print("admin");
          Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -87,15 +105,16 @@ Future<void> getUser(context,id) async{
     );  
       }
       else{
-         prefs.setString("logged", "User").then((bool success) {
-        print("logged");
-      });
-                print("not admin");
+      //    prefs.setString("logged", "User").then((bool success) {
+      //   print("logged");
+      // });
+      //prefs.
+               // print("not admin");
 
         Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => AppController(),
+        builder: (BuildContext context) => AppController(user: user),
       ),
       (route) => false,
     );  
@@ -141,7 +160,7 @@ Future<void> Login(context,username,password) async{
 }
 else if(loginresponse.statusCode == 401){
     print("not authorized");
-    msg="Unauthorized";
+    msg="User Name or Password wrong \n please verify your information";
         notify();
 
   }

@@ -1,3 +1,4 @@
+import 'Profile.dart';
 class User {
   int id;
   String password;
@@ -10,6 +11,7 @@ class User {
   bool isStaff;
   bool isActive;
   String dateJoined;
+  Profile profile;
 
   User(
       {this.id,
@@ -22,7 +24,8 @@ class User {
       this.email,
       this.isStaff,
       this.isActive,
-      this.dateJoined});
+      this.dateJoined,
+      this.profile});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -36,6 +39,7 @@ class User {
     isStaff = json['is_staff'];
     isActive = json['is_active'];
     dateJoined = json['date_joined'];
+    
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +55,8 @@ class User {
     data['is_staff'] = this.isStaff;
     data['is_active'] = this.isActive;
     data['date_joined'] = this.dateJoined;
+    
+
     return data;
   }
 }

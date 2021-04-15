@@ -4,9 +4,9 @@ import 'package:delivery_app_v0/Screens/Order.dart';
 import 'package:flutter/material.dart';
 
 showOrder({context,Orders order}) {
-  for(int i=0;i<order.orderitems.length;i++){
-    print(order.orderitems[i].name);
-  }
+  // for(int i=0;i<order.orderitems.length;i++){
+  //   print(order.orderitems[i].name);
+  // }
   //print(order.orderitems);
   Navigator.push(
       context,
@@ -17,12 +17,12 @@ showOrder({context,Orders order}) {
 
 
 Widget listitem(context,Orders order) {
-  print("I am listing");
+  //print("I am listing");
   
-  print(order.price);
-  for(int i=0;i<order.orderitems.length;i++){
-    print(order.orderitems[i].name);
-  }
+  //print(order.price);
+  // for(int i=0;i<order.orderitems.length;i++){
+  //   print(order.orderitems[i].name);
+  // }
   //String buyername=order.buyer.firstName+" "+order.buyer.lastName;
  // String sellername=order.seller.firstName+" "+order.seller.lastName;
 

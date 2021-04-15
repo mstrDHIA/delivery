@@ -52,7 +52,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
 
   Widget build(BuildContext context) {
-    
+    double deviceheight=MediaQuery.of(context).size.height;
+    double devicewidth=MediaQuery.of(context).size.width;
     
       final String whattodo="Login";
 
@@ -64,23 +65,33 @@ class _LoginPageState extends State<LoginPage> {
                       return Column(
               children: [
                 roundedtop(context),
+                SizedBox(height: deviceheight*0.03,),
                 Form(
                   key: formKey,
                                   child:Column(
                                     children: [Padding(
                     padding: const EdgeInsets.only(
                         top:16.0),
-                    child: InputWidget(placeholder:"User Name",ic:Icon(Icons.person),context:context,controller:usernamecontrol,ispassword: false),
+                    child: InputWidget(placeholder:"User Name",ic:Icon(Icons.person),context:context,controller:usernamecontrol,ispassword: false,keyboardtype: TextInputType.text),
                   ),
-                  Text(loginProvider.uservalid),
-                InputWidget(placeholder:"Password",ic:Icon(Icons.lock),context:context,controller:passwordcontrol,ispassword: true),
-                  Text(loginProvider.passwordvalid),
+                  Text(loginProvider.uservalid,
+                   style:TextStyle(
+                          color: Colors.red,
+                          fontSize: 15
+
+                        ) ,),
+                InputWidget(placeholder:"Password",ic:Icon(Icons.lock),context:context,controller:passwordcontrol,ispassword: true,keyboardtype: TextInputType.text),
+                  Text(loginProvider.passwordvalid,
+                   style:TextStyle(
+                          color: Colors.red,
+                          fontSize: 15
+                        ) ,),
                   
 
                 Padding(
                   padding: const EdgeInsets.only(
-                      top:36.0,
-                      bottom: 8
+                      top:16.0,
+                      bottom: 0
                   ),
                   child: But(context:context,provider:loginProvider,username:usernamecontrol,password:passwordcontrol,whattodo: whattodo,formkey: formKey),
                 ),],
@@ -90,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                 
                 Padding(
                     padding: const EdgeInsets.only(
-                        top:16.0,
+                        top:0.0,
                         bottom: 16
 
                     ),
@@ -98,7 +109,14 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       children: [
                         
-                        Text(loginProvider.msg),
+                        Text(
+                          loginProvider.msg,
+                           style:TextStyle(
+                          color: Colors.red,
+                          fontSize: 15,
+                          
+
+                        ) ,),
                         Link("Don't have an account","Register",Register(),context),
 
                         Link("Forgot your password","Click Here",AdminManage(),context),

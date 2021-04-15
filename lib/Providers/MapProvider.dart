@@ -224,7 +224,7 @@ double late = double.parse(order.buyer.lat);
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: LatLng(position.latitude, position.longitude),
-              zoom: 18.0,
+              zoom: 14.0,
             ),
           ),
         );

@@ -137,7 +137,7 @@ Future<void> fetchOrders(context) async{
   Buyer buyer;
   Seller seller;
   Payment payment;
-  List<OrderItems> orderItems=[];
+  List<OrderItems> items=[];
   final Orderresponse = await http.get(
     OrdersKey,
   );
@@ -152,15 +152,22 @@ Future<void> fetchOrders(context) async{
       seller=Seller.fromJson(OrderData[i][2]);
       payment=Payment.fromJson(OrderData[i][3]);
       for(int j=0;j<OrderData[i][4].length;j++){
-        orderItems.add(OrderItems.fromJson(OrderData[i][4][j]));
+        items.add(OrderItems.fromJson(OrderData[i][4][j]));
+        print(OrderItems.fromJson(OrderData[i][4][j]));
       }
       orders.buyer=buyer;
       orders.seller=seller;
       orders.payement=payment;
-      orders.orderitems=orderItems;
+      List<OrderItems> orderitems=List.from(items);
+      orders.orderitems=orderitems;
 
     allorders.add(orders);
-    
+
+    print(items.length);
+    print("before length"+orders.orderitems.length.toString());
+
+    items.clear();
+    print("length"+orders.orderitems.length.toString());
     }
     for(int k=0;k<allorders.length;k++){
       list.add(listitem(context, allorders[k]));

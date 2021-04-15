@@ -70,21 +70,24 @@ roundedtop(context) {
 
 
 
+  
+
+  
 
 
-
-
-
-InputWidget({String placeholder, Icon ic, context,TextEditingController controller,bool ispassword}) {
+InputWidget({String placeholder, Icon ic, context,TextEditingController controller,bool ispassword,keyboardtype}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
   
  // final requiredValidator = RequiredValidator(errorText: 'this field is required'
  //);
 
+
+ 
+
   return Center(
     child: Padding(
-      padding: const EdgeInsets.only(right: 35, left: 35, top: 32, bottom: 8),
+      padding: const EdgeInsets.only(right: 35, left: 35, top: 15, bottom: 8),
       child: Opacity(
         opacity: 0.7,
         child: Container(
@@ -110,6 +113,7 @@ InputWidget({String placeholder, Icon ic, context,TextEditingController controll
                       primaryColor: Colors.redAccent,
                     ),
                     child: TextFormField(
+                      keyboardType: keyboardtype,
                       /*validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter some text';
@@ -142,7 +146,7 @@ InputWidget({String placeholder, Icon ic, context,TextEditingController controll
 
 
 
-But({context, provider,username,password,whattodo,formkey,String uservalid,String passwordvalid}) {
+But({confirm,context, provider,username,email,password,whattodo,formkey,String uservalid,String passwordvalid}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
   return Container(
@@ -159,9 +163,60 @@ But({context, provider,username,password,whattodo,formkey,String uservalid,Strin
           child: RaisedButton(
             onPressed: () async {
               if(whattodo=="Register"){
-                if(provider.registerpasswordvalidation(password.text)){
+                provider.passwordvalid="";
+    provider.emailvalid="";
+    provider.uservalid="";
+    provider.confirmvalid="";
+  provider.notify();
+                if(provider.registeremailvalidation(email.text)){
 
-                provider.Register(context, username.text, password.text);
+                if(provider.registerpasswordvalidation(password.text)){
+                if(provider.confirmpasswordvalidation(confirm.text,password.text)){
+                print(provider.uservalid);
+
+                provider.Register(context, username.text, password.text,email.text);
+                print("this is"+provider.uservalid);
+                }
+                else{
+                  provider.regwidcon=Center(
+                child: 
+                Text(
+                  provider.confirmvalid,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 14
+                  ),
+                  )
+                );
+                }
+                }
+                else{
+                  provider.regwidpass=Center(
+                child: 
+                Text(
+                  provider.passwordvalid,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 14
+                  ),
+                  )
+                );
+                }
+                }
+                else{
+                   provider.regwidemail=Center(
+                child: 
+                Text(
+                  provider.emailvalid,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 14
+                  ),
+                  )
+                );
                 }
               }
               else if(whattodo=="Login"){

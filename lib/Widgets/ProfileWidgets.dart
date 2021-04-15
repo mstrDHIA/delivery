@@ -1,41 +1,14 @@
+//import 'dart:js';
+
+import 'dart:convert';
+
+import 'package:delivery_app_v0/Models/User.dart';
+import 'package:delivery_app_v0/Screens/Edit.dart';
 import 'package:flutter/material.dart';
-import 'Edit.dart';
-class Profile extends StatefulWidget{
-  @override
-  ProfilePage createState() => ProfilePage();
-}
-
-class ProfilePage extends State<Profile> {
-  @override
-  Widget build(BuildContext context) {
-    double deviceheight = MediaQuery.of(context).size.height;
-    double devicewidth = MediaQuery.of(context).size.width;
 
 
 
-
-    return Expanded(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            identifier(),
-            MonthStats(),
-            info(),
-          ],
-        ),
-      ),
-    );
-
-
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-
-
-
-
-
-  Widget identifier() {
+  Widget identifier({context,User user}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
    return Container(
@@ -73,7 +46,7 @@ class ProfilePage extends State<Profile> {
                  ),
                  SizedBox(height: deviceheight*0.007,),
                  Text(
-                     'Saleh Ben Ali',
+                     '${user.username}',
                       style: TextStyle(
                         fontSize: 28
                       ),
@@ -108,7 +81,7 @@ class ProfilePage extends State<Profile> {
    );
   }
 
-  But(){
+  But({context}){
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
 
@@ -162,7 +135,7 @@ class ProfilePage extends State<Profile> {
     );
   }
 
-  MonthStats() {
+  MonthStats({context,user}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return  Column(
@@ -180,9 +153,9 @@ class ProfilePage extends State<Profile> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            statsbox('Delivery',46,[Color(0xffF0C4A9),Color(0xffE94057),Color(0xffCC2B5E)]),
-            statsbox('Stars',123,[Color(0xffEC2A14),Color(0xffF9C34E)]),
-            statsbox('Profit',212,[Color(0xffF2BE2A),Color(0xffF94665)]),
+            statsbox(txt:'Delivery',num:46,colors:[Color(0xffF0C4A9),Color(0xffE94057),Color(0xffCC2B5E)],context: context),
+            statsbox(txt:'Stars',num:123,colors:[Color(0xffEC2A14),Color(0xffF9C34E)],context: context),
+            statsbox(txt:'Profit',num:212,colors:[Color(0xffF2BE2A),Color(0xffF94665)],context: context),
 
 
           ],
@@ -190,7 +163,7 @@ class ProfilePage extends State<Profile> {
         SizedBox(height: deviceheight*0.02,),
         Row(mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            But(),
+            But(context: context),
             SizedBox(width: devicewidth*0.062,)
           ],
         )
@@ -198,7 +171,7 @@ class ProfilePage extends State<Profile> {
     );
   }
 
-  statsbox(String txt,int num,List<Color> c) {
+  statsbox({String txt,int num,List<Color> colors,context,user}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
 
@@ -222,7 +195,7 @@ class ProfilePage extends State<Profile> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: c,
+                colors: colors,
               ),
               boxShadow: [
                 BoxShadow(
@@ -251,7 +224,25 @@ class ProfilePage extends State<Profile> {
       );
   }
 
-  info() {
+  info({context,User user}) {
+    
+    List<Widget> infos=List();
+    String userprofiletxt=jsonEncode(user.profile);
+    List<String> userprofile=userprofiletxt.split(",");
+    for(String profileinfo in userprofile){
+      List<String> keyvalue=profileinfo.split(':');
+      if(keyvalue[0]!='{"id"'){
+        if(keyvalue[0]!='"id_user"'){
+          infos.add(Line(k:keyvalue[0],v:keyvalue[1],color:Color(0xfffafafa),context: context));
+        }
+      }
+      print(profileinfo);
+    }
+    String usertxt=jsonEncode(user);
+    List<String> userlist=usertxt.split(",");
+    for(String infor in userlist){
+      print(infor);
+    }
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return Column(
@@ -271,7 +262,7 @@ class ProfilePage extends State<Profile> {
         ),
         SizedBox(height: deviceheight*0.02,),
 
-        Line('User Name','Saleh Ben Ali',Colors.white),
+        /*Line('User Name','Saleh Ben Ali',Colors.white),
         Padding(
           padding: const EdgeInsets.only(right:12.0
               ,left: 12),
@@ -305,7 +296,7 @@ class ProfilePage extends State<Profile> {
     ),
 
 
-        Line('Phone Number','12345678',Colors.white),
+        Line('Phone Number','12345678',Colors.white),*/
         Padding(
           padding: const EdgeInsets.only(right:12.0
           ,left: 12),
@@ -313,19 +304,20 @@ class ProfilePage extends State<Profile> {
           thickness: 1,color: Colors.black38,),
         ),
 
+        for(var item in infos) item,
 
-        Line('Age','24',Color(0xfffafafa)),
+        //Line(k:'Age',v:'24',color:Color(0xfffafafa),context: context),
 
       ]
     );
 
   }
 
-  Line(String k, String v,Color c) {
+  Line({String k, String v,Color color,context,user}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return Container(
-      color: c,
+      color: color,
       child: Padding(
         padding: const EdgeInsets.only(
             top:16.0,
@@ -351,5 +343,4 @@ class ProfilePage extends State<Profile> {
         ),
       ),
     );
-  }
   }

@@ -56,3 +56,62 @@ RegInputWidget({String placeholder, Icon ic, context,TextEditingController contr
     ),
   );
 }
+
+
+
+regroundedtop(context) {
+  double deviceheight = MediaQuery.of(context).size.height;
+  double devicewidth = MediaQuery.of(context).size.width;
+  return Container(
+    decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromRGBO(0, 0, 0, 0.16),
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          )
+        ],
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(110),
+        ),
+        gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              const Color.fromRGBO(211, 16, 39, 1),
+              const Color.fromRGBO(234, 90, 107, 1),
+            ])),
+    height: deviceheight * 0.35,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: deviceheight * 0.05),
+        Center(
+          child: Opacity(
+            opacity: 0.9,
+            child: Center(
+                child: Image.asset(
+              'assets/gift white.png',
+              scale: 1.5,
+            )),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 24, top: 8),
+              child: Opacity(
+                opacity: 0.8,
+                child: Text(
+                  'Register ',
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    ),
+  );
+}

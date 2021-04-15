@@ -1,4 +1,5 @@
 import 'package:delivery_app_v0/Models/Orders.dart';
+import 'package:delivery_app_v0/Models/User.dart';
 import 'package:delivery_app_v0/Providers/AppControllerProvider.dart';
 import 'package:delivery_app_v0/Providers/MenuProvider.dart';
 import 'package:delivery_app_v0/Providers/OrderProvider.dart';
@@ -11,7 +12,7 @@ import 'package:custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:custom_bottom_navigation_bar/custom_bottom_navigation_bar_item.dart';
 import 'package:provider/provider.dart';
 import 'OrdersScreen.dart';
-import 'Profile.dart';
+import 'ProfileScreen.dart';
 
 import 'MyMap.dart';
 
@@ -19,21 +20,24 @@ import 'MyMap.dart';
 
 class AppController extends StatefulWidget{
 final Orders order;
+final User user;
 
-  const AppController({Key key, this.order}) : super(key: key);
+  const AppController({Key key, this.order, this.user}) : super(key: key);
   @override
-  AppPage createState() => AppPage(order: order);
+  AppPage createState() => AppPage(order: order,user: user);
 }
 int currentindex=0;
 
 class AppPage extends State<AppController> {
+  
   final Orders order;
+  final User user;
   MenuProvider menuprovider;
   AppProvider appProvider;
   OrderProvider provider;
   Widget which;
 
-  AppPage({this.order});
+  AppPage( {this.user,this.order});
   @override
   void initState() {
     provider = Provider.of<OrderProvider>(context, listen: false);
@@ -172,6 +176,7 @@ class AppPage extends State<AppController> {
         );
       }
       else if (currentindex == 2) {
+        
         return PreferredSize(child: barapp("Profile"), preferredSize: Size.fromHeight(deviceheight*0.11));
       }
     }
@@ -180,7 +185,7 @@ class AppPage extends State<AppController> {
 
       Expanded(child: provider.which),
       Container(height: 0,width: 0,),
-      Profile()
+      Profile(user: user,)
       //Expanded(child: Map()),
       //Center(child: Text("profile")),
     ];
@@ -246,6 +251,7 @@ class AppPage extends State<AppController> {
             onTap:
                 (index) {
               setState(() {
+                
                 currentindex = index;
                 print(index);
               });

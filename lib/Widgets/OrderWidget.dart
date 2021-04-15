@@ -328,15 +328,19 @@ bill({context,Orders order,OrderProvider orderProvider}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     double h=deviceheight*0.05;
+    Color color;
+    print("this is"+order.orderitems.toString());
     for (OrderItems item in order.orderitems) {
       h=h+deviceheight*0.1;
     }
     String is_paid;
     if(order.isPaid){
         is_paid="Paid";
+         color=Colors.green;
     }
     else{
       is_paid="Not Paid";
+       color=Colors.red;
     }
     List<Widget> items=billitems(order: order,orderProvider: orderProvider);
     return Padding(
@@ -395,7 +399,7 @@ bill({context,Orders order,OrderProvider orderProvider}) {
                   Text(
                       is_paid,
                     style: TextStyle(
-                      color: Colors.green,
+                      color: color,
                       fontSize: 18,
 
                       fontWeight: FontWeight.w500
@@ -415,8 +419,11 @@ bill({context,Orders order,OrderProvider orderProvider}) {
 
   billitems({Orders order,OrderProvider orderProvider}){
     List<Widget> list=[];
-    print(order.orderitems);
+          print(order.orderitems.length);
+
+    //print(order.orderitems);
     for(int i=0;i<order.orderitems.length;i++){
+      print(order.orderitems.length);
       list.add(Billitem(item:order.orderitems[i],orderProvider: orderProvider));
     }
     

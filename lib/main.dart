@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:delivery_app_v0/Screens/AdminManage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'API/APIS.dart';
+import 'Models/Profile.dart';
+import 'Models/User.dart';
 import 'Providers/LoginProvider.dart';
 import 'Providers/AppControllerProvider.dart';
 import 'Providers/MapProvider.dart';
@@ -38,6 +43,7 @@ class MyApp extends StatelessWidget {
       ],
       child:
          MaterialApp(
+           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -89,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async{
           signed=await prefs.then((value) => value.getString('logged')??"");
-
+          print(signed);
           if(signed==""){
               Navigator.push(
               context,
@@ -98,13 +104,36 @@ class _MyHomePageState extends State<MyHomePage> {
               ));
           }
           else{
-            Navigator.pushAndRemoveUntil(
+            List<String> userinfos=signed.split('!');            
+            Map<String, dynamic> usermap=jsonDecode(userinfos[0]);
+            User user=User.fromJson(usermap);
+            Map<String, dynamic> profilemap=jsonDecode(userinfos[1]);
+            Profile profile=Profile.fromJson(profilemap);
+            user.profile=profile;
+            if(user.isStaff==true){
+                  Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => AdminManage(),
+              ),
+              (route) => false,
+            ); 
+            }
+            else{
+              usermap.forEach((key, value) {print(key+":"+value.toString());});
+              print(user.isStaff);
+              print(user.username);
+              print(user.profile.age);
+
+                    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => AppController(),
+        builder: (BuildContext context) => AppController(user: user,),
       ),
       (route) => false,
-    );  
+    ); 
+            }
+       
           }
           
         },

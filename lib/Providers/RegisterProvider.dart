@@ -10,8 +10,39 @@ import 'package:delivery_app_v0/API/APIS.dart';
 class RegisterProvider extends ChangeNotifier {
   String passwordvalid="";
   String emailvalid="";
+  String uservalid="";
+  String confirmvalid="";
+
+  Widget regwidpass=SizedBox(height: 0,);
+  Widget regwidemail=SizedBox(height: 0,);
+  Widget regwiduse=SizedBox(height: 0,);
+  Widget regwidcon=SizedBox(height: 0,);
 
 
+confirmpasswordvalidation(String password,String confirm){
+  confirmvalid="";
+  bool ok=true;
+   if(confirm==""){
+    ok=false;
+    confirmvalid="This field is required\n";
+  }
+  else if(confirm!=password){
+    confirmvalid="Passwords don't match";
+    ok=false;
+  }
+  return ok;
+}
+
+
+registeruservalidation(String username){
+  uservalid="";
+  bool ok=true;
+   if(username==""){
+    ok=false;
+    uservalid="This field is required\n";
+  }
+  return ok;
+}
 
 
 registeremailvalidation(String email){
@@ -19,11 +50,9 @@ registeremailvalidation(String email){
   bool ok=true;
    if(email==""){
     ok=false;
-    emailvalid="this field is required";
+    emailvalid="This field is required\n";
   }
-  else {
-    emailvalid= "";
-  }
+  
    notify();
    print(passwordvalid);
    return ok;
@@ -35,27 +64,27 @@ registerpasswordvalidation(String password){
    if(password==""){
      ok=false;
 
-     passwordvalid="this field is required";
+     passwordvalid="This field is required\n\n";
   }
   else {
    
 
     passwordvalid= "";
   }
-   if(password.contains(new RegExp(r'[A-Z]'))){
+   if((password.contains(new RegExp(r'[A-Z]')))||(password.contains(new RegExp(r'[a-z]')))){
 
      passwordvalid+="";
    }
    else{
                ok=false;
 
-     passwordvalid+="\n password can't be entirely numeric";
+     passwordvalid+="Password can't be entirely numeric\n\n";
 
    }
    if(password.length<8){
           ok=false;
 
-     passwordvalid+="\n password length should be > 8";
+     passwordvalid+="Password length should be > 8";
 
    }
    else{
@@ -68,9 +97,9 @@ registerpasswordvalidation(String password){
  }
 
 
-Future<void> Register(context,username,password,email,phone) async{
+Future<void> Register(context,username,password,email) async{
   final registerresponse = await http.post(
-    Authentication,
+    createuser,
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -78,7 +107,7 @@ Future<void> Register(context,username,password,email,phone) async{
       "username":username,
       "password":password,
       "email":email,
-      "phone":phone
+     
     })
   );
   if (registerresponse.statusCode == 200) {
@@ -89,7 +118,21 @@ Navigator.pushAndRemoveUntil(
       ),
       (route) => false,
     );  }
-  else if(registerresponse.statusCode == 401){
+  else if(registerresponse.statusCode == 400){
+    //print(registerresponse.body);
+    List<String> error=registerresponse.body.split("[");
+    //print(error[0]);
+    if(error[0]=='{"username": '){
+      uservalid="A user with that username already exists.";
+      notify();
+      print(uservalid);
+    }
+    if(error[0]=='{"email": '){
+      emailvalid="Please enter a valid email format";
+      print(error[0]);
+      notify();
+      //print(uservalid);
+    }
     print("false information");
   }
   notify();

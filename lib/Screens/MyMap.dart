@@ -22,8 +22,7 @@ int currentindex=0;
 class MapPage extends State<MyMap> {
   final List<Orders> orderslist;
   
-  static CameraPosition _initialLocation = CameraPosition(
-      target: LatLng(0.0, 0.0));
+
 
 
   GoogleMapController mapController;
@@ -85,7 +84,10 @@ BitmapDescriptor.fromAssetImage(
 
 
   }
-
+  static CameraPosition _initialLocation = CameraPosition(
+    tilt: 60,
+    zoom: 12,
+      target: LatLng(36.710567, 10.413693));
   @override
   Widget build(BuildContext ctx) {
 
@@ -101,6 +103,8 @@ BitmapDescriptor.fromAssetImage(
             Center(
               child: Container(height: deviceheight,
                 child: GoogleMap(
+                  
+                  buildingsEnabled: true,
 
                   onTap: (index){
                     mapProvider.polylines.clear();
@@ -112,7 +116,9 @@ BitmapDescriptor.fromAssetImage(
                   polylines: Set<Polyline>.of(mapProvider.polylines.values),
                   //polylines: ,
                   initialCameraPosition:
-                  _initialLocation = CameraPosition(target: LatLng(0.0, 0.0)),
+                  _initialLocation = CameraPosition(tilt: 60,
+                  zoom: 12,
+                    target: LatLng(36.710567, 10.413693)),
                   myLocationEnabled: true,
 
                   myLocationButtonEnabled: false,
