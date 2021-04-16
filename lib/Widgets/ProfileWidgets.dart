@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:delivery_app_v0/API/APIS.dart';
 import 'package:delivery_app_v0/Models/User.dart';
 import 'package:delivery_app_v0/Screens/Edit.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,27 @@ import 'package:flutter/material.dart';
 
 
   Widget identifier({context,User user}) {
-    double deviceheight = MediaQuery.of(context).size.height;
+     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
+    //String photo='assets/user (4).png';
+    Widget photo;
+    if(user.profile.photo!=null){
+        photo=ClipOval(
+                                    child: Image.network(
+                       user.profile.photo,
+                       fit: BoxFit.fill,
+                       width: devicewidth*0.4,
+                       height: deviceheight*0.2,
+                   scale: 1,
+                   ),
+                 );
+    }
+    else{
+      photo=Image.asset(
+        "assets/user (4).png",
+        scale: 2,
+      );
+    }
    return Container(
      width: devicewidth*1,
      height: deviceheight*0.3,
@@ -40,10 +60,7 @@ import 'package:flutter/material.dart';
                  0, deviceheight * 0.03, 0.0),
              child: Column(
                children: [
-                 Image.asset(
-                     'assets/user (4).png',
-                 scale: 2,
-                 ),
+                 photo,
                  SizedBox(height: deviceheight*0.007,),
                  Text(
                      '${user.username}',
@@ -228,21 +245,46 @@ import 'package:flutter/material.dart';
     
     List<Widget> infos=List();
     String userprofiletxt=jsonEncode(user.profile);
+    Color color;
+    int i=0;
     List<String> userprofile=userprofiletxt.split(",");
+    String usertxt=jsonEncode(user);
+    List<String> userlist=usertxt.split(",");
+    List<String> keyvalue;
+    for(String infor in userlist){
+            keyvalue=infor.split(':');
+            if(keyvalue[0]!='{"id"'){
+        if(keyvalue[0]!='"password"'){
+            if(keyvalue[0]!='"last_login"'){
+if(keyvalue[0]!='"is_superuser"'){
+if(keyvalue[0]!='"is_staff"'){
+if(keyvalue[0]!='"is_active"'){
+if(i%2!=0){color=Color(0xfffafafa);}
+else{color=Color(0xffffffff);}
+i++;
+                      infos.add(Line(k:keyvalue[0],v:keyvalue[1],color:color,context: context));
+                    }            }            }            }      
+          }
+      }
+      print(infor);
+    }
     for(String profileinfo in userprofile){
-      List<String> keyvalue=profileinfo.split(':');
+      keyvalue=profileinfo.split(':');
       if(keyvalue[0]!='{"id"'){
         if(keyvalue[0]!='"id_user"'){
-          infos.add(Line(k:keyvalue[0],v:keyvalue[1],color:Color(0xfffafafa),context: context));
-        }
+if(keyvalue[0]!='"state"'){
+if(keyvalue[0]!='"lat"'){
+if(keyvalue[0]!='"long"'){
+if(keyvalue[0]!='"photo"'){
+  if(i%2!=0){color=Color(0xfffafafa);}
+else{color=Color(0xffffffff);}
+i++;
+          infos.add(Line(k:keyvalue[0],v:keyvalue[1],color:color,context: context));
+        }        }        }        }        }
       }
       print(profileinfo);
     }
-    String usertxt=jsonEncode(user);
-    List<String> userlist=usertxt.split(",");
-    for(String infor in userlist){
-      print(infor);
-    }
+    
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return Column(
@@ -307,7 +349,7 @@ import 'package:flutter/material.dart';
         for(var item in infos) item,
 
         //Line(k:'Age',v:'24',color:Color(0xfffafafa),context: context),
-
+        
       ]
     );
 
