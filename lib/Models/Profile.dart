@@ -10,7 +10,8 @@ class Profile {
   String long;
   String photo;
   String vehicle;
-  String phone;
+  int phone;
+  String address;
   int idUser;
 
   Profile(
@@ -25,6 +26,8 @@ class Profile {
       this.long,
       this.photo,
       this.vehicle,
+      this.address,
+
       this.phone,
       this.idUser});
 
@@ -35,10 +38,14 @@ class Profile {
     country = json['country'];
     governorate = json['governorate'];
     city = json['city'];
+    address = json['address'];
+
     state = json['state'];
     lat = json['lat'];
+
     long = json['long'];
     photo = json['photo'];
+
     vehicle = json['vehicle'];
     phone = json['phone'];
     idUser = json['id_user'];
@@ -52,6 +59,9 @@ class Profile {
     data['country'] = this.country;
     data['governorate'] = this.governorate;
     data['city'] = this.city;
+    data['address'] = this.address;
+
+
     data['state'] = this.state;
     data['lat'] = this.lat;
     data['long'] = this.long;

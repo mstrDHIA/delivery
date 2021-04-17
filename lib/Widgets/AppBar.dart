@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 
 
-barapp(String ti,BuildContext context,MenuProvider menuprovider) {
+barapp({String ti,BuildContext context,MenuProvider menuprovider}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
   return Column(

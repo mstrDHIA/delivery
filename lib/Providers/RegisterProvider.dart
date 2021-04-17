@@ -1,10 +1,16 @@
 import 'dart:convert';
 
+import 'package:delivery_app_v0/Models/User.dart';
+import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
+import 'package:delivery_app_v0/Screens/createProfile.dart';
+import 'package:delivery_app_v0/Screens/createProfile.dart';
 import 'package:delivery_app_v0/Screens/OrdersScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:delivery_app_v0/API/APIS.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class RegisterProvider extends ChangeNotifier {
@@ -97,7 +103,10 @@ registerpasswordvalidation(String password){
  }
 
 
-Future<void> Register(context,username,password,email) async{
+Future<void> Register(context,username,password,email,LoginProvider loginProvider) async{
+  // LoginProvider loginProvider;
+  // loginProvider = Provider.of<LoginProvider>(context, listen: false);
+
   final registerresponse = await http.post(
     createuser,
     headers: <String, String>{
@@ -110,15 +119,38 @@ Future<void> Register(context,username,password,email) async{
      
     })
   );
-  if (registerresponse.statusCode == 200) {
-Navigator.pushAndRemoveUntil(
+  if (registerresponse.statusCode == 201) {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool("new", true).then((bool success) {
+      
+      int id=int.parse(registerresponse.body.split(':')[1].split(',')[0]);
+      User user=User(email: email,username: username,id: id);
+      String usertxt=jsonEncode(user);
+       print("baba ali azouz");
+           prefs.setString("logged", usertxt).then((bool success) {
+               Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => AppController(),
+        builder: (BuildContext context) => CreateProfile(),
       ),
       (route) => false,
-    );  }
+    );
+           }
+
+   // loginProvider.Edit();
+// Navigator.pushAndRemoveUntil(
+//       context,
+//       MaterialPageRoute(
+//         builder: (BuildContext context) => CreateProfile(),
+//       ),
+//       (route) => false,
+//     );
+      //  print("logged");
+    );});
+     }
+  
   else if(registerresponse.statusCode == 400){
+    print("hahaha");
     //print(registerresponse.body);
     List<String> error=registerresponse.body.split("[");
     //print(error[0]);

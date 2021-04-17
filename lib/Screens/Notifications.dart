@@ -21,7 +21,7 @@ class NotificationsPage extends State<Notifications>{
     return Scaffold(
       appBar: PreferredSize(
     preferredSize: Size.fromHeight(deviceheight*0.11),
-    child: barapp("Notifications",context,menuProvider),
+    child: barapp(ti:"Notifications",context:context,menuprovider:menuProvider),
     ),
     );
     // TODO: implement build

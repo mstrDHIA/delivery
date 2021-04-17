@@ -27,7 +27,7 @@ class ReportPage extends State<Report>{
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(deviceheight*0.11),
-        child: barapp('Report', context, menuProvider),
+        child: barapp(ti:'Report', context:context, menuprovider: menuProvider),
       ),
       body: Column(
         children: [

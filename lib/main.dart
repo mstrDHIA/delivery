@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:delivery_app_v0/Screens/AdminManage.dart';
+import 'package:delivery_app_v0/Screens/createProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +15,7 @@ import 'Providers/MapProvider.dart';
 import 'Providers/MenuProvider.dart';
 import 'Providers/OrderProvider.dart';
 
+import 'Providers/ProfileProvider.dart';
 import 'Providers/RegisterProvider.dart';
 import 'Screens/AppController.dart';
 import 'Screens/Register.dart';
@@ -31,6 +33,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
 
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => MenuProvider()),
@@ -95,6 +98,17 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async{
           signed=await prefs.then((value) => value.getString('logged')??"");
+         bool newboy=await prefs.then((value) => value.getBool('new')??false);
+          if(newboy){
+             Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => CreateProfile(),
+              ),
+              (route) => false,
+            ); 
+          }
+          else{
           print(signed);
           if(signed==""){
               Navigator.push(
@@ -103,7 +117,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context) => Register(),
               ));
           }
+          
           else{
+            
             List<String> userinfos=signed.split('!');            
             Map<String, dynamic> usermap=jsonDecode(userinfos[0]);
             User user=User.fromJson(usermap);
@@ -134,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ); 
             }
        
-          }
+          }}
           
         },
         child: Icon(Icons.add),

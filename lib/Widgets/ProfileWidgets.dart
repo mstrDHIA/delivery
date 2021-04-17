@@ -4,8 +4,212 @@ import 'dart:convert';
 
 import 'package:delivery_app_v0/API/APIS.dart';
 import 'package:delivery_app_v0/Models/User.dart';
-import 'package:delivery_app_v0/Screens/Edit.dart';
+import 'package:delivery_app_v0/Providers/LoginProvider.dart';
+import 'package:delivery_app_v0/Providers/ProfileProvider.dart';
+import 'package:delivery_app_v0/Screens/createProfile.dart';
 import 'package:flutter/material.dart';
+
+import 'LoginWidgets.dart';
+
+Widget radioWidget({context,ProfileProvider profileProvider}){
+  //int sex=1;
+  double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+    return
+    Column(crossAxisAlignment: CrossAxisAlignment.start,
+      children: [SizedBox(height: deviceheight*0.02,),
+      Row(
+        children: [
+          SizedBox(width: devicewidth*0.15,),
+          Opacity(opacity: 0.7,child: Text("Sex:",style: TextStyle(fontSize: 18),)),
+        ],
+      ),
+        
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [Row(children: [
+            
+ Radio(groupValue: profileProvider.sex,
+            autofocus: true,
+            value:"Male",
+            activeColor: Colors.red,
+            onChanged: (value){
+              profileProvider.chooseSex(value);
+            },),
+                    Text("Male"),
+          ],),
+            // ignore: missing_required_param
+            Row(children: [ Radio(groupValue: profileProvider.sex,
+            activeColor: Colors.red,
+
+            value:"Female",
+            onChanged: (value){
+              profileProvider.chooseSex(value);
+            },),
+                    Text("Female"),],)
+
+            
+
+          ],
+        ),
+      ],
+    );
+}
+
+Widget createidentifier({context,ProfileProvider profileProvider}) {
+    double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+    Widget photo;
+    if(profileProvider.selected==null){
+       photo=Image.asset(
+                    'assets/user (4).png',
+                    scale: 2,
+                  );
+    }
+    else{
+      photo=ClipOval(
+              child: Image.asset(
+          
+          profileProvider.selected.path,
+                      scale: 1,
+                      fit: BoxFit.fill,
+                         width: devicewidth*0.35,
+                         height: deviceheight*0.17,),
+      );
+    }
+    return Container(
+      width: devicewidth*1,
+      height: deviceheight*0.3,
+      decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+                color: Color(0x10000000),
+                offset: Offset(0,20),
+                blurRadius: 30,
+                spreadRadius: 1
+            )
+          ],
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.elliptical(devicewidth/2,deviceheight/5.5),
+            bottomRight:Radius.elliptical(devicewidth/2,deviceheight/5.5),
+          )
+      ),
+      child: Stack(
+
+        children: [
+          
+          Center(
+            child: Container(
+              transform: Matrix4.translationValues(
+                  0, deviceheight * 0.03, 0.0),
+              child: Column(
+                children: [
+                  photo,
+                  // Image.asset(
+                  //   'assets/user (4).png',
+                  //   scale: 2,
+                  // ),
+                  SizedBox(height: deviceheight*0.007,),
+            //       ClipOval(
+            //                           child: Container(decoration: BoxDecoration(
+            //                             color: Color(0xffeeeeee),
+            //                             boxShadow: [BoxShadow(
+            //                              color: Color(0x10000000),
+            //  offset: Offset(0,20),
+            //  blurRadius: 30,
+            //  spreadRadius: 1)]
+            //                           ),
+            //           width: devicewidth*0.12,
+            //           height: deviceheight*0.056,
+            //           child: IconButton(
+            //             onPressed: (){
+            //               profileProvider.imageselect();
+            //               //Navigator.push(context, MaterialPageRoute(builder: (context) => Edit(),));
+            //             }, icon: Icon(Icons.photo),
+            //           ),
+            //         ),
+            //       )
+                ],
+              ),
+            ),
+          ),
+          Positioned(bottom: deviceheight*0.1,left: devicewidth*0.57,
+            child:  ClipOval(
+                                      child: Container(decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        boxShadow: [BoxShadow(
+                                         color: Color(0x10000000),
+             offset: Offset(0,20),
+             blurRadius: 30,
+             spreadRadius: 1)]
+                                      ),
+                      width: devicewidth*0.12,
+                      height: deviceheight*0.056,
+                      child: IconButton(
+                        onPressed: (){
+                          profileProvider.imageselect();
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => Edit(),));
+                        }, icon: Icon(Icons.photo),
+                      ),
+                    ),
+                  )),
+        ],
+      ),
+    );
+  }
+
+
+
+Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProvider loginProvider}) {
+
+    double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.only(top:12.0,
+          bottom: 12),
+      child: FlatButton(
+        onPressed: (){
+          profileProvider.createprofile(context: context,age:age,city:city,phone:phone,address:address,loginProvider: loginProvider);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    offset: Offset(0,3),
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    spreadRadius: 2
+                )
+              ],
+              gradient: LinearGradient(
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft,
+                  colors: [
+                    Color(0xff71DF79),
+                    Color(0xff2ACF45),
+
+                  ]
+
+              ),
+              // color: Colors.redAccent,
+              borderRadius: BorderRadius.all(Radius.circular(10))
+          ),
+          width: devicewidth*0.4,
+          height: deviceheight*0.058,
+          child :Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:[
+                  Text('Accept',style: TextStyle(color: Colors.white,fontSize: 16),),
+
+                ]
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
 
 
@@ -17,7 +221,7 @@ import 'package:flutter/material.dart';
     if(user.profile.photo!=null){
         photo=ClipOval(
                                     child: Image.network(
-                       user.profile.photo,
+                       initiallink+user.profile.photo,
                        fit: BoxFit.fill,
                        width: devicewidth*0.4,
                        height: deviceheight*0.2,
@@ -82,7 +286,7 @@ import 'package:flutter/material.dart';
 
                  onPressed: (){
 
-                   Navigator.push(context, MaterialPageRoute(builder: (context) => Edit(),));
+                   Navigator.push(context, MaterialPageRoute(builder: (context) => CreateProfile(),));
                  },
                child: Image.asset(
                    'assets/edit (1).png',
@@ -97,6 +301,165 @@ import 'package:flutter/material.dart';
      ),
    );
   }
+
+
+
+   SelectWidget({String placeholder,Icon ic,context,ispassword,keyboardtype,List<String> items,ProfileProvider profileProvider}){
+    double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+        String selecteditem;
+
+    if(placeholder=="Vehicle"){
+        selecteditem=profileProvider.vehicleval;
+    }
+    else if(placeholder=="Country"){
+        selecteditem=profileProvider.countryval;
+    }
+    else if(placeholder=="State"){
+        selecteditem=profileProvider.stateval;
+    }
+    return Center(
+      
+      child: Padding(
+        padding: const EdgeInsets.only(
+            right: 28,
+            left: 28,
+            top: 14
+        ),
+        child: Opacity(opacity: 0.7,
+          child: Container(
+            width: devicewidth*0.83,
+            height: deviceheight*0.065,
+            decoration: BoxDecoration(
+                color:Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.16),
+                      blurRadius: 6,
+                      offset: Offset(1,4)
+
+
+                  )
+                ],
+                borderRadius: BorderRadius.all(
+                    Radius.circular(100)
+                ),
+                border: Border.all(
+                    color: Colors.black,
+
+                    width: 0.3
+                )
+            ),
+            child: Stack(
+
+                children:[
+
+                  /* Padding(
+                    padding: const EdgeInsets.only(
+                      top: 14,
+                      left: 14
+                    ),
+                    child: Icon(Icons.email),
+                  ),*/
+                  Opacity(
+                      opacity: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10,
+                            top: 2
+                        ),
+                        child: Theme(
+                          data:  Theme.of(context)
+                              .copyWith(primaryColor: Colors.redAccent,),
+                          child: new DropdownButton(
+                            focusColor: Colors.red,
+                            
+                            value: selecteditem,
+                            
+                  hint: Container(width: devicewidth*0.71,
+                  child: Row(
+                    
+                    children: [SizedBox(width: devicewidth*0.025,),
+                      Opacity(opacity: 0.7,
+                      child: ic),
+                      SizedBox(width: devicewidth*0.035,),
+                      Text("$placeholder"),
+                    ],
+                  ),),
+         
+          onChanged: (String value) {
+            if(placeholder=="Vehicle"){
+            profileProvider.changevehicle(value);
+                        print(profileProvider.vehicleval);
+
+            }
+            else if(placeholder=="Country"){
+            profileProvider.changeCountry(value);
+                        profileProvider.stateval=null;
+
+            profileProvider.whichStates();
+            print(profileProvider.countryval);
+
+            }
+            else if(placeholder=="State"){
+            profileProvider.changeState(value);
+            print(profileProvider.stateval);
+
+            }
+            profileProvider.notify();
+            //print(selecteditem);
+                          // selecteditem=value;
+                          // profileProvider.notify();
+
+            
+          },
+           items: items.map((String valueitem) {
+            return new DropdownMenuItem(
+              value: valueitem,
+              child: new Text(valueitem),
+            );
+          }).toList(),
+        ),
+                        ),
+                      )
+                  ),]
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  editform({context,ProfileProvider profileProvider,firstnamecontrol,lastnamecontrol,agecontrol,addresscontrol,citycontrol,phonecontrol}){
+    double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+    return Column(
+      children: [
+        InputWidget(controller: firstnamecontrol,context: context,placeholder: "first name",ispassword: false,ic:Icon(Icons.person),keyboardtype: TextInputType.name ),
+        InputWidget(controller: lastnamecontrol,context: context,placeholder: "last name",ispassword: false,ic:Icon(Icons.person),keyboardtype: TextInputType.name ),
+        radioWidget(context: context,profileProvider: profileProvider),
+         InputWidget(context: context,controller: agecontrol,placeholder: "age",ispassword: false,ic:Icon(Icons.date_range),keyboardtype: TextInputType.number ),       
+        InputWidget(context: context,controller: phonecontrol,placeholder: "phone number",ispassword: false,ic:Icon(Icons.phone),keyboardtype: TextInputType.phone ),
+        SelectWidget(profileProvider:profileProvider ,items: ["motor cycle","car","bicycle"],context: context,placeholder: "Vehicle",ispassword: false,ic:Icon(Icons.motorcycle),keyboardtype: TextInputType.phone ),
+        SelectWidget(profileProvider:profileProvider ,items: ["Tunisia","China","Italy"],context: context,placeholder: "Country",ispassword: false,ic:Icon(Icons.location_city),keyboardtype: TextInputType.phone ),
+        SelectWidget(profileProvider:profileProvider ,items: profileProvider.states,context: context,placeholder: "State",ispassword: false,ic:Icon(Icons.location_city),keyboardtype: TextInputType.phone ),
+        InputWidget(context: context,controller: citycontrol,placeholder: "City",ispassword: false,ic:Icon(Icons.location_city),keyboardtype: TextInputType.text ),
+
+        InputWidget(context: context,controller: addresscontrol,placeholder: "Address",ispassword: false,ic:Icon(Icons.place),keyboardtype: TextInputType.streetAddress ),
+        // InputWidget("Saleh",Icon(Icons.person,)),
+        // InputWidget("Ben Ali",Icon(Icons.person,)),
+        // InputWidget("Saleh.B.Ali@gmail.com",Icon(Icons.alternate_email,)),
+        // InputWidget("Motor Cycle",Icon(Icons.motorcycle,)),
+        // InputWidget("12345678",Icon(Icons.phone,)),
+        // InputWidget("Tunis Beb Bhar",Icon(Icons.location_city,)),
+        // InputWidget("************",Icon(Icons.lock,)),
+        SizedBox(height: deviceheight*0.05,)
+
+
+
+      ],
+    );
+  }
+
 
   But({context}){
     double deviceheight = MediaQuery.of(context).size.height;

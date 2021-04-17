@@ -30,7 +30,7 @@ class AdminManagePage extends State<AdminManage>{
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(deviceheight*0.11),
-        child: barapp('Admin Manage',context,menuProvider),
+        child: barapp(ti:'Admin Manage',context:context,menuprovider:menuProvider),
       ),
       body: WebView(
         initialUrl: adminmanage,

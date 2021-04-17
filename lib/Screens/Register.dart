@@ -1,3 +1,4 @@
+import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Providers/RegisterProvider.dart';
 import 'package:delivery_app_v0/Widgets/LoginWidgets.dart';
 import 'package:delivery_app_v0/Widgets/RegisterWidgets.dart';
@@ -29,9 +30,13 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   RegisterProvider registerProvider;
+    LoginProvider loginProvider;
+
   @override
   void initState() {
     registerProvider = Provider.of<RegisterProvider>(context, listen: false);
+        loginProvider = Provider.of<LoginProvider>(context, listen: false);
+
     registerProvider.passwordvalid="";
     registerProvider.emailvalid="";
     registerProvider.uservalid="";
@@ -108,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     top:36.0,
                     bottom: 2
                 ),
-                child: But(confirm: confirmcontrol,username: usernamecontrol,email:emailcontrol,context:context,whattodo:whattodo,provider: registerProvider,password: passwordcontrol),
+                child: But(logprovider: loginProvider,confirm: confirmcontrol,username: usernamecontrol,email:emailcontrol,context:context,whattodo:whattodo,provider: registerProvider,password: passwordcontrol),
               ),
               ],),),
               

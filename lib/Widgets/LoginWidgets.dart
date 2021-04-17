@@ -146,7 +146,7 @@ InputWidget({String placeholder, Icon ic, context,TextEditingController controll
 
 
 
-But({confirm,context, provider,username,email,password,whattodo,formkey,String uservalid,String passwordvalid}) {
+But({confirm,context, provider,logprovider,username,email,password,whattodo,formkey,String uservalid,String passwordvalid}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
   return Container(
@@ -174,7 +174,7 @@ But({confirm,context, provider,username,email,password,whattodo,formkey,String u
                 if(provider.confirmpasswordvalidation(confirm.text,password.text)){
                 print(provider.uservalid);
 
-                provider.Register(context, username.text, password.text,email.text);
+                provider.Register(context, username.text, password.text,email.text,logprovider);
                 print("this is"+provider.uservalid);
                 }
                 else{
