@@ -625,7 +625,18 @@ if(keyvalue[0]!='"is_active"'){
 if(i%2!=0){color=Color(0xfffafafa);}
 else{color=Color(0xffffffff);}
 i++;
-                      infos.add(Line(k:keyvalue[0],v:keyvalue[1],color:color,context: context));
+List<String> value;
+List<String> key=keyvalue[0].split('"');
+print("key: "+key[1]);
+if(keyvalue[1].contains('"')){
+ value=keyvalue[1].split('"');
+print("value: "+value[1]);
+}
+else value[1]=keyvalue[1];
+print("value: "+value[1]);
+
+
+                      infos.add(Line(k:key[1],v:value[1],color:color,context: context));
                     }            }            }            }      
           }
       }
@@ -642,7 +653,24 @@ if(keyvalue[0]!='"photo"'){
   if(i%2!=0){color=Color(0xfffafafa);}
 else{color=Color(0xffffffff);}
 i++;
-          infos.add(Line(k:keyvalue[0],v:keyvalue[1],color:color,context: context));
+List<String> value=List();
+List<String> key=keyvalue[0].split('"');
+print("key: "+key[1]);
+//value[1]=keyvalue[1];
+if(keyvalue[1].contains('"')){
+  print("cbon t3ada");
+ value=keyvalue[1].split('"');
+print("value: "+value[1]);
+}
+else if(!keyvalue[1].contains('"')){
+  //print("chbeha "+value[1]);
+  value.insert(0, keyvalue[1]);
+    value.insert(0, keyvalue[1]);
+
+}
+//else {value[1]=keyvalue[1];}
+//print("value: "+value[1]);
+          infos.add(Line(k:key[1],v:value[1],color:color,context: context));
         }        }        }        }        }
       }
       print(profileinfo);
