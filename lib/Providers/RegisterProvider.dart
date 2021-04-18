@@ -124,7 +124,7 @@ Future<void> Register(context,username,password,email,LoginProvider loginProvide
     prefs.setBool("new", true).then((bool success) {
       
       int id=int.parse(registerresponse.body.split(':')[1].split(',')[0]);
-      User user=User(email: email,username: username,id: id);
+      User user=User(email: email,username: username,id: id,password: password);
       String usertxt=jsonEncode(user);
        print("baba ali azouz");
            prefs.setString("logged", usertxt).then((bool success) {

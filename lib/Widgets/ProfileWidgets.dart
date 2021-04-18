@@ -160,7 +160,7 @@ Widget createidentifier({context,ProfileProvider profileProvider}) {
 
 
 
-Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProvider loginProvider}) {
+Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProvider loginProvider,firstname,lastname}) {
 
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
@@ -169,7 +169,7 @@ Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProv
           bottom: 12),
       child: FlatButton(
         onPressed: (){
-          profileProvider.createprofile(context: context,age:age,city:city,phone:phone,address:address,loginProvider: loginProvider);
+          profileProvider.createprofile(context: context,age:age,city:city,phone:phone,address:address,loginProvider: loginProvider,firstname: firstname,lastname: lastname);
         },
         child: Container(
           decoration: BoxDecoration(

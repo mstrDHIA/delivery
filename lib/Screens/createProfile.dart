@@ -49,7 +49,7 @@ TextEditingController phonecontrol=TextEditingController();
           child: Column(
             children: [
               createidentifier(context: context,profileProvider: profileProvider),
-              editform(context: context,profileProvider:profileProvider,addresscontrol: addresscontrol,agecontrol: agecontrol,citycontrol: citycontrol,phonecontrol: phonecontrol)
+              editform(context: context,profileProvider:profileProvider,addresscontrol: addresscontrol,agecontrol: agecontrol,citycontrol: citycontrol,phonecontrol: phonecontrol,firstnamecontrol: firstnamecontrol,lastnamecontrol: lastcontrol)
             ],
           ),
         );  },
@@ -76,7 +76,7 @@ TextEditingController phonecontrol=TextEditingController();
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-                Accept(loginProvider: loginProvider,context: context,address: addresscontrol.text,age: agecontrol.text,profileProvider: profileProvider,city: citycontrol.text,phone: phonecontrol.text)
+                Accept(loginProvider: loginProvider,context: context,address: addresscontrol.text,age: agecontrol.text,profileProvider: profileProvider,city: citycontrol.text,phone: phonecontrol.text,firstname: firstnamecontrol.text,lastname: lastcontrol.text)
               ],
             ),
           ),

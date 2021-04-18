@@ -1,4 +1,4 @@
-import 'package:delivery_app_v0/Screens/AdminManage.dart';
+import 'package:delivery_app_v0/Screens/CodeScanner.dart';
 import 'package:delivery_app_v0/Screens/Report.dart';
 import 'package:delivery_app_v0/Screens/login.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class MenuProvider extends ChangeNotifier {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Report(),));
     }
     if(result==MenuOptions.Settings){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AdminManage(),));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => QRViewExample(),));
     }
     if(result==MenuOptions.Logout){
        final prefs = await SharedPreferences.getInstance();  

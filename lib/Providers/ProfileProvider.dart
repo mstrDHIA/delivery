@@ -79,7 +79,7 @@ Future<void> getUser(context,id) async{
 
 
 
-createprofile({context,age,city,phone,address,LoginProvider loginProvider}) async {
+createprofile({context,age,city,phone,address,LoginProvider loginProvider,firstname,lastname}) async {
   
   
   Future<SharedPreferences> prefs = SharedPreferences.getInstance();
@@ -96,6 +96,7 @@ print(vehicleval);
 print(phone);
 File file;
 print(city);
+print(firstname+" "+lastname);
 if(selected!=null){
   file = File(selected.path);
 }
@@ -123,18 +124,27 @@ if(selected!=null){
   request.fields.addAll(prof);
   var res = await request.send();
   if(res.statusCode==201){
-    pref.setBool("new", false).then((bool success) async {
+    var userresponse=await http.put(
+      edituser+usermap["id"].toString()+"/",
+      body: jsonEncode(<String,dynamic>{
+        "first_name":firstname,
+        "last_name":lastname,
+        "username":usermap["username"],
+        "password":usermap["password"]
+      })
+      );
+      if(userresponse.statusCode==200){
+          pref.setBool("new", false).then((bool success) async {
       getUser(context, usermap["id"]);
       
-     // LoginProvider loginProvider;
-// Navigator.pushAndRemoveUntil(
-//       context,
-//       MaterialPageRoute(
-//         builder: (BuildContext context) => AppController(),
-//       ),
-//       (route) => false,
-//     );   
+    
+ } );pref.setBool("new", false).then((bool success) async {
+      getUser(context, usermap["id"]);
+      
+    
  } );
+      }
+    else{print(userresponse.statusCode);}
     print("added");
     
   }
@@ -149,48 +159,7 @@ if(selected!=null){
 
 
 
-Future<void> createProfile({context,age,city,phone,address}) async{
-    Future<SharedPreferences> prefs = SharedPreferences.getInstance();
-             String signed=await prefs.then((value) => value.getString('logged')??"");
-    Map<String,dynamic> usermap=jsonDecode(signed);
-print(age);
-print(address);
 
-print(phone);
-
-print(city);
-
- File file = File(selected.path);
-
-final profileresponse = await http.post(
-    profile,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String,dynamic>{
-      "id_user":usermap["id"],
-      "age":age,
-      "sex":sex,
-      "phone":phone,
-      "country":countryval,
-      "governorate":stateval,
-      "city":city,
-      "address":address,
-      "photo":file,
-      "vehicle":vehicleval,
-      "state":"free"
-    })
-  );
-    if (profileresponse.statusCode == 201) {
-      print("profile created");
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => AppController(),), (route) => false);
-    }
-    else if (profileresponse.statusCode == 400) {
-      print(profileresponse.body);
-    }
-
-
-}
 
 
 Future<void> imageselect()async{
