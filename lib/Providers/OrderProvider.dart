@@ -12,6 +12,7 @@ import 'package:delivery_app_v0/Screens/OrdersScreen.dart';
 import 'package:delivery_app_v0/Widgets/OrderWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Widgets/OrdersWidgets.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,6 +42,15 @@ Future<void> fetchdata(context)async{
 }
 */
 
+Future<bool> getback(context,order,orderProvider){
+  which=which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
+      cam(context: context,provider: orderProvider,order: order),
+      confirm(context:context,order: order,provider: orderProvider)]
+      ));  
+      notify();
+      
+}
+
 verifOrder(){
   if(scannedinfo=='{"id_order":3}'){
     scanmsg="Correct Order";
@@ -53,15 +63,20 @@ verifOrder(){
   
 }
 
-confirmorder(context){
+confirmorder(context) async {
+            final prefs = await SharedPreferences.getInstance();
+
   if(scanned){
     scanmsg="";
           scanned=false;
-  
+
+            prefs.setBool("taken", false).then((bool success) {});
+
           which=OrdersScreen();
 }
 else{
   print("wrooooooooooong");
+  
 }
           
           notify();
@@ -105,12 +120,27 @@ print(o);
   )
   );
   if(Orderresponse.statusCode==200){
+        final prefs = await SharedPreferences.getInstance();
+        String orderjson=jsonEncode(order);
+        String buyerjson=jsonEncode(order.buyer);
+        String sellerjson=jsonEncode(order.seller);
+        String paymentjson=jsonEncode(order.payement);
+        String orderitemsjson=jsonEncode(order.orderitems);
+        String userjson=jsonEncode(order.user);
+        String finalorder=orderjson+"!"+buyerjson+"!"+sellerjson+"!"+paymentjson+"!"+orderitemsjson+"!"+userjson;
+        //String buyerjson=
+                  prefs.setString("order", finalorder).then((bool success) {
+
+                  });
+
       allorders.clear();
       allorders.add(order);
       which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
       cam(context: context,provider: orderProvider,order: order),
       confirm(context:context,order: order,provider: orderProvider)]
       ));
+          prefs.setBool("taken", true).then((bool success) {
+
       taken=true;
       notify(); 
       Navigator.pop(context);
@@ -121,7 +151,7 @@ print(o);
       
     //   (route) => false,
     // );  
-    }
+   } );}
 }
 
  CaclulDistance(Orders order,Geolocator geo)async{

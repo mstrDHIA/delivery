@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Buyer.dart';
 import 'OrderItems.dart';
 import 'Payment.dart';
@@ -69,6 +73,73 @@ class Orders {
     orderDuration = json['order_duration'];
     state = json['state'];
     
+  }
+
+
+  Future<Orders> decoded() async {
+     Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+        String finalorder=await prefs.then((value) => value.getString('order'));
+        List<String> finalorderinfo=finalorder.split('!');            
+        Map<String, dynamic> ordermap=jsonDecode(finalorderinfo[0]);
+        Orders order=Orders.fromJson(ordermap);
+        Map<String, dynamic> buyermap=jsonDecode(finalorderinfo[1]);
+        Buyer buyer=Buyer.fromJson(buyermap);
+        order.buyer=buyer;
+        Map<String, dynamic> sellermap=jsonDecode(finalorderinfo[2]);
+        Seller seller=Seller.fromJson(sellermap);
+        order.seller=seller;
+        Map<String, dynamic> paymentmap=jsonDecode(finalorderinfo[3]);
+        Payment payment=Payment.fromJson(paymentmap);
+        order.payement=payment;
+        //List<String> orderitemslisttxt=finalorderinfo[4].split("}");
+        Map<String, dynamic>orderitemsmap;
+        List<String>itemslist=List();
+        List<OrderItems> orderitems=List();
+        
+      //  print(finalorderinfo[4]);
+        var a=finalorderinfo[4].split("}");
+        //print(a[0].split("[")[1]+"}");
+        //print("{"+a[1].split("{")[1].split("]")[0]+"}");
+        //print(a);
+
+        for(int i=0;i<a.length;i++){
+          int l=a.length-1;
+          if(i==0){
+                      itemslist.add(a[i].split("[")[1]+"}");
+          }
+          else if((i>0)&(i<l)){
+                itemslist.add("{"+a[i].split("{")[1]+"}");
+          }
+          else {
+                    itemslist.add("{"+a[1].split("{")[1].split("]")[0]+"}");
+
+          }
+          orderitemsmap=jsonDecode(itemslist[i]);
+          orderitems.add(OrderItems.fromJson(orderitemsmap));
+        }
+
+        /*for(int i=0;i<orderitemslisttxt.length;i++){
+          int l=orderitemslisttxt.length-1;
+          if(i!=l){
+            orderitemslisttxt[i]=orderitemslisttxt[i]+"}";
+            orderitemsmap.add(jsonDecode(orderitemslisttxt[i]));
+            orderitems.add(OrderItems.fromJson(orderitemsmap[i]));
+          }
+        }*/
+        //itemslist=jsonDecode(finalorderinfo[4]);
+        
+        // for(dynamic item in itemslist){
+        //   print(item);
+        //   // orderitemsmap=jsonDecode(item);
+        //   // orderitems.add(OrderItems.fromJson(orderitemsmap));
+        // }
+          //orderitems=OrderItems.fromJson(orderitemsmap);
+        //OrderItems orderItems=OrderItems.fromJson(orderitemsmap);
+        order.orderitems=orderitems;
+        // Map<String, dynamic> usermap=jsonDecode(finalorderinfo[5]);
+        // User user=User.fromJson(usermap);
+        // order.user=user;
+         return order;
   }
 
   Map<String, dynamic> toJson() {

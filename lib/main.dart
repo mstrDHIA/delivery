@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'API/APIS.dart';
+import 'Models/Orders.dart';
 import 'Models/Profile.dart';
 import 'Models/User.dart';
 import 'Providers/LoginProvider.dart';
@@ -20,6 +21,7 @@ import 'Providers/RegisterProvider.dart';
 import 'Screens/AppController.dart';
 import 'Screens/Register.dart';
 import 'Screens/api test.dart';
+import 'Widgets/OrderWidget.dart';
 
 void main() {
   runApp(MyApp());
@@ -67,8 +69,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   String signed;
+  OrderProvider orderProvider;
   @override
   Future<void> initState()   {
+    orderProvider = Provider.of<OrderProvider>(context, listen: false);
+
+
     // TODO: implement initState
     super.initState();
   }
@@ -97,6 +103,18 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async{
+        
+         orderProvider.taken=await prefs.then((value) => value.getBool('taken')??false);
+         if(orderProvider.taken){
+         String ordertxt =await prefs.then((value) => value.getString('order')??"");
+         Orders order=Orders();
+         order=await order.decoded();
+         print(order.seller.name);
+            orderProvider.which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
+      cam(context: context,provider: orderProvider,order: order),
+      confirm(context:context,order: order,provider: orderProvider)]
+      ));  
+         }
           signed=await prefs.then((value) => value.getString('logged')??"");
          bool newboy=await prefs.then((value) => value.getBool('new')??false);
           if(newboy){

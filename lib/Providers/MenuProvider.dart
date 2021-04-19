@@ -7,6 +7,8 @@ import '../Widgets/popupMenu.dart';
 class MenuProvider extends ChangeNotifier {
 
   Changeoption(BuildContext context,option) async {
+    double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
     var result=option;
 
     notify();
@@ -18,9 +20,32 @@ class MenuProvider extends ChangeNotifier {
     }
     if(result==MenuOptions.Logout){
        final prefs = await SharedPreferences.getInstance();  
-    prefs.setString("logged", "").then((bool success) {
+              final pref =  SharedPreferences.getInstance();  
+
+                bool taken=await pref.then((value) => value.getBool('taken'));
+if(!taken){
+prefs.setString("logged", "").then((bool success) {
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login(),),(route) => false,);
       });
+}
+else{
+  showDialog(context: context,
+  builder: (_){return 
+  Dialog(
+    child: Container(
+      height: deviceheight*0.1,
+      width: devicewidth*0.3,
+      child: Center(child: Text("You can't logout when you accept an order",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        color: Colors.red,
+        fontSize: 18
+      ),))
+      ),
+    );}
+  );
+}
+    
     }
 
     print(option.toString());

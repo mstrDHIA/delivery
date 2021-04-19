@@ -35,7 +35,7 @@ class AppPage extends State<AppController> {
   MenuProvider menuprovider;
   AppProvider appProvider;
   OrderProvider provider;
-  Widget which;
+  //Widget which;
 
   AppPage( {this.user,this.order});
 
@@ -121,7 +121,8 @@ class AppPage extends State<AppController> {
                   Row(
                     children: [
                       IconButton(onPressed:(){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications(),));
+                        provider.confirmorder(context);
+                       // Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications(),));
                       },
                         icon: Icon(
                           Icons.notifications,
