@@ -3,6 +3,7 @@ import 'package:delivery_app_v0/Models/OrderItems.dart';
 import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Providers/OrderProvider.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
+import 'package:delivery_app_v0/Screens/CodeScanner.dart';
 import 'package:delivery_app_v0/Screens/Notifications.dart';
 import 'package:delivery_app_v0/Screens/OrdersScreen.dart';
 import 'package:flutter/material.dart';
@@ -156,6 +157,58 @@ import 'package:provider/provider.dart';
   }
 
 
+cam({context,OrderProvider provider,order}){
+  double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+    Color col;
+    double h;
+    if(provider.scanned){
+      col=Colors.green;
+      h=deviceheight*0.025;
+    }
+    else{
+      col=Colors.red;
+            h=0.0;
+
+    }
+  return Column(
+    children: [
+      provider.scanner,
+      
+      Container(width: devicewidth*0.2,
+      height: deviceheight*0.07,
+      
+      decoration: BoxDecoration(
+        boxShadow: [BoxShadow(
+          color: Colors.grey,
+          blurRadius: 40,
+          offset: Offset(2,10),
+          spreadRadius: 1
+        )],
+        color: Colors.red,
+        borderRadius: BorderRadius.all(Radius.circular(30)),
+      ),
+        child: IconButton(icon: Icon(Icons.qr_code,size: 30,),
+         onPressed: () {
+           print("let's scan");
+          //  showDialog(context: context,
+          //  builder: (_){QRViewExample();}
+          //  );
+          provider.which=QRViewExample(order: order);
+          provider.notify();
+           //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => QRViewExample()));
+           },),
+      ),SizedBox(height: h,),
+      Text(provider.scanmsg,
+      style: TextStyle(
+        color: col,
+        fontSize: 20
+      ),)
+      //SizedBox(height: deviceheight*0.05,)
+    ],
+  );
+}
+
 
 singleorder({Orders order,context,OrderProvider orderProvider}){
   double deviceheight = MediaQuery.of(context).size.height;
@@ -197,6 +250,17 @@ singleorder({Orders order,context,OrderProvider orderProvider}){
 
 
 confirm({context,OrderProvider provider,Orders order}) {
+     List<Color> colors;
+
+  if(provider.scanned){
+      colors=[Color(0xff71DF79),
+                    Color(0xff2ACF45)];
+
+  }
+  else{
+     colors=[Colors.grey,
+                    Colors.grey];
+  }
 
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
@@ -204,6 +268,8 @@ confirm({context,OrderProvider provider,Orders order}) {
       padding: const EdgeInsets.only(top:12.0,
       bottom: 12),
       child: FlatButton(
+        
+        //disabledColor: Colors.grey,
         onPressed: (){
           //provider.acceptorder(order,context,provider);
           provider.confirmorder(context);
@@ -241,11 +307,7 @@ confirm({context,OrderProvider provider,Orders order}) {
               gradient: LinearGradient(
                   begin: Alignment.centerRight,
                   end: Alignment.centerLeft,
-                  colors: [
-                    Color(0xff71DF79),
-                    Color(0xff2ACF45),
-
-                  ]
+                  colors: colors,
 
               ),
               // color: Colors.redAccent,

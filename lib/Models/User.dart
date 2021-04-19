@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Profile.dart';
 class User {
   int id;
@@ -26,6 +30,19 @@ class User {
       this.isActive,
       this.dateJoined,
       this.profile});
+
+
+  Future<User> decoded() async {
+        Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+        String signed=await prefs.then((value) => value.getString('logged'));
+        List<String> userinfos=signed.split('!');            
+        Map<String, dynamic> usermap=jsonDecode(userinfos[0]);
+        User user=User.fromJson(usermap);
+        Map<String, dynamic> profilemap=jsonDecode(userinfos[1]);
+        Profile profile=Profile.fromJson(profilemap);
+        user.profile=profile;
+        return user;
+  }
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];

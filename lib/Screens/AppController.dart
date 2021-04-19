@@ -38,6 +38,8 @@ class AppPage extends State<AppController> {
   Widget which;
 
   AppPage( {this.user,this.order});
+
+  
   @override
   void initState() {
     provider = Provider.of<OrderProvider>(context, listen: false);
@@ -183,7 +185,8 @@ class AppPage extends State<AppController> {
 
     var tabs = [
 
-      Expanded(child: provider.which),
+      Consumer<OrderProvider>(builder: (BuildContext context, value, Widget child) { return Expanded(child: provider.which) ;},),
+      
       Container(height: 0,width: 0,),
       Profile(user: user,)
       //Expanded(child: Map()),

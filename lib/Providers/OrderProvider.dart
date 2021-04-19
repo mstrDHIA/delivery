@@ -6,6 +6,7 @@ import 'package:delivery_app_v0/Models/OrderItems.dart';
 import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Models/Payment.dart';
 import 'package:delivery_app_v0/Models/Seller.dart';
+import 'package:delivery_app_v0/Models/User.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
 import 'package:delivery_app_v0/Screens/OrdersScreen.dart';
 import 'package:delivery_app_v0/Widgets/OrderWidget.dart';
@@ -15,6 +16,9 @@ import '../Widgets/OrdersWidgets.dart';
 import 'package:http/http.dart' as http;
 
 class OrderProvider extends ChangeNotifier{
+  bool scanned=false;
+  String scanmsg="";
+  String scannedinfo;
   bool taken=false;
 Widget which=OrdersScreen();
 
@@ -22,6 +26,8 @@ final List<Widget> list=List();
 bool loading=false;
   List<Orders> allorders=[];
   double distance;
+
+  Widget scanner=SizedBox(height: 0,width: 0,);
 
 /*
 Future<void> fetchdata(context)async{
@@ -35,9 +41,29 @@ Future<void> fetchdata(context)async{
 }
 */
 
+verifOrder(){
+  if(scannedinfo=='{"id_order":3}'){
+    scanmsg="Correct Order";
+    scanned=true;
+  }
+  else{
+    scanmsg="Wrong Order";
+    scanned=false;
+  }
+  
+}
+
 confirmorder(context){
-  taken=false;
+  if(scanned){
+    scanmsg="";
+          scanned=false;
+  
           which=OrdersScreen();
+}
+else{
+  print("wrooooooooooong");
+}
+          
           notify();
 }
 
@@ -81,16 +107,20 @@ print(o);
   if(Orderresponse.statusCode==200){
       allorders.clear();
       allorders.add(order);
-      which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),confirm(context:context,order: order,provider: orderProvider)]));
+      which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
+      cam(context: context,provider: orderProvider,order: order),
+      confirm(context:context,order: order,provider: orderProvider)]
+      ));
       taken=true;
       notify(); 
-      Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => AppController(order: order,)),
+      Navigator.pop(context);
+    //   Navigator.pushAndRemoveUntil(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (BuildContext context) => AppController(order: order,)),
       
-      (route) => false,
-    );  
+    //   (route) => false,
+    // );  
     }
 }
 
