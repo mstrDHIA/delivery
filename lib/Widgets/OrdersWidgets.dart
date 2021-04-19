@@ -60,14 +60,14 @@ Widget listitem(context,Orders order) {
         title: Padding(
           padding: const EdgeInsets.only(top: 14.0, left: 16),
           child: Text(
-            order.id.toString(),
+            "Order Num "+order.id.toString(),
             style: TextStyle(
               //fontFamily: 'ebrima',
                 fontSize: 18),
           ),
         ),
         trailing: Text(
-          order.price.toString(),
+          order.totalPrice.toString()+"DT",
           style: TextStyle(
             //fontFamily: 'ebrima',
               fontSize: 18),

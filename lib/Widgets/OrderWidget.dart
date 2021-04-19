@@ -6,6 +6,7 @@ import 'package:delivery_app_v0/Screens/AppController.dart';
 import 'package:delivery_app_v0/Screens/CodeScanner.dart';
 import 'package:delivery_app_v0/Screens/Notifications.dart';
 import 'package:delivery_app_v0/Screens/OrdersScreen.dart';
+import 'package:delivery_app_v0/Widgets/OrdersWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 //import 'dart:js';
@@ -445,9 +446,10 @@ bill({context,Orders order,OrderProvider orderProvider}) {
             ),
             //billitems(order: order).map((e) => Billitem(item:e)).toList(),
             for(var item in items) item,
-            
+            Billitemtxt(orderProvider: orderProvider,txt: "delivery fees",cost: order.deliveryFees),
             Divider(),
-            
+            Billitemtxt(orderProvider: orderProvider,txt: "Total",cost: order.totalPrice),
+
             // Billitem(order: order),
             // Billitem("1 Pizza 4 Cheese Small",9),
             // Billitem("1 Soda 1L",3),
@@ -477,6 +479,47 @@ bill({context,Orders order,OrderProvider orderProvider}) {
     );
 
   }
+
+
+
+Billitemtxt({String txt,OrderProvider orderProvider,double cost}) {
+    return Padding(
+      padding: const EdgeInsets.only(left:12,right: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+
+          Text(
+            txt,
+            style: TextStyle(
+              fontSize: 17,
+                fontFamily: 'calist'
+
+            ),
+          ),
+         
+          Row(
+            children: [
+              Text(
+              cost.toString()+"DT",
+            style: TextStyle(
+                fontSize: 17,
+                fontFamily: 'calist',
+
+                fontWeight: FontWeight.bold
+            ),
+          ),
+           
+           
+            ],
+          )
+          
+        ],
+      ),
+    );
+  }
+
+
 
 
   billitems({Orders order,OrderProvider orderProvider}){

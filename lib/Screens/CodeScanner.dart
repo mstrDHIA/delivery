@@ -202,7 +202,7 @@ class _QRViewExampleState extends State<QRViewExample> {
       setState(() {
         result = scanData;
         orderProvider.scannedinfo=result.code;
-        orderProvider.verifOrder();
+        orderProvider.verifOrder(order:order);
         
 orderProvider.which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
       cam(context: context,provider: orderProvider,order: order),

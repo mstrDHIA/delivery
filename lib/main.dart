@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:delivery_app_v0/Screens/AdminManage.dart';
 import 'package:delivery_app_v0/Screens/createProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -106,10 +107,13 @@ class _MyHomePageState extends State<MyHomePage> {
         
          orderProvider.taken=await prefs.then((value) => value.getBool('taken')??false);
          if(orderProvider.taken){
+           Geolocator geo=Geolocator();
          String ordertxt =await prefs.then((value) => value.getString('order')??"");
          Orders order=Orders();
          order=await order.decoded();
          print(order.seller.name);
+               orderProvider.allorders.add(order);
+                orderProvider.CaclulDistance(order, geo);
             orderProvider.which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
       cam(context: context,provider: orderProvider,order: order),
       confirm(context:context,order: order,provider: orderProvider)]

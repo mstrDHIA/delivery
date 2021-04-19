@@ -121,8 +121,8 @@ class AppPage extends State<AppController> {
                   Row(
                     children: [
                       IconButton(onPressed:(){
-                        provider.confirmorder(context);
-                       // Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications(),));
+                        //provider.confirmorder(context);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications(),));
                       },
                         icon: Icon(
                           Icons.notifications,

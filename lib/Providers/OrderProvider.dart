@@ -51,8 +51,17 @@ Future<bool> getback(context,order,orderProvider){
       
 }
 
-verifOrder(){
-  if(scannedinfo=='{"id_order":3}'){
+verifOrder({Orders order}){
+  //Map<String,dynamic> ordermap=json.decode(scannedinfo);
+  String notid=scannedinfo.split(":")[1];
+  String id=notid.split("}")[0];
+  print(id);
+    // print("this is"+ordermap["id"].toString());
+    // print("map");
+    // print(ordermap);
+    //print(scannedinfo);
+
+  if(id==order.id.toString()){
     scanmsg="Correct Order";
     scanned=true;
   }

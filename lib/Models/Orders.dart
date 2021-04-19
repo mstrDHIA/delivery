@@ -101,19 +101,24 @@ class Orders {
         //print(a[0].split("[")[1]+"}");
         //print("{"+a[1].split("{")[1].split("]")[0]+"}");
         //print(a);
-
-        for(int i=0;i<a.length;i++){
           int l=a.length-1;
+print("this is length"+l.toString());
+        for(int i=0;i<l;i++){
           if(i==0){
+            print("this is 1");
                       itemslist.add(a[i].split("[")[1]+"}");
           }
           else if((i>0)&(i<l)){
+                        print("this is 2");
+
                 itemslist.add("{"+a[i].split("{")[1]+"}");
           }
-          else {
-                    itemslist.add("{"+a[1].split("{")[1].split("]")[0]+"}");
+          // else if(i==l){
+          //               print("this is 3");
 
-          }
+          //           itemslist.add("{"+a[1].split("{")[1].split("]")[0]+"}");
+
+          // }
           orderitemsmap=jsonDecode(itemslist[i]);
           orderitems.add(OrderItems.fromJson(orderitemsmap));
         }
