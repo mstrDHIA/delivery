@@ -21,6 +21,7 @@ class OrderProvider extends ChangeNotifier{
   String scanmsg="";
   String scannedinfo;
   bool taken=false;
+  double accepteddistance;
 Widget which=OrdersScreen();
 
 final List<Widget> list=List();
@@ -95,13 +96,14 @@ confirmorder(context,Orders order) async {
     "price": order.price,
     "stars": order.stars,
     "review": order.review,
-    "delivery_time": order.deliveryTime,
+    "distance": accepteddistance,
+
+    //"delivery_time": order.deliveryTime.toString(),
     "delivery_durations": order.deliveryDuration,
     "accept_time": order.accept_time.toString(),
     "order_time": order.orderTime,
     "order_type": order.orderType,
     "is_paid": order.isPaid,
-    "distance": order.distance,
     "order_duration": order.orderDuration,
     "state": "pending",
     //"id_user": order.user.id,
@@ -132,6 +134,7 @@ else{
 }
 
 acceptorder(Orders order,context,orderProvider)async{
+  accepteddistance=distance;
   order.state="delivering";
 Map<String,dynamic> o=order.toJson();
 print(o);  
@@ -150,13 +153,13 @@ print(o);
     "price": order.price,
     "stars": order.stars,
     "review": order.review,
-    "delivery_time": order.deliveryTime,
+    //"delivery_time": order.deliveryTime,
     "delivery_durations": order.deliveryDuration,
     //"accept_time": order.,
     "order_time": order.orderTime,
     "order_type": order.orderType,
     "is_paid": order.isPaid,
-    "distance": order.distance,
+    "distance": distance,
     "order_duration": order.orderDuration,
     "state": "pending",
     //"id_user": order.user.id,

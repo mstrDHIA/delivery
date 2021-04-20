@@ -394,7 +394,7 @@ confirm({context,OrderProvider provider,Orders order}) {
 bill({context,Orders order,OrderProvider orderProvider}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
-    double h=deviceheight*0.05;
+    double h=deviceheight*0.08;
     Color color;
     print("this is"+order.orderitems.toString());
     for (OrderItems item in order.orderitems) {
