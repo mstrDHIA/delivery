@@ -17,10 +17,11 @@ class Orders {
   double price;
   int stars;
   String review;
-  String deliveryTime;
+  DateTime deliveryTime;
   String deliveryDuration;
   String orderTime;
   String orderType;
+  DateTime accept_time;
   bool isPaid;
   double distance;
   double orderDuration;
@@ -42,6 +43,7 @@ class Orders {
       this.stars,
       this.review,
       this.deliveryTime,
+      this.accept_time,
       this.deliveryDuration,
       this.orderTime,
       this.orderType,
@@ -65,6 +67,7 @@ class Orders {
     stars = json['stars'];
     review = json['review'];
     deliveryTime = json['delivery_time'];
+    accept_time = DateTime.parse(json['accept_time']);
     deliveryDuration = json['delivery_duration'];
     orderTime = json['order_time'];
     orderType = json['order_type'];
@@ -161,6 +164,7 @@ print("this is length"+l.toString());
     data['delivery_duration'] = this.deliveryDuration;
     data['order_time'] = this.orderTime;
     data['order_type'] = this.orderType;
+    data['accept_time'] = this.accept_time.toString();
     data['is_paid'] = this.isPaid;
     data['distance'] = this.distance;
     data['order_duration'] = this.orderDuration;

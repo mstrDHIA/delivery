@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
          order=await order.decoded();
          print(order.seller.name);
                orderProvider.allorders.add(order);
-                orderProvider.CaclulDistance(order, geo);
+                await orderProvider.CaclulDistance(order, geo);
             orderProvider.which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
       cam(context: context,provider: orderProvider,order: order),
       confirm(context:context,order: order,provider: orderProvider)]

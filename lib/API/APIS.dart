@@ -12,6 +12,7 @@ const acceptapi=initiallink+"/accept_order/";
 const createuser=initiallink+"/new_user/";
 const profile=initiallink+"/profile/";
 
+const orderconfirm=initiallink+"/confirm_order/";
 
 
 

@@ -27,7 +27,7 @@ final List<Widget> list=List();
 bool loading=false;
   List<Orders> allorders=[];
   double distance;
-
+bool scanpage=false;
   Widget scanner=SizedBox(height: 0,width: 0,);
 
 /*
@@ -72,16 +72,56 @@ verifOrder({Orders order}){
   
 }
 
-confirmorder(context) async {
+confirmorder(context,Orders order) async {
+  String url=orderconfirm+order.id.toString()+"/";
             final prefs = await SharedPreferences.getInstance();
 
   if(scanned){
+    print("heni houni");
     scanmsg="";
           scanned=false;
 
-            prefs.setBool("taken", false).then((bool success) {});
+            prefs.setBool("taken", false).then((bool success) async {
+              order.state="delivered";
+              Map<String,dynamic> o=order.toJson();
+              print(o);  
+              final confirmresponse=await http.put(url,
+            body: jsonEncode(<String,dynamic>{
+       "id": order.id,
+    "buyer_phone": order.buyerPhone,
+    "buyer_mail": order.buyerMail,
+    "total_price": order.totalPrice,
+    "delivery_fees": order.deliveryFees,
+    "price": order.price,
+    "stars": order.stars,
+    "review": order.review,
+    "delivery_time": order.deliveryTime,
+    "delivery_durations": order.deliveryDuration,
+    "accept_time": order.accept_time.toString(),
+    "order_time": order.orderTime,
+    "order_type": order.orderType,
+    "is_paid": order.isPaid,
+    "distance": order.distance,
+    "order_duration": order.orderDuration,
+    "state": "pending",
+    //"id_user": order.user.id,
+    "id_buyer": order.buyer.id,
+    "id_payement": order.payement.id,
+    "id_seller": order.seller.id
+      
+    } ));
+    if(confirmresponse.statusCode==200){
+      print("tawa houni");
+           which=OrdersScreen();
+                     notify();
 
-          which=OrdersScreen();
+    }
+    else{
+      print("manich houni");
+      print(confirmresponse.body);
+    }
+            });
+            
 }
 else{
   print("wrooooooooooong");

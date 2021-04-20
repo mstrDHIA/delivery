@@ -98,7 +98,7 @@ import 'package:provider/provider.dart';
   }
 
 
-    showmap({context}) {
+    showmap({context,Orders order}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return Center(
@@ -106,6 +106,7 @@ import 'package:provider/provider.dart';
         padding: const EdgeInsets.only(top:8.0),
         child: FlatButton(
           onPressed: (){
+            print(order.accept_time);
             print('pressed');
           },
           child: Container(
@@ -195,6 +196,9 @@ cam({context,OrderProvider provider,order}){
           //  showDialog(context: context,
           //  builder: (_){QRViewExample();}
           //  );
+                provider.scanpage=true;
+          provider.notify();
+
           provider.which=QRViewExample(order: order);
           provider.notify();
            //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => QRViewExample()));
@@ -230,7 +234,7 @@ singleorder({Orders order,context,OrderProvider orderProvider}){
                     0, -deviceheight * 0.08, 0.0),
                 child: Column(
                   children: [route(context: context,order: order),
-                  showmap(context: context),
+                  showmap(context: context,order: order),
                   bill(context: context,order: order,orderProvider: orderProvider),
                   info(context: context,text: "distance:",orderprovider: orderProvider,orders: order),
 
@@ -273,7 +277,7 @@ confirm({context,OrderProvider provider,Orders order}) {
         //disabledColor: Colors.grey,
         onPressed: (){
           //provider.acceptorder(order,context,provider);
-          provider.confirmorder(context);
+          provider.confirmorder(context,order);
           
           print(provider.taken);
 

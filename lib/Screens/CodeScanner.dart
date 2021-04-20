@@ -14,6 +14,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRViewExample extends StatefulWidget {
   final Orders order;
+  
   const QRViewExample({
     Key key, this.order,
   }) : super(key: key);
@@ -36,6 +37,7 @@ class _QRViewExampleState extends State<QRViewExample> {
     print(order.price);
     // TODO: implement initState
     orderProvider = Provider.of<OrderProvider>(context, listen: false);
+    //orderProvider.scanpage=true;
     super.initState();
   }
 
@@ -59,6 +61,8 @@ class _QRViewExampleState extends State<QRViewExample> {
       cam(context: context,provider: orderProvider,order: order),
       confirm(context:context,order: order,provider: orderProvider)]
       ));  
+            orderProvider.scanpage=false;
+
       orderProvider.notify();
     }, /*orderProvider.getback(context, order, orderProvider),*/
           child: Scaffold(
@@ -201,6 +205,8 @@ class _QRViewExampleState extends State<QRViewExample> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
+              orderProvider.scanpage=false;
+
         orderProvider.scannedinfo=result.code;
         orderProvider.verifOrder(order:order);
         

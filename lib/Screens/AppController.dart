@@ -70,7 +70,7 @@ class AppPage extends State<AppController> {
       return Column(
         children: [Container(
           color: Color.fromRGBO(211, 16, 39, 0.6),
-          height: deviceheight*0.0365,
+          height: deviceheight*0.0375,
 
         ),
           Container(
@@ -159,7 +159,7 @@ class AppPage extends State<AppController> {
     appcontrol(int currentindex) {
       if (currentindex == 0) {
         return PreferredSize(
-          preferredSize: Size.fromHeight(deviceheight*0.11),
+          preferredSize: Size.fromHeight(deviceheight*0.09),
           child: barapp("Available Orders"),
         );
       }
