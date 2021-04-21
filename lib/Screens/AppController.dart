@@ -16,6 +16,7 @@ import 'ProfileScreen.dart';
 
 import 'MyMap.dart';
 
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 
 class AppController extends StatefulWidget{
@@ -187,7 +188,7 @@ class AppPage extends State<AppController> {
     var tabs = [
 
       Consumer<OrderProvider>(builder: (BuildContext context, value, Widget child) { return Expanded(child: provider.which) ;},),
-      
+     
       Container(height: 0,width: 0,),
       Profile(user: user,)
       //Expanded(child: Map()),
@@ -195,7 +196,7 @@ class AppPage extends State<AppController> {
     ];
     
     return Scaffold(
-
+key: scaffoldKey,
       appBar: appcontrol(currentindex),
       body: Consumer<OrderProvider>(
               builder: (BuildContext context, value, Widget child) { return Column(

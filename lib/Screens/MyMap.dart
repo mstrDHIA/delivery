@@ -1,4 +1,6 @@
 import 'package:delivery_app_v0/Models/Orders.dart';
+import 'package:delivery_app_v0/Providers/OrderProvider.dart';
+import 'package:delivery_app_v0/Widgets/OrderWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Providers/MapProvider.dart';
@@ -35,16 +37,25 @@ class MapPage extends State<MyMap> {
 
   //PageController _pageController = PageController();
   MapProvider mapProvider;
+  OrderProvider orderProvider;
 
   MapPage(this.orderslist);
 
       //List<Marker> markers;
 
+      @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+         // orderProvider.timewidget=timewidget(context: context,order: orderslist[0]);
 
+    super.didChangeDependencies();
+  }
   @override
   void initState() {
 
     mapProvider = Provider.of<MapProvider>(context, listen: false);
+    orderProvider = Provider.of<OrderProvider>(context, listen: false);
+
     mapProvider.getCurrentLocation(_geolocator,_currentPosition,mapController);
       mapProvider.checkGps();
 
@@ -98,142 +109,156 @@ BitmapDescriptor.fromAssetImage(
           //print("this is ${orderslist[0].price}");
 
       return
-        Stack(
-          children: [
-            Center(
-              child: Container(height: deviceheight,
-                child: GoogleMap(
-                  
-                  buildingsEnabled: true,
+        Consumer<OrderProvider>(
+                  builder: (BuildContext context, value, Widget child) {     return Stack(
+            children: [
+              Center(
+                child: Container(height: deviceheight,
+                  child: GoogleMap(
+                    
+                    buildingsEnabled: true,
 
-                  onTap: (index){
-                    mapProvider.polylines.clear();
-                    mapProvider.AddMarkers(orderslist, context, _geolocator);
-                    //mapProvider.removeClientsMarkers();
-                    //mapProvider.markers.clear();
-                    mapProvider.notify();
-                  },
-                  polylines: Set<Polyline>.of(mapProvider.polylines.values),
-                  //polylines: ,
-                  initialCameraPosition:
-                  _initialLocation = CameraPosition(tilt: 60,
-                  zoom: 12,
-                    target: LatLng(36.710567, 10.413693)),
-                  myLocationEnabled: true,
+                    onTap: (index){
+                      mapProvider.polylines.clear();
+                      mapProvider.AddMarkers(orderslist, context, _geolocator);
+                      //mapProvider.removeClientsMarkers();
+                      //mapProvider.markers.clear();
+                      mapProvider.notify();
+                    },
+                    polylines: Set<Polyline>.of(mapProvider.polylines.values),
+                    //polylines: ,
+                    initialCameraPosition:
+                    _initialLocation = CameraPosition(tilt: 60,
+                    zoom: 12,
+                      target: LatLng(36.710567, 10.413693)),
+                    myLocationEnabled: true,
 
-                  myLocationButtonEnabled: false,
-                  mapType: MapType.normal,
-                  zoomGesturesEnabled: true,
-                  zoomControlsEnabled: false,
-                  markers: mapProvider.markers.toSet(),
-                  
-                  //onTap: goto,
-                  onMapCreated: (GoogleMapController controller) {
-                    mapProvider.AddMarkers(orderslist,context,_geolocator);
+                    myLocationButtonEnabled: false,
+                    mapType: MapType.normal,
+                    zoomGesturesEnabled: true,
+                    zoomControlsEnabled: false,
+                    markers: mapProvider.markers.toSet(),
+                    
+                    //onTap: goto,
+                    onMapCreated: (GoogleMapController controller) {
+                      mapProvider.AddMarkers(orderslist,context,_geolocator);
 
-                    mapController = controller;
-                  },
+                      mapController = controller;
+                    },
 
+                  ),
                 ),
               ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: ClipOval(
-                        child: Material(
-                          color: Colors.redAccent, // button color
-                          child: InkWell(
-                            splashColor: Colors.blue, // inkwell color
-                            child: SizedBox(
-                              width: 56,
-                              height: 56,
-                              child: Icon(Icons.zoom_in, color: Colors.white,),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ClipOval(
+                          child: Material(
+                            color: Colors.redAccent, // button color
+                            child: InkWell(
+                              splashColor: Colors.blue, // inkwell color
+                              child: SizedBox(
+                                width: 56,
+                                height: 56,
+                                child: Icon(Icons.zoom_in, color: Colors.white,),
+                              ),
+                              onTap: () {
+                                print("this is"+orderProvider.now);
+                                mapController.animateCamera(
+                                  CameraUpdate.zoomIn(),
+                                );
+                                // TODO: Add the operation to be performed
+                                // on button tap
+                              },
                             ),
-                            onTap: () {
-                              mapController.animateCamera(
-                                CameraUpdate.zoomIn(),
-                              );
-                              // TODO: Add the operation to be performed
-                              // on button tap
-                            },
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: ClipOval(
-                        child: Material(
-                          color: Colors.redAccent, // button color
-                          child: InkWell(
-                            splashColor: Colors.blue, // inkwell color
-                            child: SizedBox(
-                              width: 56,
-                              height: 56,
-                              child: Icon(Icons.zoom_out, color: Colors.white,),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ClipOval(
+                          child: Material(
+                            color: Colors.redAccent, // button color
+                            child: InkWell(
+                              splashColor: Colors.blue, // inkwell color
+                              child: SizedBox(
+                                width: 56,
+                                height: 56,
+                                child: Icon(Icons.zoom_out, color: Colors.white,),
+                              ),
+                              onTap: () {
+                                mapController.animateCamera(
+                                  CameraUpdate.zoomOut(),
+                                );
+                                // TODO: Add the operation to be performed
+                                // on button tap
+                              },
                             ),
-                            onTap: () {
-                              mapController.animateCamera(
-                                CameraUpdate.zoomOut(),
-                              );
-                              // TODO: Add the operation to be performed
-                              // on button tap
-                            },
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
+                    ],
+                  )
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
 
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right:16.0,bottom: 42),
-                      child: ClipOval(
-                        child: Material(
-                          color: Colors.redAccent, // button color
-                          child: InkWell(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Consumer<OrderProvider>(
+                                            builder: (BuildContext context, value, Widget child) { 
+                                              return Padding(
+                          padding: EdgeInsets.only(
+                            left: 16,
+                            bottom: 42
+                          ),
+                          child: orderProvider.timerwidget); },
+                                            
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right:16.0,bottom: 42),
+                        child: ClipOval(
+                          child: Material(
+                            color: Colors.redAccent, // button color
+                            child: InkWell(
 
-                            splashColor: Colors.redAccent, // inkwell color
-                            child: SizedBox(
-                              width: 56,
-                              height: 56,
-                              child: Icon(
-                                Icons.my_location, color: Colors.white,),
+                              splashColor: Colors.redAccent, // inkwell color
+                              child: SizedBox(
+                                width: 56,
+                                height: 56,
+                                child: Icon(
+                                  Icons.my_location, color: Colors.white,),
+                              ),
+                              onTap: () {
+                                mapProvider.getCurrentLocation(_geolocator,_currentPosition,mapController);
+                                // TODO: Add the operation to be performed
+                                // on button tap
+                              },
                             ),
-                            onTap: () {
-                              mapProvider.getCurrentLocation(_geolocator,_currentPosition,mapController);
-                              // TODO: Add the operation to be performed
-                              // on button tap
-                            },
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ); },
+              
         );
     }
 

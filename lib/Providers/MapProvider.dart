@@ -16,7 +16,7 @@ class MapProvider extends ChangeNotifier {
 BitmapDescriptor customIcon1;
 BitmapDescriptor customIcon2;
 
-
+Widget timerwidget;
 bool chosen=false;
 final List<Marker> buyermarkers=List();
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-const String initiallink="http://0b0c2fb7ce9b.ngrok.io";
+const String initiallink="http://41321cc8c839.ngrok.io";
 const String getOrdersApi=initiallink+"/available_orders/";
 const String getUserApi=initiallink+"/user_info/";
 const String edituser=initiallink+"/user/";
@@ -11,6 +11,7 @@ const Authentication=initiallink+"/api/token/";
 const acceptapi=initiallink+"/accept_order/";
 const createuser=initiallink+"/new_user/";
 const profile=initiallink+"/profile/";
+const block=initiallink+"/block/";
 
 const orderconfirm=initiallink+"/confirm_order/";
 

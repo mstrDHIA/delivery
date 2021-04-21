@@ -7,8 +7,10 @@ import 'package:delivery_app_v0/Screens/CodeScanner.dart';
 import 'package:delivery_app_v0/Screens/Notifications.dart';
 import 'package:delivery_app_v0/Screens/OrdersScreen.dart';
 import 'package:delivery_app_v0/Widgets/OrdersWidgets.dart';
+import 'package:delivery_app_v0/Screens/AppController.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //import 'dart:js';
 
   blank({context}) {
@@ -98,14 +100,19 @@ import 'package:provider/provider.dart';
   }
 
 
-    showmap({context,Orders order}) {
+    showmap({context,Orders order,OrderProvider orderProvider}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(top:8.0),
         child: FlatButton(
-          onPressed: (){
+          onPressed: () async {
+            final prefs =  SharedPreferences.getInstance();
+
+            String blocked =await prefs.then((value) => value.getString('blocked')??"");
+            print(blocked);
+           // print(orderProvider.now);
             print(order.accept_time);
             print('pressed');
           },
@@ -234,7 +241,7 @@ singleorder({Orders order,context,OrderProvider orderProvider}){
                     0, -deviceheight * 0.08, 0.0),
                 child: Column(
                   children: [route(context: context,order: order),
-                  showmap(context: context,order: order),
+                  showmap(context: context,order: order,orderProvider: orderProvider),
                   bill(context: context,order: order,orderProvider: orderProvider),
                   info(context: context,text: "distance:",orderprovider: orderProvider,orders: order),
 
@@ -255,6 +262,13 @@ singleorder({Orders order,context,OrderProvider orderProvider}){
 
 
 confirm({context,OrderProvider provider,Orders order}) {
+  BuildContext ctx;
+  if(scaffoldKey.currentContext==null){
+    ctx=context;
+  }
+  else{
+    ctx=scaffoldKey.currentContext;
+  }
      List<Color> colors;
 
   if(provider.scanned){
@@ -267,8 +281,8 @@ confirm({context,OrderProvider provider,Orders order}) {
                     Colors.grey];
   }
 
-    double deviceheight = MediaQuery.of(context).size.height;
-    double devicewidth = MediaQuery.of(context).size.width;
+    double deviceheight = MediaQuery.of(ctx).size.height;
+    double devicewidth = MediaQuery.of(ctx).size.width;
     return Padding(
       padding: const EdgeInsets.only(top:12.0,
       bottom: 12),
@@ -277,7 +291,8 @@ confirm({context,OrderProvider provider,Orders order}) {
         //disabledColor: Colors.grey,
         onPressed: (){
           //provider.acceptorder(order,context,provider);
-          provider.confirmorder(context,order);
+          
+          provider.confirmorder(ctx,order);
           
           print(provider.taken);
 
@@ -589,6 +604,56 @@ Billitemtxt({String txt,OrderProvider orderProvider,double cost}) {
     );
   }
 
+  
+timewidget({context,order,OrderProvider orderProvider}){
+  double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+ return Consumer<OrderProvider>(
+    builder: (BuildContext context, value, Widget child) { 
+return Container(
+              height: deviceheight*0.05,
+              width: devicewidth*0.17,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(3)
+                  ),
+                  border: Border.all(
+
+                    color: Colors.black,
+                    width: 3,
+                  )
+              ),
+              child: Center(
+                child: Container(
+                  height: deviceheight*0.035,
+                  width: devicewidth*0.14,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(3)
+                    ),
+                    border: Border.all(
+
+                      color: Colors.black,
+                      width: 3,
+                    )
+                  ),
+                  child:
+                  Center(
+                      child: Text(
+                          orderProvider.now,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700
+                        ),
+                      )
+                  )
+                ),
+              ),
+            );
+     },
+    
+ );
+}
 
 timer({context,Orders order}) {
     double deviceheight = MediaQuery.of(context).size.height;
