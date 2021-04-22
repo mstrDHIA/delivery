@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:delivery_app_v0/Providers/FeedBackProvider.dart';
 import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:delivery_app_v0/Screens/AdminManage.dart';
 import 'package:delivery_app_v0/Screens/createProfile.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => blockedUsersProvider()),
+        ChangeNotifierProvider(create: (_) => FeedBackProvider()),
 
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => MenuProvider()),

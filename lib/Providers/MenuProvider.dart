@@ -14,7 +14,7 @@ class MenuProvider extends ChangeNotifier {
     var result=option;
 
     notify();
-    if(result==MenuOptions.Report){
+    if(result==MenuOptions.FeedBack){
       Navigator.push(context, MaterialPageRoute(builder: (context) => Report(),));
     }
     if(result==MenuOptions.Settings){

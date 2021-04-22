@@ -2,7 +2,7 @@ import 'package:delivery_app_v0/Providers/MenuProvider.dart';
 import 'package:flutter/material.dart';
 
 enum MenuOptions{
-  Settings,Contact,Report,Logout
+  Settings,Contact,FeedBack,Logout
 }
 Menu(BuildContext context,MenuProvider menuprovider){
 
@@ -23,8 +23,8 @@ Menu(BuildContext context,MenuProvider menuprovider){
     value: MenuOptions.Contact,
     ),
     PopupMenuItem(
-    child: Text('Report'),
-    value: MenuOptions.Report,
+    child: Text('FeedBack'),
+    value: MenuOptions.FeedBack,
     ),
     PopupMenuItem(
     child: Text('Logout'),
