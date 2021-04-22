@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:delivery_app_v0/Models/Profile.dart';
 import 'package:delivery_app_v0/Models/TokenModel.dart';
 import 'package:delivery_app_v0/Models/User.dart';
+import 'package:delivery_app_v0/Models/block.dart';
+import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:delivery_app_v0/Screens/AdminManage.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
 import 'package:delivery_app_v0/Screens/OrdersScreen.dart';
@@ -61,7 +63,11 @@ class LoginProvider extends ChangeNotifier {
   notify();
 }
 
-Future<void> getUser(context,id) async{
+
+List<Blocks> blockedBuyers=List<Blocks>();
+
+
+Future<void> getUser(context,id,blockedUsersProvider blockProvider) async{
     final prefs = await SharedPreferences.getInstance();
     //bool signed=await prefs.then((value) => value.getBool('logged')??false);
 
@@ -82,8 +88,11 @@ Future<void> getUser(context,id) async{
       String activeprofile=jsonEncode(user.profile);
       String activeuserprofile=activeuser+"!"+activeprofile;
       print(activeuser+"!"+activeprofile);
+
+
       //print(user.isSuperuser);
        prefs.setString("logged", activeuserprofile).then((bool success) {
+         
       //  print("logged");
       });
       if(user.isStaff){
@@ -95,6 +104,7 @@ Future<void> getUser(context,id) async{
       //   print("logged");
       // });
         print(user.profile.age);
+
         //print("admin");
          Navigator.pushAndRemoveUntil(
       context,
@@ -110,6 +120,8 @@ Future<void> getUser(context,id) async{
       // });
       //prefs.
                // print("not admin");
+              // blockProvider.notify();
+                      blockedBuyers=await  blockProvider.getBlockedBuyers(user);
 
         Navigator.pushAndRemoveUntil(
       context,
@@ -127,7 +139,7 @@ Future<void> getUser(context,id) async{
 
 
 
-Future<void> Login(context,username,password) async{
+Future<void> Login(context,username,password,blockedUsersProvider blockedProvider) async{
 
   final loginresponse = await http.post(
     Authentication,
@@ -145,7 +157,8 @@ Future<void> Login(context,username,password) async{
     Map<String, dynamic> decoded=Jwt.parseJwt(token.access);
     
     print(decoded["user_id"]);
-    getUser(context, decoded["user_id"]);
+    getUser(context, decoded["user_id"],blockedProvider);
+    
     
     //Token token=Token.fromJson(loginresponse.body);
 /*Navigator.pushAndRemoveUntil(

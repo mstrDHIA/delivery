@@ -1,4 +1,5 @@
 import 'package:delivery_app_v0/Providers/LoginProvider.dart';
+import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:delivery_app_v0/Screens/AdminManage.dart';
 import 'package:delivery_app_v0/Widgets/LoginWidgets.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +40,16 @@ class _LoginPageState extends State<LoginPage> {
     String passwordvalid;
 
     LoginProvider loginProvider;
+        blockedUsersProvider blockedProvider;
+
   @override
   void initState() {
      
 
     // TODO: implement initState
       loginProvider = Provider.of<LoginProvider>(context, listen: false);
+      blockedProvider = Provider.of<blockedUsersProvider>(context, listen: false);
+
       loginProvider.uservalid="";
      loginProvider.passwordvalid="";
     super.initState();
@@ -93,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       top:16.0,
                       bottom: 0
                   ),
-                  child: But(context:context,provider:loginProvider,username:usernamecontrol,password:passwordcontrol,whattodo: whattodo,formkey: formKey),
+                  child: But(context:context,provider:loginProvider,username:usernamecontrol,password:passwordcontrol,whattodo: whattodo,formkey: formKey,blockedProvider:blockedProvider),
                 ),],
                                   )
                 ),

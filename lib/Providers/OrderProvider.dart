@@ -8,6 +8,9 @@ import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Models/Payment.dart';
 import 'package:delivery_app_v0/Models/Seller.dart';
 import 'package:delivery_app_v0/Models/User.dart';
+import 'package:delivery_app_v0/Models/block.dart';
+import 'package:delivery_app_v0/Providers/LoginProvider.dart';
+import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
 import 'package:delivery_app_v0/Screens/OrdersScreen.dart';
 import 'package:delivery_app_v0/Widgets/OrderWidget.dart';
@@ -20,6 +23,8 @@ import 'package:http/http.dart' as http;
 class OrderProvider extends ChangeNotifier{
 Widget timerwidget=SizedBox();
   bool scanned=false;
+  List<Blocks>blockedBuyers=List();
+
   String scanmsg="";
   String scannedinfo;
   bool taken=false;
@@ -48,9 +53,8 @@ int nowtime;
 Timer timer;
 String now;
 
+blockuser(Orders order,String reason,context,blockedUsersProvider blockProvider,LoginProvider loginProvider) async {
 
-blockuser(Orders order,String reason,context) async {
-  
  var nowdate = DateTime.now();
   User user=User();
   user=await user.decoded();
@@ -60,7 +64,7 @@ body: jsonEncode(<String,dynamic>{
   "id_buyer":order.buyer.id,
   "reason":reason,
   "blocker":"user",
-  "email":order.buyerMail,
+  "buyer_email":order.buyerMail,
  // "date": nowdate
 
 })
@@ -68,25 +72,38 @@ body: jsonEncode(<String,dynamic>{
 );
 
 if(blockresponse.statusCode==201){
-                final pref =  SharedPreferences.getInstance();
-
-              final prefs = await SharedPreferences.getInstance();
-
-            String blocked =await pref.then((value) => value.getString('blocked')??"");
-
-if(blocked==""){
-            prefs.setString("blocked", order.buyerMail+"!").then((bool success) async {
-              print(blocked);
-            });
+Map<String,dynamic> blockmap;
+Blocks b=Blocks();
+blockmap=jsonDecode(blockresponse.body);
+b=Blocks.fromJson(blockmap);
+//blockProvider.blockedBuyers=List();
+if(loginProvider.blockedBuyers.length==0){
+loginProvider.blockedBuyers=[b];
 }
 else{
-  blocked=blocked+order.buyerMail+"!";
-  prefs.setString("blocked", blocked).then((bool success) async {
-                  print(blocked);
-
-  });
+loginProvider.blockedBuyers.add(b);
 
 }
+              //   final pref =  SharedPreferences.getInstance();
+
+              // final prefs = await SharedPreferences.getInstance();
+
+           // String blocked =await pref.then((value) => value.getString('blocked'));
+
+// if(blocked==null){
+
+//             prefs.setString("blocked", order.buyerMail+"!").then((bool success) async {
+//               print(blocked);
+//             });
+// }
+// else{
+//   blocked=blocked+order.buyerMail+"!";
+//   prefs.setString("blocked", blocked).then((bool success) async {
+//                   print(blocked);
+
+//   });
+
+// }
 
   print("blocked");
                         notify();
@@ -111,8 +128,8 @@ starttimer(Orders order){
     (Timer time){
         if(nowtime>0){
           if(secs>0){
-            secs--;   
-            notify();        
+            secs--;
+            notify();
           }
           if(secs==0){
             nowtime--;
@@ -129,7 +146,7 @@ starttimer(Orders order){
         time.cancel();
         notify();
       }
-      
+
     }
     now=nowtime.toString()+":"+secs.toString();
     print(nowtime.toString()+":"+secs.toString());
@@ -141,13 +158,13 @@ starttimer(Orders order){
 }
 
 
-Future<bool> getback(context,order,orderProvider){
+Future<bool> getback(context,order,orderProvider,blockedUsersProvider blockProvider){
   which=which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
       cam(context: context,provider: orderProvider,order: order),
-      confirm(context:context,order: order,provider: orderProvider)]
-      ));  
+      confirm(context:context,order: order,provider: orderProvider,blockProvider: blockProvider)]
+      ));
       notify();
-      
+
 }
 
 verifOrder({Orders order}){
@@ -168,10 +185,10 @@ verifOrder({Orders order}){
     scanmsg="Wrong Order";
     scanned=false;
   }
-  
+
 }
 
-confirmorder(context,Orders order) async {
+confirmorder(context,Orders order,blockedUsersProvider blockProvider,LoginProvider loginProvider) async {
   TextEditingController reasoncontrol=TextEditingController();
 
 
@@ -188,7 +205,7 @@ confirmorder(context,Orders order) async {
             prefs.setBool("taken", false).then((bool success) async {
               order.state="delivered";
               Map<String,dynamic> o=order.toJson();
-              print(o);  
+              print(o);
               final confirmresponse=await http.put(url,
             body: jsonEncode(<String,dynamic>{
        "id": order.id,
@@ -213,7 +230,7 @@ confirmorder(context,Orders order) async {
     "id_buyer": order.buyer.id,
     "id_payement": order.payement.id,
     "id_seller": order.seller.id
-      
+
     } ));
     if(confirmresponse.statusCode==200){
       timer.cancel();
@@ -227,7 +244,7 @@ confirmorder(context,Orders order) async {
                 child: Column(
                 children: [
                   Text("Congratulations the order was successfully confirmed",style: TextStyle(color: Colors.green),),
-                  
+
 
                   Divider(),
                   Opacity(
@@ -248,12 +265,12 @@ confirmorder(context,Orders order) async {
                       height: deviceheight*0.2,
               width: devicewidth*0.7,
                       child: Column(
-                        
+
                       children: [
-                      
+
                         TextFormField(controller: reasoncontrol,
                           maxLines: null,
-                        
+
                                               cursorColor: Colors.redAccent,
 
                           decoration: InputDecoration(labelText: "Reason",
@@ -264,10 +281,10 @@ confirmorder(context,Orders order) async {
                         SizedBox(height: deviceheight*0.02,),
                         Opacity(opacity: 0.6,
                           child: Text("We are sorry for any trouble you had in your journey, please tell us the reason you're blocking this buyer")),
-                      
+
 
                       ],
-                      
+
                     ),
                   ),
                   buttonPadding: EdgeInsets.only(
@@ -276,8 +293,8 @@ confirmorder(context,Orders order) async {
                   ),
                   actions: [
                     FlatButton(onPressed: (){
-                      blockuser(order, reasoncontrol.text,context);
-                      
+                      blockuser(order, reasoncontrol.text,context,blockProvider,loginProvider);
+
                       notify();
                     }, child: Text("Confirm",style: TextStyle(color: Colors.blue),)),
                   FlatButton(onPressed: (){
@@ -287,11 +304,11 @@ confirmorder(context,Orders order) async {
                     }, child: Text("Cancel",style: TextStyle(color: Colors.red)))],
                   );}
                   );
-                }),  
+                }),
                FlatButton(child: Text("Continue delivering",style: TextStyle(color: Colors.blue),),onPressed: (){ which=OrdersScreen();
                Navigator.pop(ctx);
                notify();
-               })  
+               })
               ],
               // child:Container(
               //   width: devicewidth*0.4,
@@ -300,10 +317,10 @@ confirmorder(context,Orders order) async {
               //   )
                 );
           }
-          
+
           );
 
-          
+
                      notify();
 
     }
@@ -312,17 +329,17 @@ confirmorder(context,Orders order) async {
       print(confirmresponse.body);
     }
             });
-            
+
 }
 else{
   print("wrooooooooooong");
-  
+
 }
-          
+
           notify();
 }
 
-acceptorder(Orders order,context,orderProvider)async{
+acceptorder(Orders order,context,orderProvider,blockedUsersProvider blockProvider,LoginProvider loginProvider)async{
         //   final prefs =  SharedPreferences.getInstance();
         //  String usertxt =await prefs.then((value) => value.getString('order')??"");
 
@@ -333,7 +350,7 @@ user=await user.decoded();
   accepteddistance=distance;
   order.state="delivering";
 Map<String,dynamic> o=order.toJson();
-print(o);  
+print(o);
 
    final Orderresponse = await http.put(
     acceptapi+"${order.id}/",
@@ -362,9 +379,9 @@ print(o);
     "id_buyer": order.buyer.id,
     "id_payement": order.payement.id,
     "id_seller": order.seller.id
-      
-    } 
-    
+
+    }
+
   )
   );
   if(Orderresponse.statusCode==200){
@@ -390,21 +407,21 @@ print(o);
       allorders.add(order);
       which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
       cam(context: context,provider: orderProvider,order: order),
-      confirm(context:context,order: order,provider: orderProvider)]
+      confirm(context:context,order: order,provider: orderProvider,blockProvider: blockProvider,loginProvider: loginProvider)]
       ));
           prefs.setBool("taken", true).then((bool success) {
 
       taken=true;
-      notify(); 
+      notify();
       starttimer(order);
       Navigator.pop(context);
     //   Navigator.pushAndRemoveUntil(
     //   context,
     //   MaterialPageRoute(
     //     builder: (BuildContext context) => AppController(order: order,)),
-      
+
     //   (route) => false,
-    // );  
+    // );
    } );}
 }
 
@@ -438,13 +455,15 @@ print(o);
   //print(distance);
   //return distanceInMeters;
 }
+Future<void> fetchOrders(context,LoginProvider loginProvider) async{
+  User user=User();
+  user=await user.decoded();
 
-Future<void> fetchOrders(context) async{
   final pref =  SharedPreferences.getInstance();
 
-            String blocked =await pref.then((value) => value.getString('blocked')??"");
+           // String blocked =await pref.then((value) => value.getString('blocked')??null);
   String OrdersKey=getOrdersApi;
-  
+
   list.clear();
   loading=true;
   //notify();
@@ -477,9 +496,34 @@ Future<void> fetchOrders(context) async{
       orders.payement=payment;
       List<OrderItems> orderitems=List.from(items);
       orders.orderitems=orderitems;
-    if(!blocked.contains(orders.buyerMail)){
-    allorders.add(orders);
-    }
+//       if(blocked!=null){
+//  if(!blocked.contains(orders.buyerMail)){
+//     allorders.add(orders);
+//     }
+//       }
+bool ok=true;
+      // if(loginProvider.blockedBuyers.length==0){
+      //   allorders.add(orders);
+      // }
+      if(loginProvider.blockedBuyers.length>0){
+        int j=0;
+        while((ok)&(j<loginProvider.blockedBuyers.length)){
+          if(loginProvider.blockedBuyers[j].buyerEmail==orders.buyerMail){
+            ok=false;
+          }
+          else{
+            j++;
+          }
+        }
+      }
+      if(ok){
+                 allorders.add(orders);
+
+      }
+            
+
+      
+  //  print("blocked buyers:"+blocked);
     print(items.length);
     print("before length"+orders.orderitems.length.toString());
 

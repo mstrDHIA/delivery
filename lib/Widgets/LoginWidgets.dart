@@ -1,4 +1,5 @@
 import 'package:delivery_app_v0/Providers/LoginProvider.dart';
+import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
 import 'package:flutter/material.dart';
 
@@ -146,7 +147,7 @@ InputWidget({String placeholder, Icon ic, context,TextEditingController controll
 
 
 
-But({confirm,context, provider,logprovider,username,email,password,whattodo,formkey,String uservalid,String passwordvalid}) {
+But({blockedUsersProvider blockedProvider,confirm,context, provider,logprovider,username,email,password,whattodo,formkey,String uservalid,String passwordvalid}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
   return Container(
@@ -226,7 +227,7 @@ But({confirm,context, provider,logprovider,username,email,password,whattodo,form
 
                   
                  if (formkey.currentState.validate()) {
-                  provider.Login(context, username.text, password.text);
+                  provider.Login(context, username.text, password.text,blockedProvider);
                 }
                 
 

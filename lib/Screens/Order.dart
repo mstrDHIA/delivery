@@ -1,6 +1,8 @@
 import 'package:delivery_app_v0/Models/Orders.dart';
+import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Providers/MenuProvider.dart';
 import 'package:delivery_app_v0/Providers/OrderProvider.dart';
+import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:delivery_app_v0/Widgets/OrderWidget.dart';
 import 'package:delivery_app_v0/Widgets/popupMenu.dart';
 import 'package:flutter/material.dart';
@@ -26,13 +28,20 @@ class Order extends  StatefulWidget{
 class OrderPage extends State<Order>{
 final Orders order;
 MenuProvider menuProvider;
+blockedUsersProvider blockProvider;
+
 //Future<double> distance;
 OrderPage(this.order);
 OrderProvider orderProvider;
+LoginProvider loginProvider;
+
 Geolocator geo=Geolocator();
 @override
   Future<void> initState()  {
   orderProvider = Provider.of<OrderProvider>(context, listen: false);
+  blockProvider = Provider.of<blockedUsersProvider>(context, listen: false);
+  loginProvider = Provider.of<LoginProvider>(context, listen: false);
+
   menuProvider = Provider.of<MenuProvider>(context, listen: false);
   orderProvider.CaclulDistance(order,geo);
   //print(distance);
@@ -156,7 +165,7 @@ Geolocator geo=Geolocator();
                   fontWeight: FontWeight.w500
               ),
               ),
-              Accept(context:context,order: order,provider: orderProvider)
+              Accept(context:context,order: order,provider: orderProvider,blockProvider: blockProvider,loginProvider: loginProvider)
             ],
           ),
         ),

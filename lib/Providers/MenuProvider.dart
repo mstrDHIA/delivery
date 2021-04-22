@@ -1,7 +1,9 @@
 import 'package:delivery_app_v0/Screens/CodeScanner.dart';
 import 'package:delivery_app_v0/Screens/Report.dart';
+import 'package:delivery_app_v0/Screens/blockedBuyers.dart';
 import 'package:delivery_app_v0/Screens/login.dart';
 import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Widgets/popupMenu.dart';
 class MenuProvider extends ChangeNotifier {
@@ -16,13 +18,26 @@ class MenuProvider extends ChangeNotifier {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Report(),));
     }
     if(result==MenuOptions.Settings){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => QRViewExample(),));
+      final pref =  SharedPreferences.getInstance();
+                    String blocked =await pref.then((value) => value.getString('blocked'));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => blockedUsers(blocked: blocked,),));
+     
     }
     if(result==MenuOptions.Logout){
        final prefs = await SharedPreferences.getInstance();  
-              final pref =  SharedPreferences.getInstance();  
+              final pref =  SharedPreferences.getInstance(); 
+              //SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
 
                 bool taken=await pref.then((value) => value.getBool('taken'));
+                //String blocked=await pref.then((value) => value.getString('blocked'));
+                // if(blocked!=null){
+                //   //prefs.remove(blocked);
+                //   prefs.setString("blocked", null);
+                //   print("removed blocked:"+blocked);
+
+                // }
+
 if(!taken){
 prefs.setString("logged", "").then((bool success) {
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login(),),(route) => false,);

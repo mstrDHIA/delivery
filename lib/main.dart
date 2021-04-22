@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:delivery_app_v0/Screens/AdminManage.dart';
 import 'package:delivery_app_v0/Screens/createProfile.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => blockedUsersProvider()),
 
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => MenuProvider()),
@@ -71,9 +73,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   String signed;
   OrderProvider orderProvider;
+    LoginProvider loginProvider;
+        blockedUsersProvider blockProvider;
+
+
   @override
   Future<void> initState()   {
     orderProvider = Provider.of<OrderProvider>(context, listen: false);
+    loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    blockProvider = Provider.of<blockedUsersProvider>(context, listen: false);
 
 
     // TODO: implement initState
@@ -104,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async{
-        
+         
          orderProvider.taken=await prefs.then((value) => value.getBool('taken')??false);
          if(orderProvider.taken){
            Geolocator geo=Geolocator();
@@ -121,7 +129,11 @@ class _MyHomePageState extends State<MyHomePage> {
          }
           signed=await prefs.then((value) => value.getString('logged')??"");
          bool newboy=await prefs.then((value) => value.getBool('new')??false);
+         
           if(newboy){
+            User user=User();
+         user=await user.decoded();
+         loginProvider.blockedBuyers=blockProvider.getBlockedBuyers(user);
              Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -163,6 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
               print(user.username);
               print(user.profile.age);
 
+         loginProvider.blockedBuyers=await blockProvider.getBlockedBuyers(user);
                     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(

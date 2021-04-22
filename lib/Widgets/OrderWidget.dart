@@ -1,7 +1,9 @@
 
 import 'package:delivery_app_v0/Models/OrderItems.dart';
 import 'package:delivery_app_v0/Models/Orders.dart';
+import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Providers/OrderProvider.dart';
+import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
 import 'package:delivery_app_v0/Screens/CodeScanner.dart';
 import 'package:delivery_app_v0/Screens/Notifications.dart';
@@ -261,7 +263,7 @@ singleorder({Orders order,context,OrderProvider orderProvider}){
 }
 
 
-confirm({context,OrderProvider provider,Orders order}) {
+confirm({context,OrderProvider provider,Orders order,blockedUsersProvider blockProvider,LoginProvider loginProvider}) {
   BuildContext ctx;
   if(scaffoldKey.currentContext==null){
     ctx=context;
@@ -292,7 +294,7 @@ confirm({context,OrderProvider provider,Orders order}) {
         onPressed: (){
           //provider.acceptorder(order,context,provider);
           
-          provider.confirmorder(ctx,order);
+          provider.confirmorder(ctx,order,blockProvider,loginProvider);
           
           print(provider.taken);
 
@@ -352,7 +354,7 @@ confirm({context,OrderProvider provider,Orders order}) {
 
 
 
-  Accept({context,OrderProvider provider,Orders order}) {
+  Accept({context,OrderProvider provider,Orders order,blockedUsersProvider blockProvider,LoginProvider loginProvider}) {
 
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
@@ -361,7 +363,7 @@ confirm({context,OrderProvider provider,Orders order}) {
       bottom: 12),
       child: FlatButton(
         onPressed: (){
-          provider.acceptorder(order,context,provider);
+          provider.acceptorder(order,context,provider,blockProvider,loginProvider);
           print('pressed');
         },
         child: Container(

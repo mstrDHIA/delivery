@@ -1,6 +1,8 @@
 import 'package:delivery_app_v0/API/APIS.dart';
+import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Providers/MapProvider.dart';
 import 'package:delivery_app_v0/Providers/OrderProvider.dart';
+import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:flutter/material.dart';
 import 'Order.dart';
 import 'package:provider/provider.dart';
@@ -14,16 +16,23 @@ class OrdersPage extends State<OrdersScreen> {
   int num = 30;
   
   OrderProvider provider;
+  blockedUsersProvider blockProvider;
+
   MapProvider mapProvider;
+  LoginProvider loginProvider;
 
 
   @override
   void initState() {
     provider = Provider.of<OrderProvider>(context, listen: false);
+        loginProvider = Provider.of<LoginProvider>(context, listen: false);
+
     mapProvider = Provider.of<MapProvider>(context, listen: false);
+    blockProvider = Provider.of<blockedUsersProvider>(context, listen: false);
+
     mapProvider.checkGps();
     provider.allorders.clear();
-    provider?.fetchOrders(context);
+    provider?.fetchOrders(context,loginProvider);
 
     /*if(provider.list.length==0){
       provider.fetchOrders(context);
