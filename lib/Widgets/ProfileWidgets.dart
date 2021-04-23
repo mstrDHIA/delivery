@@ -515,7 +515,7 @@ Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProv
     );
   }
 
-  MonthStats({context,user}) {
+  MonthStats({context,User user}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return  Column(
@@ -533,9 +533,9 @@ Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProv
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            statsbox(txt:'Delivery',num:46,colors:[Color(0xffF0C4A9),Color(0xffE94057),Color(0xffCC2B5E)],context: context),
-            statsbox(txt:'Stars',num:123,colors:[Color(0xffEC2A14),Color(0xffF9C34E)],context: context),
-            statsbox(txt:'Profit',num:212,colors:[Color(0xffF2BE2A),Color(0xffF94665)],context: context),
+            statsbox(txt:'Delivery',num:user.profile.deliveredOrders,colors:[Color(0xffF0C4A9),Color(0xffE94057),Color(0xffCC2B5E)],context: context),
+            statsbox(txt:'Stars',num:user.profile.stars,colors:[Color(0xffEC2A14),Color(0xffF9C34E)],context: context),
+            statsbox(txt:'Profit',num:user.profile.profits,colors:[Color(0xffF2BE2A),Color(0xffF94665)],context: context),
 
 
           ],
@@ -551,7 +551,7 @@ Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProv
     );
   }
 
-  statsbox({String txt,int num,List<Color> colors,context,user}) {
+  statsbox({String txt, num,List<Color> colors,context,user}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
 
@@ -650,6 +650,10 @@ if(keyvalue[0]!='"state"'){
 if(keyvalue[0]!='"lat"'){
 if(keyvalue[0]!='"long"'){
 if(keyvalue[0]!='"photo"'){
+  if(keyvalue[0]!='"delivered_orders"'){
+ if(keyvalue[0]!='"failed_orders"'){
+  if(keyvalue[0]!='"stars"'){
+ if(keyvalue[0]!='"profits"'){
   if(i%2!=0){color=Color(0xfffafafa);}
 else{color=Color(0xffffffff);}
 i++;
@@ -671,6 +675,7 @@ else if(!keyvalue[1].contains('"')){
 //else {value[1]=keyvalue[1];}
 //print("value: "+value[1]);
           infos.add(Line(k:key[1],v:value[1],color:color,context: context));
+        }  }    }    } 
         }        }        }        }        }
       }
       print(profileinfo);

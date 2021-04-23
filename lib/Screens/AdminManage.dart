@@ -29,7 +29,7 @@ class AdminManagePage extends State<AdminManage>{
     double devicewidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(deviceheight*0.11),
+        preferredSize: Size.fromHeight(deviceheight*0.088899),
         child: barapp(ti:'Admin Manage',context:context,menuprovider:menuProvider),
       ),
       body: WebView(

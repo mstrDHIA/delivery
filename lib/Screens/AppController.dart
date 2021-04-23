@@ -181,7 +181,7 @@ class AppPage extends State<AppController> {
       }
       else if (currentindex == 2) {
         
-        return PreferredSize(child: barapp("Profile"), preferredSize: Size.fromHeight(deviceheight*0.11));
+        return PreferredSize(child: barapp("Profile"), preferredSize: Size.fromHeight(deviceheight*0.09));
       }
     }
 

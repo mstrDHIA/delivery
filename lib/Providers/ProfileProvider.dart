@@ -129,8 +129,8 @@ if(selected!=null){
       body: jsonEncode(<String,dynamic>{
         "first_name":firstname,
         "last_name":lastname,
-        "username":usermap["username"],
-        "password":usermap["password"]
+        //"username":usermap["username"],
+        //"password":usermap["password"]
       })
       );
       if(userresponse.statusCode==200){

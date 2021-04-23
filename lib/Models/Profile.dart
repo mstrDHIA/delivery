@@ -13,6 +13,12 @@ class Profile {
   int phone;
   String address;
   int idUser;
+  int stars;
+  double profits;
+  int deliveredOrders;
+  int failedOrders;
+
+
 
   Profile(
       {this.id,
@@ -29,6 +35,11 @@ class Profile {
       this.address,
 
       this.phone,
+      this.profits,
+      this.deliveredOrders,
+      this.stars,
+      this.failedOrders,
+
       this.idUser});
 
   Profile.fromJson(Map<String, dynamic> json) {
@@ -49,6 +60,11 @@ class Profile {
     vehicle = json['vehicle'];
     phone = json['phone'];
     idUser = json['id_user'];
+    deliveredOrders = json['delivered_orders'];
+    failedOrders = json['failed_orders'];
+    profits = json['profits'];
+    stars = json['stars'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -69,6 +85,10 @@ class Profile {
     data['vehicle'] = this.vehicle;
     data['phone'] = this.phone;
     data['id_user'] = this.idUser;
+    data['profits'] = this.profits;
+    data['delivered_orders'] = this.deliveredOrders;
+    data['failed_orders'] = this.failedOrders;
+    data['stars'] = this.stars;
     return data;
   }
 }
