@@ -1,8 +1,10 @@
 //import 'dart:js';
 
 import 'package:delivery_app_v0/Models/User.dart';
+import 'package:delivery_app_v0/Providers/ProfileProvider.dart';
 import 'package:delivery_app_v0/Widgets/ProfileWidgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'Edit.dart';
 class Profile extends StatefulWidget{
@@ -17,11 +19,12 @@ class Profile extends StatefulWidget{
 class ProfilePage extends State<Profile> {
   @override
   final User user;
-  
+  ProfileProvider profileProvider;
 
   ProfilePage({this.user});
   void initState() {
-
+        profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+        
     // TODO: implement initState
     super.initState();
   }
@@ -38,7 +41,7 @@ class ProfilePage extends State<Profile> {
         child: Column(
           children: [
             identifier(context: context,user: user),
-            MonthStats(context: context,user: user),
+            MonthStats(context: context,user: user,profileProvider: profileProvider),
             info(context: context,user: user),
           ],
         ),

@@ -230,9 +230,27 @@ confirmorder(context,Orders order,blockedUsersProvider blockProvider,LoginProvid
     "id_buyer": order.buyer.id,
     "id_payement": order.payement.id,
     "id_seller": order.seller.id
-
+    
     } ));
     if(confirmresponse.statusCode==200){
+      User user=User();
+      user=await user.decoded();
+      user.profile.deliveredOrders++;
+      
+      notify();
+      var profileresponse=http.put(profile+user.profile.id.toString()+"/",
+      body: jsonEncode(<String,dynamic>{
+        "id_user":user.id,
+        "delivered_orders":user.profile.deliveredOrders,
+        
+      }));
+
+      String usertxt=jsonEncode(user);
+            String profiletxt=jsonEncode(user.profile);
+                  String userprofiletxt=usertxt+"!"+profiletxt;
+
+
+      prefs.setString("logged", userprofiletxt);
       timer.cancel();
       print("tawa houni");
         timerwidget=SizedBox();

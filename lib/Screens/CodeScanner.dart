@@ -187,6 +187,7 @@ class _QRViewExampleState extends State<QRViewExample> {
     // To ensure the Scanner view is properly sizes after rotation
     // we need to listen for Flutter SizeChanged notification and update controller
     return QRView(
+      
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
@@ -194,6 +195,7 @@ class _QRViewExampleState extends State<QRViewExample> {
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
+
           cutOutSize: scanArea),
     );
   }

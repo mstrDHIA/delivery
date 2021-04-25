@@ -3,9 +3,13 @@
 import 'dart:convert';
 
 import 'package:delivery_app_v0/API/APIS.dart';
+import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Models/User.dart';
 import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Providers/ProfileProvider.dart';
+import 'package:delivery_app_v0/Screens/Delivered.dart';
+import 'package:delivery_app_v0/Screens/DeliveredOrders.dart';
+import 'package:delivery_app_v0/Screens/ProfileStats.dart';
 import 'package:delivery_app_v0/Screens/createProfile.dart';
 import 'package:flutter/material.dart';
 
@@ -461,7 +465,7 @@ Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProv
   }
 
 
-  But({context}){
+  But({context,User user,ProfileProvider profileProvider}){
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
 
@@ -481,6 +485,26 @@ Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProv
             Opacity(
                 opacity: 0,
                 child: RaisedButton(onPressed: (){
+
+                  if(user.profile.photo!=null){
+        profileProvider.photo=ClipOval(
+                                    child: Image.network(
+                       initiallink+user.profile.photo,
+                       fit: BoxFit.fill,
+                       width: devicewidth*0.4,
+                       height: deviceheight*0.2,
+                   scale: 1,
+                   ),
+                 );
+    }
+    else{
+      profileProvider.photo=Image.asset(
+        "assets/user (4).png",
+        scale: 2,
+      );
+    }
+
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>ProfileStats()));
                   print("pressed");
                 },)
             ),
@@ -515,7 +539,7 @@ Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProv
     );
   }
 
-  MonthStats({context,User user}) {
+  MonthStats({context,User user,ProfileProvider profileProvider}) {
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return  Column(
@@ -543,7 +567,7 @@ Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProv
         SizedBox(height: deviceheight*0.02,),
         Row(mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            But(context: context),
+            But(context: context,profileProvider:profileProvider,user: user),
             SizedBox(width: devicewidth*0.062,)
           ],
         )
@@ -782,3 +806,130 @@ else if(!keyvalue[1].contains('"')){
       ),
     );
   }
+
+
+
+
+
+
+
+
+
+  Widget listitem(context,Orders order) {
+  //print("I am listing");
+  
+  //print(order.price);
+  // for(int i=0;i<order.orderitems.length;i++){
+  //   print(order.orderitems[i].name);
+  // }
+  //String buyername=order.buyer.firstName+" "+order.buyer.lastName;
+ // String sellername=order.seller.firstName+" "+order.seller.lastName;
+
+  double deviceheight = MediaQuery.of(context).size.height;
+  double devicewidth = MediaQuery.of(context).size.width;
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 24, right: 24, left: 24),
+    child: Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0, 1),
+              blurRadius: 20,
+              spreadRadius: 1)
+        ],
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(15),
+        ),
+      ),
+      height: deviceheight * 0.19,
+
+
+      width: devicewidth * 0.85,
+      child: ListTile(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>Delivered(order: order,)));
+          
+          //  _increment();
+          //showOrder(context:context,order:order);
+        },
+        leading: Padding(
+          padding: const EdgeInsets.only(top: 6.0, right: 6),
+          child: Image.asset('assets/french-fries.png'),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 14.0, left: 16),
+          child: Text(
+            "Order Num "+order.id.toString(),
+            style: TextStyle(
+              //fontFamily: 'ebrima',
+                fontSize: 18),
+          ),
+        ),
+
+        trailing: Text(
+         order.totalPrice.toString()+"DT",
+          style: TextStyle(
+            //fontFamily: 'ebrima',
+              fontSize: 18),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 8.0, left: 16),
+          child: Column(
+            
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(order.deliveryTime.toString().split(".")[0] ,
+              style: TextStyle(
+                fontSize: 18
+              ),),
+              Row(
+                children: [
+                  Text(
+                    'From ',
+                    style: TextStyle(
+                        fontFamily: 'calist',
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Expanded(
+                                      child: Text(
+                      "${order.seller.name}",
+                      style: TextStyle(
+                          color: Color.fromRGBO(187, 33, 33, 0.86),
+                          fontFamily: 'calist',
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+
+                ],
+              ),
+              SizedBox(height: deviceheight * 0.005),
+              Row(
+                children: [
+                  Text(
+                    'To ',
+                    style: TextStyle(
+                        fontFamily: 'calist',
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    "${order.buyer.firstName} ${order.buyer.lastName}",
+                    style: TextStyle(
+                        color: Color.fromRGBO(187, 33, 33, 0.86),
+                        fontFamily: 'calist',
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}

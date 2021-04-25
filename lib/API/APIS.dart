@@ -1,3 +1,4 @@
+import 'package:delivery_app_v0/Screens/DeliveredOrders.dart';
 import 'package:flutter/material.dart';
 
 
@@ -19,6 +20,7 @@ const feedback=initiallink+"/feedback/";
 
 const orderconfirm=initiallink+"/confirm_order/";
 
+const deliveredOrders=initiallink+"/delivered_orders/";
 
 
 

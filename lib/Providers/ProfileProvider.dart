@@ -1,9 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:delivery_app_v0/Models/Buyer.dart';
+import 'package:delivery_app_v0/Models/ChartData.dart';
+import 'package:delivery_app_v0/Models/OrderItems.dart';
+import 'package:delivery_app_v0/Models/Orders.dart';
+import 'package:delivery_app_v0/Models/Payment.dart';
 import 'package:delivery_app_v0/Models/Profile.dart';
+import 'package:delivery_app_v0/Models/Seller.dart';
 import 'package:delivery_app_v0/Models/User.dart';
 import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
+import 'package:delivery_app_v0/Screens/Order.dart';
+import 'package:delivery_app_v0/Widgets/ProfileWidgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../API/APIS.dart';
@@ -28,8 +36,77 @@ String sex;
 String val;
 
 PickedFile selected;
+  Widget photo;
 
 
+List<ChartData> chartData=List();
+
+List<Orders> alldelivered=List();
+List<Widget> alldeliveredwidgets=List();
+
+getDeliveredOrders(context) async {
+  if(alldelivered.length>0){
+    alldeliveredwidgets.clear();
+
+    alldelivered.clear();
+  }
+    Buyer buyer=Buyer();
+  Seller seller=Seller();
+  Payment payment=Payment();
+  Orders orders=Orders();
+  List<OrderItems> items=[];
+
+  User user=User();
+  user=await user.decoded();
+ var deliveredresponse=await http.get(deliveredOrders+user.id.toString()+"/");
+ if(deliveredresponse.statusCode==200){
+   print(deliveredresponse.body);
+   List OrderData=jsonDecode(deliveredresponse.body);
+
+for(int i=0;i<OrderData.length;i++){
+  
+  print(OrderData[i]);
+  print("length"+OrderData.length.toString());
+      orders=Orders.fromJson(OrderData[i][0]);
+      buyer=Buyer.fromJson(OrderData[i][1]);
+      seller=Seller.fromJson(OrderData[i][2]);
+      payment=Payment.fromJson(OrderData[i][3]);
+      for(int j=0;j<OrderData[i][4].length;j++){
+        items.add(OrderItems.fromJson(OrderData[i][4][j]));
+        print(OrderItems.fromJson(OrderData[i][4][j]));
+      }
+      orders.buyer=buyer;
+      orders.seller=seller;
+      orders.payement=payment;
+      List<OrderItems> orderitems=List.from(items);
+      orders.orderitems=orderitems;   
+       alldelivered.add(orders);
+      alldeliveredwidgets.add(listitem(context, orders));
+      items.clear();
+ }
+ notify();
+
+}
+}
+
+
+makestats(context) async {
+  double deviceheight = MediaQuery.of(context).size.height;
+    double devicewidth = MediaQuery.of(context).size.width;
+  User user=User();
+  user=await user.decoded();
+  chartData=[
+     ChartData('Delivered Orders', user.profile.deliveredOrders.toDouble(),Colors.blue),
+            ChartData('Failed Orders', user.profile.failedOrders.toDouble(),Colors.red),
+     ChartData(
+       'Stars',user.profile.stars.toDouble(),Colors.yellow),
+            ChartData('Profits', user.profile.profits,Colors.green),
+           
+  ];
+
+
+    
+}
 
 
 Future<void> getUser(context,id) async{
