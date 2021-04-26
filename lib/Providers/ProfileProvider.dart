@@ -235,7 +235,7 @@ if(selected!=null){
 
 
 
-
+bool change=false;
 
 
 
@@ -282,20 +282,22 @@ else if(countryval=="Italy"){
 "Trentino-Alto Adige","Umbria","Valle d'Aosta","Veneto"
 ];
 }
-notify();
+//notify();
 }
+
+bool changed=false;
 
 changeState(value){
     stateval=value;
-    notify();
+   // notify();
   }
   changevehicle(value){
     vehicleval=value;
-    notify();
+    //notify();
   }
   changeCountry(value){
     countryval=value;
-    notify();
+   // notify();
   }
 
 

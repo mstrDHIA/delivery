@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:delivery_app_v0/Providers/FeedBackProvider.dart';
 import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:delivery_app_v0/Screens/AdminManage.dart';
-import 'package:delivery_app_v0/Screens/createProfile.dart';
+import 'package:delivery_app_v0/Screens/EditProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +24,7 @@ import 'Providers/RegisterProvider.dart';
 import 'Screens/AppController.dart';
 import 'Screens/Register.dart';
 import 'Screens/api test.dart';
+import 'Screens/createProfile.dart';
 import 'Widgets/OrderWidget.dart';
 
 void main() {

@@ -443,6 +443,38 @@ print(o);
    } );}
 }
 
+
+getDistance(Orders order,geo)async{
+  double dis;
+   double d;
+   double blat = double.parse(order.buyer.lat);
+      assert(blat is double);
+      double blong = double.parse(order.buyer.long);
+      assert(blong is double);
+      double slat = double.parse(order.seller.lat);
+      assert(slat is double);
+      double slong = double.parse(order.seller.long);
+      assert(slong is double);
+   d =await Geolocator().distanceBetween(slat, slong, blat, blong);
+   d=d/1000;
+   dis=double.parse(d.toStringAsPrecision(2));
+   geo.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+         .then((Position position) async{
+                     d =await Geolocator().distanceBetween(slat, slong, position.latitude, position.longitude);
+                  d=d/1000;
+   d=double.parse(d.toStringAsPrecision(2));
+         });
+         print(d);
+         dis=dis+d;
+            dis=double.parse(dis.toStringAsPrecision(2));
+               notify();
+
+return dis;
+                  //print(distance);
+
+  
+}
+
  CaclulDistance(Orders order,Geolocator geo)async{
    double d;
    double blat = double.parse(order.buyer.lat);
@@ -474,6 +506,7 @@ print(o);
   //return distanceInMeters;
 }
 Future<void> fetchOrders(context,LoginProvider loginProvider) async{
+  Geolocator geo=Geolocator();
   User user=User();
   user=await user.decoded();
 
@@ -511,9 +544,18 @@ Future<void> fetchOrders(context,LoginProvider loginProvider) async{
       }
       orders.buyer=buyer;
       orders.seller=seller;
+     // CaclulDistance(orders, geo);
+              notify();
+              double d;
+              d=await getDistance(orders, geo);
+              print(d);
+      //orders.distance=distance;
       orders.payement=payment;
       List<OrderItems> orderitems=List.from(items);
       orders.orderitems=orderitems;
+            notify();
+
+      
 //       if(blocked!=null){
 //  if(!blocked.contains(orders.buyerMail)){
 //     allorders.add(orders);
@@ -523,7 +565,9 @@ bool ok=true;
       // if(loginProvider.blockedBuyers.length==0){
       //   allorders.add(orders);
       // }
-      if(loginProvider.blockedBuyers.length>0){
+     // print("distance:"+distance.toString());
+      if(d<4){
+      if(loginProvider.blockedBuyers!=null){
         int j=0;
         while((ok)&(j<loginProvider.blockedBuyers.length)){
           if(loginProvider.blockedBuyers[j].buyerEmail==orders.buyerMail){
@@ -533,7 +577,8 @@ bool ok=true;
             j++;
           }
         }
-      }
+      }}
+      else{ok=false;}
       if(ok){
                  allorders.add(orders);
 

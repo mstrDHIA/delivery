@@ -1,4 +1,5 @@
 import 'package:delivery_app_v0/Providers/LoginProvider.dart';
+import 'package:delivery_app_v0/Providers/ProfileProvider.dart';
 import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:delivery_app_v0/Screens/AppController.dart';
 import 'package:flutter/material.dart';
@@ -70,19 +71,94 @@ roundedtop(context) {
 
 
 
-
-  
-
-  
-
-
-InputWidget({String placeholder, Icon ic, context,TextEditingController controller,bool ispassword,keyboardtype}) {
+InputWidget({ProfileProvider profileProvider,String placeholder, Icon ic, context,TextEditingController controller,bool ispassword,keyboardtype}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
   
  // final requiredValidator = RequiredValidator(errorText: 'this field is required'
  //);
 
+
+ 
+
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.only(right: 35, left: 35, top: 15, bottom: 8),
+      child: Opacity(
+        opacity: 0.7,
+        child: Container(
+          height: deviceheight * 0.065,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.16),
+                    blurRadius: 6,
+                    offset: Offset(1, 4))
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(100)),
+              border: Border.all(color: Colors.black, width: 0.3)),
+          child: Stack(children: [
+            
+            Opacity( 
+                opacity: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 2),
+                  child: Theme(
+                    data: Theme.of(context).copyWith(
+                      primaryColor: Colors.redAccent,
+                    ),
+                    child: TextFormField(
+                      keyboardType: keyboardtype,
+                      /*validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },*/
+                      //autovalidate: true,
+                      //validator: requiredValidator,
+                      obscureText: ispassword,
+                      controller: controller,
+                      cursorColor: Colors.redAccent,
+                      decoration: InputDecoration(
+                          prefixIcon: ic,
+                          //labelText: "$placeholder",
+                          //alignLabelWithHint: true,
+                          border: InputBorder.none,
+                          hintText: "$placeholder",
+                          contentPadding: EdgeInsets.only(
+                            top: 14,
+                          )),
+                    ),
+                  ),
+                )),
+          ]),
+        ),
+      ),
+    ),
+  );
+}
+
+
+  
+
+  
+
+
+EditInputWidget({ProfileProvider profileProvider,String placeholder, Icon ic, context,TextEditingController controller,bool ispassword,keyboardtype,value}) {
+  double deviceheight = MediaQuery.of(context).size.height;
+  double devicewidth = MediaQuery.of(context).size.width;
+  
+ // final requiredValidator = RequiredValidator(errorText: 'this field is required'
+ //);
+
+  if(value!=null){
+    if(!profileProvider.change){
+    controller.text=value;
+    
+    }
+  }
 
  
 

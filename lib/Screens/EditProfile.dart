@@ -1,20 +1,32 @@
-import 'package:delivery_app_v0/Models/Profile.dart';
+
+
+
+import 'package:delivery_app_v0/Models/Profile.dart' as p;
+import 'package:delivery_app_v0/Models/User.dart';
 import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Providers/MenuProvider.dart';
 import 'package:delivery_app_v0/Providers/ProfileProvider.dart';
+import 'package:delivery_app_v0/Screens/ProfileScreen.dart';
 import 'package:delivery_app_v0/Widgets/AppBar.dart';
 import 'package:delivery_app_v0/Widgets/LoginWidgets.dart';
 import 'package:delivery_app_v0/Widgets/ProfileWidgets.dart';
+
 import 'package:delivery_app_v0/Widgets/popupMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CreateProfile extends StatefulWidget{
+class EditProfile extends StatefulWidget{
+  final String ti;
+  final User user;
+
+  const EditProfile({Key key, this.ti, this.user}) : super(key: key);
   @override
-  CreateProfilePage createState() => CreateProfilePage();
+  EditProfilePage createState() => EditProfilePage(ti,user: user);
 }
 
-class CreateProfilePage extends State<CreateProfile> {
+class EditProfilePage extends State<EditProfile> {
+  final String ti;
+  final User user;
   MenuProvider menuProvider;
   ProfileProvider profileProvider;
     LoginProvider loginProvider;
@@ -25,12 +37,29 @@ TextEditingController agecontrol=TextEditingController();
 TextEditingController addresscontrol=TextEditingController();
 TextEditingController citycontrol=TextEditingController();
 TextEditingController phonecontrol=TextEditingController();
+
+  EditProfilePage(this.ti, {this.user});
+
+  @override
+  void dispose() {
+    profileProvider.vehicleval=null;
+    profileProvider.countryval=null;
+    profileProvider.stateval=null;
+    profileProvider.changed=false;
+
+   // print(profileProvider.vehicleval);
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   void initState() {
         menuProvider = Provider.of<MenuProvider>(context, listen: false);
                 menuProvider = Provider.of<MenuProvider>(context, listen: false);
-
         profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+            profileProvider.change=false;
+          
+
         profileProvider.selected=null;
 
     super.initState();
@@ -40,13 +69,14 @@ TextEditingController phonecontrol=TextEditingController();
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: PreferredSize(child: barapp(context: context,menuprovider: menuProvider,ti: "Create Profile"), preferredSize: Size.fromHeight(deviceheight*0.089)),
+      appBar: PreferredSize(child: barapp(context: context,menuprovider: menuProvider,ti: ti), preferredSize: Size.fromHeight(deviceheight*0.089)),
       body: Consumer<ProfileProvider>(
               builder: (BuildContext context, value, Widget child) {  return SingleChildScrollView(
           child: Column(
             children: [
-              createidentifier(context: context,profileProvider: profileProvider),
-              createform(context: context,profileProvider:profileProvider,addresscontrol: addresscontrol,agecontrol: agecontrol,citycontrol: citycontrol,phonecontrol: phonecontrol,firstnamecontrol: firstnamecontrol,lastnamecontrol: lastcontrol)
+              editidentifier(context: context,profileProvider: profileProvider,user:user),
+              //editform(context: context,profileProvider:profileProvider,addresscontrol: addresscontrol,agecontrol: agecontrol,citycontrol: citycontrol,phonecontrol: phonecontrol,firstnamecontrol: firstnamecontrol,lastnamecontrol: lastcontrol,user: user)
+               editform(context: context,profileProvider:profileProvider,addresscontrol: addresscontrol,agecontrol: agecontrol,citycontrol: citycontrol,phonecontrol: phonecontrol,firstnamecontrol: firstnamecontrol,lastnamecontrol: lastcontrol,user: user),
             ],
           ),
         );  },
@@ -211,4 +241,6 @@ TextEditingController phonecontrol=TextEditingController();
 
  
 }
+
+
 
