@@ -103,7 +103,7 @@ makestats(context) async {
             ChartData('Profits', user.profile.profits,Colors.green),
            
   ];
-
+notify();
 
     
 }
