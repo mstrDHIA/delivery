@@ -31,15 +31,12 @@ profileProvider.getDeliveredOrders(context);
     double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.fromHeight(deviceheight*0.09),
+      appBar: PreferredSize(preferredSize: Size.fromHeight(deviceheight*0.089),
         child:barapp(ti:"Delivered Orders",context: context,menuprovider: menuProvider)),
       body: Consumer<ProfileProvider>(builder: (BuildContext context, value, Widget child) { 
-        return Padding(
-          padding: const EdgeInsets.only(top:24.0),
-          child: ListView.builder(
-                  itemCount: this.profileProvider.alldeliveredwidgets.length,
-                  itemBuilder: (context, int index) => this.profileProvider.alldeliveredwidgets[index]),
-        );
+        return ListView.builder(
+                itemCount: this.profileProvider.alldeliveredwidgets.length,
+                itemBuilder: (context, int index) => this.profileProvider.alldeliveredwidgets[index]);
        },),
     );
     // TODO: implement build

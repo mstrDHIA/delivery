@@ -1,9 +1,14 @@
+
 import 'package:delivery_app_v0/API/APIS.dart';
+import 'package:delivery_app_v0/Models/User.dart';
 import 'package:delivery_app_v0/Providers/LoginProvider.dart';
 import 'package:delivery_app_v0/Providers/MapProvider.dart';
 import 'package:delivery_app_v0/Providers/OrderProvider.dart';
 import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+
 import 'Order.dart';
 import 'package:provider/provider.dart';
 
@@ -29,10 +34,9 @@ class OrdersPage extends State<OrdersScreen> {
 
     mapProvider = Provider.of<MapProvider>(context, listen: false);
     blockProvider = Provider.of<blockedUsersProvider>(context, listen: false);
-
+    
     mapProvider.checkGps();
     provider.allorders.clear();
-    provider?.fetchOrders(context,loginProvider);
 
     /*if(provider.list.length==0){
       provider.fetchOrders(context);
@@ -42,6 +46,17 @@ class OrdersPage extends State<OrdersScreen> {
     //print("blablabla");
     //provider?.fetchOrders(context);
     super.initState();
+  }
+  Geolocator geo=Geolocator();
+  User user=User();
+  @override
+  Future<void> didChangeDependencies() async {
+    
+  user=await user.decoded();
+        provider?.fetchOrders(context,loginProvider,geo,user);
+
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
@@ -56,12 +71,28 @@ class OrdersPage extends State<OrdersScreen> {
           if (this.provider.loading)
             return Center(child: CircularProgressIndicator());
           else
-            return ListView.builder(
-                itemCount: this.provider.list.length,
-                itemBuilder: (context, int index) => this.provider.list[index]);
+            return RefreshIndicator(
+                          onRefresh: () { 
+                            provider.list.clear();
+                            provider.allorders.clear();
+        provider?.fetchOrders(context,loginProvider,geo,user);
+                            },
+                          child: ListView.builder(
+                  itemCount: this.provider.list.length,
+                  itemBuilder: (context, int index) => this.provider.list[index]),
+            );
         },
       ),
     );
+
+    // return StreamBuilder<http.Response>(
+    //   stream: provider.getRandomNumberFact(context,loginProvider),
+    //   builder: (context, snapshot) => snapshot.hasData
+    //       ? Center(child: Column(children: [
+    //         for (var l in provider.list ) l
+    //       ],))
+    //       : CircularProgressIndicator(),
+    // );
    
  }
 }

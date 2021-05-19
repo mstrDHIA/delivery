@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:delivery_app_v0/API/APIS.dart';
 import 'package:delivery_app_v0/Models/Buyer.dart';
 import 'package:delivery_app_v0/Models/OrderItems.dart';
@@ -93,13 +95,11 @@ loginProvider.blockedBuyers.add(b);
 // if(blocked==null){
 
 //             prefs.setString("blocked", order.buyerMail+"!").then((bool success) async {
-//               print(blocked);
 //             });
 // }
 // else{
 //   blocked=blocked+order.buyerMail+"!";
 //   prefs.setString("blocked", blocked).then((bool success) async {
-//                   print(blocked);
 
 //   });
 
@@ -114,14 +114,13 @@ loginProvider.blockedBuyers.add(b);
 }
 else{
   print("not blocked");
- // print();
 }
 }
 
 
 starttimer(Orders order){
   nowtime=order.orderDuration.toInt()-1;
-  int secs=60;
+  int secs=59;
   Duration duration=Duration(seconds: 1);
    timer=Timer.periodic(
     duration,
@@ -133,7 +132,7 @@ starttimer(Orders order){
           }
           if(secs==0){
             nowtime--;
-            secs=60;
+            secs=59;
             notify();
           }
     }
@@ -171,11 +170,7 @@ verifOrder({Orders order}){
   //Map<String,dynamic> ordermap=json.decode(scannedinfo);
   String notid=scannedinfo.split(":")[1];
   String id=notid.split("}")[0];
-  print(id);
-    // print("this is"+ordermap["id"].toString());
-    // print("map");
-    // print(ordermap);
-    //print(scannedinfo);
+
 
   if(id==order.id.toString()){
     scanmsg="Correct Order";
@@ -198,14 +193,12 @@ confirmorder(context,Orders order,blockedUsersProvider blockProvider,LoginProvid
             final prefs = await SharedPreferences.getInstance();
 
   if(scanned){
-    print("heni houni");
     scanmsg="";
           scanned=false;
 
             prefs.setBool("taken", false).then((bool success) async {
               order.state="delivered";
               Map<String,dynamic> o=order.toJson();
-              print(o);
               final confirmresponse=await http.put(url,
             body: jsonEncode(<String,dynamic>{
        "id": order.id,
@@ -216,11 +209,11 @@ confirmorder(context,Orders order,blockedUsersProvider blockProvider,LoginProvid
     "price": order.price,
     "stars": order.stars,
     "review": order.review,
-    "distance": accepteddistance,
+    "distance": 4.6,
 
     //"delivery_time": order.deliveryTime.toString(),
     "delivery_durations": order.deliveryDuration,
-    "accept_time": order.accept_time.toString(),
+    //"accept_time": order.accept_time.toString(),
     "order_time": order.orderTime,
     "order_type": order.orderType,
     "is_paid": order.isPaid,
@@ -251,8 +244,10 @@ confirmorder(context,Orders order,blockedUsersProvider blockProvider,LoginProvid
 
 
       prefs.setString("logged", userprofiletxt);
-      timer.cancel();
-      print("tawa houni");
+      if(timer!=null){
+timer.cancel();
+      }
+      
         timerwidget=SizedBox();
         showDialog(context: scaffoldKey.currentContext,
           builder: (ctx){
@@ -343,8 +338,7 @@ confirmorder(context,Orders order,blockedUsersProvider blockProvider,LoginProvid
 
     }
     else{
-      print("manich houni");
-      print(confirmresponse.body);
+    
     }
             });
 
@@ -365,10 +359,9 @@ User user=User();
 
 user=await user.decoded();
 
-  accepteddistance=distance;
+  accepteddistance=order.distance;
   order.state="delivering";
 Map<String,dynamic> o=order.toJson();
-print(o);
 
    final Orderresponse = await http.put(
     acceptapi+"${order.id}/",
@@ -408,6 +401,7 @@ print(o);
         }
         timerwidget=timewidget(context: context,order: order,orderProvider: orderProvider);
         notify();
+        order.distance=accepteddistance;
         final prefs = await SharedPreferences.getInstance();
         String orderjson=jsonEncode(order);
         String buyerjson=jsonEncode(order.buyer);
@@ -444,7 +438,7 @@ print(o);
 }
 
 
-getDistance(Orders order,geo)async{
+Future<double> getDistance(Orders order,geo)async{
   double dis;
    double d;
    double blat = double.parse(order.buyer.lat);
@@ -458,19 +452,20 @@ getDistance(Orders order,geo)async{
    d =await Geolocator().distanceBetween(slat, slong, blat, blong);
    d=d/1000;
    dis=double.parse(d.toStringAsPrecision(2));
-   geo.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-         .then((Position position) async{
-                     d =await Geolocator().distanceBetween(slat, slong, position.latitude, position.longitude);
+   Position position = await geo.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+ d =await Geolocator().distanceBetween(slat, slong, position.latitude, position.longitude);
                   d=d/1000;
    d=double.parse(d.toStringAsPrecision(2));
-         });
-         print(d);
          dis=dis+d;
             dis=double.parse(dis.toStringAsPrecision(2));
                notify();
-
+print(order.id.toString()+": "+dis.toString());
 return dis;
-                  //print(distance);
+         
+  //  geo.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+  //        .then((Position position) async{
+                    
+  //        });
 
   
 }
@@ -486,6 +481,7 @@ return dis;
       double slong = double.parse(order.seller.long);
       assert(slong is double);
    d =await Geolocator().distanceBetween(slat, slong, blat, blong);
+
    d=d/1000;
    distance=double.parse(d.toStringAsPrecision(2));
    geo.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
@@ -494,23 +490,19 @@ return dis;
                   d=d/1000;
    d=double.parse(d.toStringAsPrecision(2));
          });
-         print(d);
          distance=distance+d;
             distance=double.parse(distance.toStringAsPrecision(2));
 
-                  //print(distance);
 
    notify();
    //return distance;
-  //print(distance);
   //return distanceInMeters;
 }
-Future<void> fetchOrders(context,LoginProvider loginProvider) async{
-  Geolocator geo=Geolocator();
-  User user=User();
-  user=await user.decoded();
+Future<void> fetchOrders(context,LoginProvider loginProvider,geo,user) async{
+      double deviceheight = MediaQuery.of(context).size.height;
 
-  final pref =  SharedPreferences.getInstance();
+  
+
 
            // String blocked =await pref.then((value) => value.getString('blocked')??null);
   String OrdersKey=getOrdersApi;
@@ -530,8 +522,7 @@ Future<void> fetchOrders(context,LoginProvider loginProvider) async{
   );
   if (Orderresponse.statusCode == 200) {
     OrderData = jsonDecode(Orderresponse.body);
-    //print(OrdersKey);
-    //print(OrderData[0][0]);
+   
 
     for(int i=0;i<OrderData.length;i++){
       orders=Orders.fromJson(OrderData[i][0]);
@@ -540,15 +531,17 @@ Future<void> fetchOrders(context,LoginProvider loginProvider) async{
       payment=Payment.fromJson(OrderData[i][3]);
       for(int j=0;j<OrderData[i][4].length;j++){
         items.add(OrderItems.fromJson(OrderData[i][4][j]));
-        print(OrderItems.fromJson(OrderData[i][4][j]));
       }
       orders.buyer=buyer;
       orders.seller=seller;
      // CaclulDistance(orders, geo);
               notify();
               double d;
+              if((orders.distance==0)||(orders.distance==null)){
+                
               d=await getDistance(orders, geo);
-              print(d);
+              orders.distance=d;
+              }
       //orders.distance=distance;
       orders.payement=payment;
       List<OrderItems> orderitems=List.from(items);
@@ -565,8 +558,7 @@ bool ok=true;
       // if(loginProvider.blockedBuyers.length==0){
       //   allorders.add(orders);
       // }
-     // print("distance:"+distance.toString());
-      if(d<4){
+      if(d<10){
       if(loginProvider.blockedBuyers!=null){
         int j=0;
         while((ok)&(j<loginProvider.blockedBuyers.length)){
@@ -586,12 +578,9 @@ bool ok=true;
             
 
       
-  //  print("blocked buyers:"+blocked);
-    print(items.length);
-    print("before length"+orders.orderitems.length.toString());
+  
 
     items.clear();
-    print("length"+orders.orderitems.length.toString());
     }
     for(int k=0;k<allorders.length;k++){
       list.add(listitem(context, allorders[k]));
@@ -602,6 +591,22 @@ bool ok=true;
 
 
     loading=false;
+    if (allorders.length==0){
+      list.add(Center(
+        child: Column(
+          children: [
+            SizedBox(height: deviceheight*0.25),
+            Opacity(opacity: 0.8,
+                          child: Icon(Icons.remove_shopping_cart,
+              size: 140,
+              color: Colors.red,),
+            ),
+            //Text("No available orders \n for the moment")
+
+          ],
+        ),
+      ));
+    }
     notify();
   }
 
@@ -618,6 +623,62 @@ bool ok=true;
   }
 
 
+ Stream<http.Response> getRandomNumberFact(context, loginProvider) async* {
+    yield* Stream.periodic(Duration(seconds: 5), (_) {
+    //  fetchOrders(context, loginProvider);
+    }).asyncMap((event) async => await event);
+  }
+
+
+
+Future shownotif({localNotification,context})async{
+
+Future selectNotif(String payload) async {
+  User user=User();
+          user=await user.decoded();
+  Navigator.push(context, MaterialPageRoute(builder: (context)=>AppController(user: user,)));
+      //Handle notification tapped logic here
+   }
+
+    FlutterLocalNotificationsPlugin localNotification;
+localNotification= new FlutterLocalNotificationsPlugin();
+    var   androidInitialize=new AndroidInitializationSettings("logojustmonkeyflipped");
+      var iOSIntialize = new IOSInitializationSettings();
+    var initializeSettings=new InitializationSettings(android: androidInitialize,);
+    localNotification.initialize(initializeSettings,onSelectNotification: selectNotif);
+
+    var androidDetails = new AndroidNotificationDetails(
+        "channelId",
+        "Local Notification",
+        "This is the description of the notification",
+      importance: Importance.high
+    );
+    var iosDetails =new IOSNotificationDetails();
+    var generalNotificationDetails=new NotificationDetails(android: androidDetails,iOS: iosDetails);
+     await localNotification.show(0, "Order", "There is a new order available check it out now", generalNotificationDetails);
+    
+     tz.initializeTimeZones();
+    
+    await localNotification.zonedSchedule(
+
+        12345,
+
+        "A Notification From My App",
+        "This notification is brought to you by Local Notifcations Package",
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10)),
+        const NotificationDetails(
+            android: AndroidNotificationDetails("CHANNEL_ID", "CHANNEL_NAME",
+                "CHANNEL_DESCRIPTION")),
+
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime
+            );
+  }
+
+
+
+  
 
 
   void notify(){

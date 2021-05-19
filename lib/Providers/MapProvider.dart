@@ -34,7 +34,11 @@ Future checkGps() async {
 if(!await location.serviceEnabled()){
    location.requestService();
   }
+
+
 }
+
+
 
    void _getPolyline(Position start,Position end,String name) async {
     List<LatLng> polylineCoordinates = [];
@@ -157,6 +161,8 @@ if(!await location.serviceEnabled()){
               markerId: MarkerId("buyer,${o.buyer.firstName}"),
               infoWindow: InfoWindow(
                 title: "buyer ${o.buyer.firstName}",
+
+                snippet: "Total ditance: "+o.distance.toString()+"Km\n"+"Price: "+o.totalPrice.toString()+"DT",
                 onTap: (){Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Order(order: o)));}
               ),
               onTap: (){

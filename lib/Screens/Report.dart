@@ -1,4 +1,5 @@
 import 'package:delivery_app_v0/Providers/MenuProvider.dart';
+import 'package:delivery_app_v0/Providers/OrderProvider.dart';
 import 'package:delivery_app_v0/Widgets/AppBar.dart';
 import 'package:delivery_app_v0/Providers/FeedBackProvider.dart';
 
@@ -15,12 +16,16 @@ class Report extends StatefulWidget{
 
 class ReportPage extends State<Report>{
   MenuProvider menuProvider;
+    OrderProvider orderProvider;
+
     FeedBackProvider feedbackProvider;
 TextEditingController objectcontrol=TextEditingController();
     TextEditingController contentcontrol=TextEditingController();
   @override
   void initState() {
     menuProvider = Provider.of<MenuProvider>(context, listen: false);
+        orderProvider = Provider.of<OrderProvider>(context, listen: false);
+
         feedbackProvider = Provider.of<FeedBackProvider>(context, listen: false);
 
     super.initState();
@@ -34,8 +39,8 @@ TextEditingController objectcontrol=TextEditingController();
     double devicewidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(deviceheight*0.11),
-        child: barapp(ti:'FeedBack', context:context, menuprovider: menuProvider),
+        preferredSize: Size.fromHeight(deviceheight*0.089),
+        child: barapp(ti:'FeedBack', context:context, menuprovider: menuProvider,orderProvider: orderProvider),
       ),
       body: SingleChildScrollView(
               child: Center(
@@ -51,7 +56,7 @@ Opacity(opacity: 0.7,
                 ),
                 textAlign: TextAlign.center,),
               ),
-                            SizedBox(height: deviceheight*0.07,),
+                            SizedBox(height: deviceheight*0.05,),
 
               
               Container(
@@ -74,19 +79,36 @@ Opacity(opacity: 0.7,
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                                                       SizedBox(height: deviceheight*0.03,),
+                                                                             SizedBox(height: deviceheight*0.02,),
+
+                      Image.asset("assets/logo just monkey.png",
+                      scale: 1.5,),
+                      
+                                                       SizedBox(height: deviceheight*0.015,),
 
                       Container(width: devicewidth*0.7,
                 child: 
-              Opacity(opacity: 0.7,
-                          child: Text('Tell us what happened',
-                style: TextStyle(
-                  fontSize: 20,
+              Column(
+                children: [
+
+                  Opacity(opacity: 0.7,
+                              child: Text('Tell us what happened',
+                    style: TextStyle(
+                      fontSize: 20,
+                      
+                    ),
+                    textAlign: TextAlign.center,),
+                    
+                  ),
                   
-                ),
-                textAlign: TextAlign.center,),
+                                                     // SizedBox(height: deviceheight*0.01,),
+
+                  
+                ],
               )
+              
               ),
+              
              
                       Container(
                         width: devicewidth*0.8,

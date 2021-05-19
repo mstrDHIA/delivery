@@ -1,3 +1,4 @@
+
 import 'package:delivery_app_v0/Models/Orders.dart';
 import 'package:delivery_app_v0/Models/User.dart';
 import 'package:delivery_app_v0/Providers/AppControllerProvider.dart';
@@ -123,7 +124,8 @@ class AppPage extends State<AppController> {
                     children: [
                       IconButton(onPressed:(){
                         //provider.confirmorder(context);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications(),));
+                        provider.shownotif(context: context);
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications(),));
                       },
                         icon: Icon(
                           Icons.notifications,
@@ -191,8 +193,7 @@ class AppPage extends State<AppController> {
      
       Container(height: 0,width: 0,),
       Profile(user: user,)
-      //Expanded(child: Map()),
-      //Center(child: Text("profile")),
+     
     ];
     
     return Scaffold(
@@ -209,7 +210,7 @@ key: scaffoldKey,
               
       ),
       bottomNavigationBar: Container(
-
+        
 
 
         //height: deviceheight*0.08,
@@ -218,9 +219,9 @@ key: scaffoldKey,
 
             boxShadow: [
               BoxShadow(
-                  color: Colors.black26,
+                  color: Colors.black12,
                   offset: Offset(0, -2),
-                  blurRadius: 130,
+                  blurRadius: 50,
                   spreadRadius: 1
               )
             ],
@@ -233,6 +234,7 @@ key: scaffoldKey,
             itemOutlineColor: Colors.redAccent,
             itemBackgroudnColor: Colors.white,
             selectedItemColor: Colors.redAccent,
+            
             items: [
               CustomBottomNavigationBarItem(
                 titleTextColor: Colors.redAccent,
@@ -241,15 +243,17 @@ key: scaffoldKey,
               ),
               CustomBottomNavigationBarItem(
                 titleTextColor: Colors.redAccent,
-
+                
                 icon: Icons.map,
+
                 title: "Map",
               ),
               CustomBottomNavigationBarItem(
                 titleTextColor: Colors.redAccent,
 
 
-                icon: Icons.person_rounded,
+                icon: Icons.person_outline_rounded,
+
                 title: "Profile",
               ),
             ],
@@ -260,12 +264,7 @@ key: scaffoldKey,
                 currentindex = index;
                 print(index);
               });
-            } /*(index) {
-
-            _pageController.animateToPage(index,
-                curve: Curves.fastLinearToSlowEaseIn,
-                duration: Duration(milliseconds: 600));
-          },*/
+            } 
         ),
       ),
     );

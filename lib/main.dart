@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:delivery_app_v0/Providers/FeedBackProvider.dart';
 import 'package:delivery_app_v0/Providers/blockedUsersProvider.dart';
@@ -32,7 +33,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-    
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -42,31 +42,23 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => blockedUsersProvider()),
         ChangeNotifierProvider(create: (_) => FeedBackProvider()),
-
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => MenuProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => MapProvider()),
         ChangeNotifierProvider(create: (_) => AppProvider()),
-        
-
-
       ],
-      child:
-         MaterialApp(
-           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: MyHomePage(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-      
+        home: MyHomePage(),
+      ),
     );
   }
 }
-
-
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -74,129 +66,150 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   String signed;
   OrderProvider orderProvider;
-    LoginProvider loginProvider;
-        blockedUsersProvider blockProvider;
-
+  LoginProvider loginProvider;
+  blockedUsersProvider blockProvider;
 
   @override
-  Future<void> initState()   {
+  Future<void> initState() {
     orderProvider = Provider.of<OrderProvider>(context, listen: false);
     loginProvider = Provider.of<LoginProvider>(context, listen: false);
     blockProvider = Provider.of<blockedUsersProvider>(context, listen: false);
-
 
     // TODO: implement initState
     super.initState();
   }
 
+  prepare() async {
+    orderProvider.taken =
+        await prefs.then((value) => value.getBool('taken') ?? false);
+    if (orderProvider.taken) {
+      Geolocator geo = Geolocator();
+      String ordertxt =
+          await prefs.then((value) => value.getString('order') ?? "");
+      Orders order = Orders();
+      order = await order.decoded();
+      print(order.seller.name);
+      orderProvider.allorders.add(order);
+      await orderProvider.CaclulDistance(order, geo);
+      orderProvider.which = SingleChildScrollView(
+          child: Column(children: [
+        singleorder(
+            order: order, orderProvider: orderProvider, context: context),
+        cam(context: context, provider: orderProvider, order: order),
+        confirm(context: context, order: order, provider: orderProvider)
+      ]));
+    }
+    signed = await prefs.then((value) => value.getString('logged') ?? "");
+    bool newboy = await prefs.then((value) => value.getBool('new') ?? false);
 
+    if (newboy) {
+      User user = User();
+      user = await user.decoded();
+      loginProvider.blockedBuyers = blockProvider.getBlockedBuyers(user);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => CreateProfile(),
+        ),
+        (route) => false,
+      );
+    } else {
+      print(signed);
+      if (signed == "") {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Register(),
+            ));
+      } else {
+        List<String> userinfos = signed.split('!');
+        Map<String, dynamic> usermap = jsonDecode(userinfos[0]);
+        User user = User.fromJson(usermap);
+        Map<String, dynamic> profilemap = jsonDecode(userinfos[1]);
+        Profile profile = Profile.fromJson(profilemap);
+        user.profile = profile;
+        if (user.isStaff == true) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => AdminManage(),
+            ),
+            (route) => false,
+          );
+        } else {
+          usermap.forEach((key, value) {
+            print(key + ":" + value.toString());
+          });
+          print(user.isStaff);
+          print(user.username);
+          print(user.profile.age);
 
-  prepare()async{
-
- 
-         orderProvider.taken=await prefs.then((value) => value.getBool('taken')??false);
-         if(orderProvider.taken){
-           Geolocator geo=Geolocator();
-         String ordertxt =await prefs.then((value) => value.getString('order')??"");
-         Orders order=Orders();
-         order=await order.decoded();
-         print(order.seller.name);
-               orderProvider.allorders.add(order);
-                await orderProvider.CaclulDistance(order, geo);
-            orderProvider.which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
-      cam(context: context,provider: orderProvider,order: order),
-      confirm(context:context,order: order,provider: orderProvider)]
-      ));  
-         }
-          signed=await prefs.then((value) => value.getString('logged')??"");
-         bool newboy=await prefs.then((value) => value.getBool('new')??false);
-         
-          if(newboy){
-            User user=User();
-         user=await user.decoded();
-         loginProvider.blockedBuyers=blockProvider.getBlockedBuyers(user);
-             Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => CreateProfile(),
+          loginProvider.blockedBuyers =
+              await blockProvider.getBlockedBuyers(user);
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => AppController(
+                user: user,
               ),
-              (route) => false,
-            ); 
-          }
-          else{
-          print(signed);
-          if(signed==""){
-              Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Register(),
-              ));
-          }
-          
-          else{
-            
-            List<String> userinfos=signed.split('!');            
-            Map<String, dynamic> usermap=jsonDecode(userinfos[0]);
-            User user=User.fromJson(usermap);
-            Map<String, dynamic> profilemap=jsonDecode(userinfos[1]);
-            Profile profile=Profile.fromJson(profilemap);
-            user.profile=profile;
-            if(user.isStaff==true){
-                  Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => AdminManage(),
-              ),
-              (route) => false,
-            ); 
-            }
-            else{
-              usermap.forEach((key, value) {print(key+":"+value.toString());});
-              print(user.isStaff);
-              print(user.username);
-              print(user.profile.age);
-
-         loginProvider.blockedBuyers=await blockProvider.getBlockedBuyers(user);
-                    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => AppController(user: user,),
-      ),
-      (route) => false,
-    ); 
-            }
-       
-          }}
-
+            ),
+            (route) => false,
+          );
+        }
+      }
+    }
   }
 
-
- 
   @override
   Widget build(BuildContext context) {
-double deviceheight = MediaQuery.of(context).size.height;
+    double deviceheight = MediaQuery.of(context).size.height;
     double devicewidth = MediaQuery.of(context).size.width;
-    String GAK=GoogleApiKey;
-    String AO=getOrdersApi;
+    String GAK = GoogleApiKey;
+    String AO = getOrdersApi;
 
-    
-
-return AnimatedSplashScreen.withScreenFunction(
-  splashIconSize: 400,
-  splash: 'assets/logo.png',
-  screenFunction: () async{
-    return prepare();
-  },
-  splashTransition: SplashTransition.fadeTransition,
-  //pageTransitionType: PageTransitionType.scale,
-);
+    return AnimatedSplashScreen.withScreenFunction(
+      splashIconSize: 400,
+      splash: 'assets/logo.png',
+      screenFunction: () async {
+        try {
+          final result = await InternetAddress.lookup('google.com');
+          if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+            print('connected');
+            return prepare();
+          }
+        } on SocketException catch (_) {
+          print('not connected');
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.network_check,
+                    size: 80,
+                  ),
+                  SizedBox(
+                    height: deviceheight * 0.02,
+                  ),
+                  Text(
+                    "No Internet Connection",
+                    style: TextStyle(fontSize: 20),
+                  )
+                ],
+              ),
+            ),
+          );
+        }
+      },
+      splashTransition: SplashTransition.fadeTransition,
+      //pageTransitionType: PageTransitionType.scale,
+    );
     //  return new SplashScreen(
     //   navigateAfterFuture: prepare(),
-      
+
     //   title: new Text('Siyou Delivery',
     //   style: new TextStyle(
     //     //fontWeight: FontWeight.,
@@ -233,7 +246,7 @@ return AnimatedSplashScreen.withScreenFunction(
     //   ),
     //   floatingActionButton: FloatingActionButton(
     //     onPressed: () async{
-         
+
     // //      orderProvider.taken=await prefs.then((value) => value.getBool('taken')??false);
     // //      if(orderProvider.taken){
     // //        Geolocator geo=Geolocator();
@@ -246,11 +259,11 @@ return AnimatedSplashScreen.withScreenFunction(
     // //         orderProvider.which=SingleChildScrollView(child: Column(children:[singleorder(order: order,orderProvider: orderProvider,context:context),
     // //   cam(context: context,provider: orderProvider,order: order),
     // //   confirm(context:context,order: order,provider: orderProvider)]
-    // //   ));  
+    // //   ));
     // //      }
     // //       signed=await prefs.then((value) => value.getString('logged')??"");
     // //      bool newboy=await prefs.then((value) => value.getBool('new')??false);
-         
+
     // //       if(newboy){
     // //         User user=User();
     // //      user=await user.decoded();
@@ -261,7 +274,7 @@ return AnimatedSplashScreen.withScreenFunction(
     // //             builder: (BuildContext context) => CreateProfile(),
     // //           ),
     // //           (route) => false,
-    // //         ); 
+    // //         );
     // //       }
     // //       else{
     // //       print(signed);
@@ -272,10 +285,10 @@ return AnimatedSplashScreen.withScreenFunction(
     // //             builder: (context) => Register(),
     // //           ));
     // //       }
-          
+
     // //       else{
-            
-    // //         List<String> userinfos=signed.split('!');            
+
+    // //         List<String> userinfos=signed.split('!');
     // //         Map<String, dynamic> usermap=jsonDecode(userinfos[0]);
     // //         User user=User.fromJson(usermap);
     // //         Map<String, dynamic> profilemap=jsonDecode(userinfos[1]);
@@ -288,7 +301,7 @@ return AnimatedSplashScreen.withScreenFunction(
     // //             builder: (BuildContext context) => AdminManage(),
     // //           ),
     // //           (route) => false,
-    // //         ); 
+    // //         );
     // //         }
     // //         else{
     // //           usermap.forEach((key, value) {print(key+":"+value.toString());});
@@ -303,11 +316,11 @@ return AnimatedSplashScreen.withScreenFunction(
     // //     builder: (BuildContext context) => AppController(user: user,),
     // //   ),
     // //   (route) => false,
-    // // ); 
+    // // );
     // //         }
-       
+
     // //       }}
-          
+
     //     },
     //     child: Icon(Icons.add),
     //   ),

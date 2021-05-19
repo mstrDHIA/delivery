@@ -43,7 +43,7 @@ Geolocator geo=Geolocator();
   loginProvider = Provider.of<LoginProvider>(context, listen: false);
 
   menuProvider = Provider.of<MenuProvider>(context, listen: false);
-  orderProvider.CaclulDistance(order,geo);
+  //orderProvider.CaclulDistance(order,geo);
   //print(distance);
     super.initState();
   }

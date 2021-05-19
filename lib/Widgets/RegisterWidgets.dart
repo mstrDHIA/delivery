@@ -91,8 +91,11 @@ regroundedtop(context) {
             opacity: 0.9,
             child: Center(
                 child: Image.asset(
-              'assets/gift white.png',
-              scale: 1.5,
+                                    'assets/logo white3.png',
+
+              //'assets/gift white.png',
+              scale: 2.8,
+              
             )),
           ),
         ),

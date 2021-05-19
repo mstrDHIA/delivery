@@ -45,10 +45,12 @@ List<Orders> alldelivered=List();
 List<Widget> alldeliveredwidgets=List();
 
 getDeliveredOrders(context) async {
+
   if(alldelivered.length>0){
     alldeliveredwidgets.clear();
 
     alldelivered.clear();
+    alldeliveredwidgets.add(SizedBox(height: 20,));
   }
     Buyer buyer=Buyer();
   Seller seller=Seller();
@@ -241,6 +243,7 @@ bool change=false;
 
 Future<void> imageselect()async{
   ImagePicker picker=ImagePicker();
+  
  selected=await picker.getImage(source: ImageSource.gallery);
  print("this is:"+selected.path);
  notify();

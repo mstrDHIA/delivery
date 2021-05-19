@@ -2,7 +2,7 @@ import 'package:delivery_app_v0/Screens/DeliveredOrders.dart';
 import 'package:flutter/material.dart';
 
 
-const String initiallink="http://c4037c092bef.ngrok.io";
+const String initiallink="http://eede5d3e75b6.ngrok.io";
 const String getOrdersApi=initiallink+"/available_orders/";
 const String getUserApi=initiallink+"/user_info/";
 const String edituser=initiallink+"/user/";

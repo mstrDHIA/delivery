@@ -199,7 +199,7 @@ cam({context,OrderProvider provider,order}){
         color: Colors.red,
         borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
-        child: IconButton(icon: Icon(Icons.qr_code,size: 30,),
+        child: IconButton(icon: Icon(Icons.qr_code_scanner,size: 30,),
          onPressed: () {
            print("let's scan");
           //  showDialog(context: context,
@@ -614,7 +614,7 @@ timewidget({context,order,OrderProvider orderProvider}){
     builder: (BuildContext context, value, Widget child) { 
 return Container(
               height: deviceheight*0.05,
-              width: devicewidth*0.17,
+              width: devicewidth*0.2,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(
                       Radius.circular(3)
@@ -628,7 +628,7 @@ return Container(
               child: Center(
                 child: Container(
                   height: deviceheight*0.035,
-                  width: devicewidth*0.14,
+                  width: devicewidth*0.18,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
                       Radius.circular(3)
@@ -678,7 +678,7 @@ timer({context,Orders order}) {
           ),
           Container(
             height: deviceheight*0.05,
-            width: devicewidth*0.17,
+            width: devicewidth*0.24,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(
                     Radius.circular(3)
@@ -692,7 +692,7 @@ timer({context,Orders order}) {
             child: Center(
               child: Container(
                 height: deviceheight*0.035,
-                width: devicewidth*0.14,
+                width: devicewidth*0.21,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(
                     Radius.circular(3)
@@ -706,7 +706,7 @@ timer({context,Orders order}) {
                 child:
                 Center(
                     child: Text(
-                        order.orderDuration.toString(),
+                        order.orderDuration.toString()+"m",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700
@@ -746,7 +746,7 @@ timer({context,Orders order}) {
           ),
           Center(
               child: Text(
-                  "${orderprovider.distance}Km",
+                  "${orders.distance}Km",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700

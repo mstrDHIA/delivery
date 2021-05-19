@@ -15,13 +15,13 @@ Menu(BuildContext context,MenuProvider menuprovider){
 
      return <PopupMenuEntry<MenuOptions>>[
       PopupMenuItem(
-      child: Text('Settings'),
+      child: Text('Blocked Buyers'),
       value: MenuOptions.Settings,
       ),
-    PopupMenuItem(
-    child: Text('Contact Us'),
-    value: MenuOptions.Contact,
-    ),
+    // PopupMenuItem(
+    // child: Text('Contact Us'),
+    // value: MenuOptions.Contact,
+    // ),
     PopupMenuItem(
     child: Text('FeedBack'),
     value: MenuOptions.FeedBack,

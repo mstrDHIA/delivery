@@ -1,10 +1,11 @@
 import 'package:delivery_app_v0/Providers/MenuProvider.dart';
+import 'package:delivery_app_v0/Providers/OrderProvider.dart';
 import 'package:delivery_app_v0/Widgets/popupMenu.dart';
 import 'package:flutter/material.dart';
 
 
 
-barapp({String ti,BuildContext context,MenuProvider menuprovider}) {
+barapp({String ti,BuildContext context,MenuProvider menuprovider,OrderProvider orderProvider}) {
   double deviceheight = MediaQuery.of(context).size.height;
   double devicewidth = MediaQuery.of(context).size.width;
   return Column(
@@ -72,10 +73,16 @@ barapp({String ti,BuildContext context,MenuProvider menuprovider}) {
 
               Row(
                 children: [
-                  Icon(
-                    Icons.notifications,
-                      color: Colors.white,
-                      size: 28,),
+                   IconButton(onPressed:(){
+                        //provider.confirmorder(context);
+                        orderProvider.shownotif(context: context);
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications(),));
+                      },
+                        icon: Icon(
+                          Icons.notifications,
+                          color: Colors.white,
+                          size: 28,),
+                      ),
 
                   /*IconButton(
                     onPressed: null,

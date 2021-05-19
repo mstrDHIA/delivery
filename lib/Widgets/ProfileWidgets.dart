@@ -1,6 +1,7 @@
 //import 'dart:js';
 
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:delivery_app_v0/API/APIS.dart';
 import 'package:delivery_app_v0/Models/Orders.dart';
@@ -319,10 +320,10 @@ Widget editidentifier({context,ProfileProvider profileProvider,User user}) {
     }
     else{
       photo=ClipOval(
-              child: Image.asset(
-          
-          profileProvider.selected.path,
-                      scale: 1,
+              child: CachedNetworkImage(
+          fadeInDuration: Duration(microseconds: 10),
+          imageUrl:profileProvider.selected.path,
+                      //scale: 1,
                       fit: BoxFit.fill,
                          width: devicewidth*0.35,
                          height: deviceheight*0.17,),
@@ -502,12 +503,14 @@ Accept({context,ProfileProvider profileProvider,age,city,phone,address,LoginProv
     Widget photo;
     if(user.profile.photo!=null){
         photo=ClipOval(
-                                    child: Image.network(
-                       initiallink+user.profile.photo,
+                                    child: CachedNetworkImage(
+                                      
+                       fadeInDuration: Duration(microseconds: 10),
+                       imageUrl: initiallink+user.profile.photo,
                        fit: BoxFit.fill,
                        width: devicewidth*0.4,
                        height: deviceheight*0.2,
-                   scale: 1,
+                   //scale: 1,
                    ),
                  );
     }
